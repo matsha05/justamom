@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Lizi Shaw</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-name">Lizi Shaw</div>
+      <div class="brand-tagline">Speaker | Writer&nbsp; Encourager</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Me</a>
+      <a href="speaking.html">Speaking Topics</a>
+      <a class="active" href="contact.html">Contact</a>
+    </nav>
+    <a class="contact-link" href="contact.html">Contact</a>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Contact</p>
+        <h1 class="page-title">Contact</h1>
+        <p class="body-large">I would love to hear from you. Whether you are interested in having me speak at your event or just want to say hi, fill out the form below and I will get back to you as soon as I can.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container card">
+        <div id="form-status"></div>
+        <form id="contact-form" class="form-grid" novalidate>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Your full name" required>
+            <div class="error" data-error="name"></div>
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            <div class="helper">I will only use this to reply to your message.</div>
+            <div class="error" data-error="email"></div>
+          </div>
+
+          <div>
+            <label for="reason">How can I help?</label>
+            <select id="reason" name="reason">
+              <option>Book Lizi to speak</option>
+              <option>Ask a question</option>
+              <option>Share a story</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="org">Organization or church (optional)</label>
+            <input id="org" name="org" type="text" placeholder="Name of your group, church, or event">
+          </div>
+
+          <div id="event-details-group" style="display:none;">
+            <label for="event">Event details</label>
+            <textarea id="event" name="event" placeholder="Date, location, type of event, and an approximate size of your group."></textarea>
+            <div class="helper">Share as much as you know so far, even if details are still flexible.</div>
+          </div>
+
+          <div>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="What would you like to share or ask?" required></textarea>
+            <div class="error" data-error="message"></div>
+          </div>
+
+          <button type="submit" class="btn primary">Send message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <span>© 2025 by Lizi Shaw. Powered and secured by Wix</span>
+      <span class="to-top"><a href="#top">top of page</a></span>
+    </div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('form-status');
+    const reason = document.getElementById('reason');
+    const eventGroup = document.getElementById('event-details-group');
+
+    const errors = {
+      name: 'Please enter your name.',
+      email: 'Please enter a valid email address.',
+      message: 'Please add a short message.'
+    };
+
+    reason.addEventListener('change', () => {
+      eventGroup.style.display = reason.value === 'Book Lizi to speak' ? 'block' : 'none';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearMessages();
+      const formData = new FormData(form);
+      const name = formData.get('name')?.trim();
+      const email = formData.get('email')?.trim();
+      const message = formData.get('message')?.trim();
+      let valid = true;
+
+      if (!name) {
+        showError('name', errors.name);
+        valid = false;
+      }
+      if (!validateEmail(email)) {
+        showError('email', errors.email);
+        valid = false;
+      }
+      if (!message) {
+        showError('message', errors.message);
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      statusEl.innerHTML = '<div class="success">Thank you for reaching out. Your message is on its way, and I will respond as soon as I can.</div>';
+      form.reset();
+      eventGroup.style.display = 'none';
+    });
+
+    function validateEmail(email) {
+      return !!email && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+    }
+
+    function showError(field, message) {
+      const target = document.querySelector(\`[data-error=\"\${field}\"]\`);
+      if (target) target.textContent = message;
+    }
+
+    function clearMessages() {
+      statusEl.innerHTML = '';
+      document.querySelectorAll('.error').forEach(el => el.textContent = '');
+    }
+  </script>
+</body>
+</html>
