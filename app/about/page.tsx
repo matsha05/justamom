@@ -11,19 +11,12 @@ export default function AboutPage() {
     return (
         <>
             {/* Hero Section */}
-            <section className="bg-gradient-hero py-16 md:py-20">
-                <div className="container-main">
-                    <h1 className="text-heading text-3xl md:text-4xl mb-8">About Me</h1>
-                </div>
-            </section>
-
-            {/* Main Content with Photo */}
-            <section className="py-12 md:py-16">
-                <div className="container-main">
-                    <div className="grid lg:grid-cols-5 gap-12 items-start max-w-5xl mx-auto">
+            <section className="section section-warm">
+                <div className="container">
+                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
                         {/* Photo */}
-                        <div className="lg:col-span-2">
-                            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+                        <div className="lg:col-span-5">
+                            <div className="image-editorial aspect-[3/4] relative sticky top-32">
                                 <Image
                                     src="/images/aboutmepic.avif"
                                     alt="Lizi Shaw"
@@ -36,47 +29,58 @@ export default function AboutPage() {
                         </div>
 
                         {/* Bio Content */}
-                        <div className="lg:col-span-3 space-y-6 text-[var(--color-gray-dark)]">
-                            <p className="text-lg leading-relaxed">
-                                <span className="text-heading">Hi, I&apos;m Lizi Shaw.</span>
-                            </p>
+                        <div className="lg:col-span-7">
+                            <p className="text-label mb-6">About Me</p>
+                            <h1 className="text-display mb-10">Hi, I&apos;m Lizi Shaw.</h1>
 
-                            <p className="leading-relaxed">
-                                I&apos;m a wife, mom of three young kids, and someone who deeply
-                                understands how overwhelming modern motherhood can feel. Between
-                                cultural pressure, information overload, and the everyday demands
-                                of life, it&apos;s easy to lose sight of what really matters.
-                                That&apos;s why I&apos;m passionate about helping women cut through
-                                the noise and live with clarity, confidence, and peace rooted in
-                                Biblical truth.
-                            </p>
+                            <div className="prose space-y-6 text-body-lg text-[var(--color-ink-soft)]">
+                                <p className="drop-cap">
+                                    I&apos;m a wife, mom of three young kids, and someone who deeply
+                                    understands how overwhelming modern motherhood can feel. Between
+                                    cultural pressure, information overload, and the everyday demands
+                                    of life, it&apos;s easy to lose sight of what really matters.
+                                    That&apos;s why I&apos;m passionate about helping women cut through
+                                    the noise and live with clarity, confidence, and peace rooted in
+                                    Biblical truth.
+                                </p>
 
-                            <p className="leading-relaxed">
-                                I don&apos;t claim to have it all figured out, but I&apos;ve
-                                learned (sometimes the hard way) that small, faithful steps in the
-                                right direction make a big difference. I love speaking to women in
-                                every stage of life and helping them rediscover joy in the simple
-                                and sacred work they&apos;re already doing.
-                            </p>
+                                <p>
+                                    I don&apos;t claim to have it all figured out, but I&apos;ve
+                                    learned (sometimes the hard way) that small, faithful steps in the
+                                    right direction make a big difference. I love speaking to women in
+                                    every stage of life and helping them rediscover joy in the simple
+                                    and sacred work they&apos;re already doing.
+                                </p>
 
-                            <p className="leading-relaxed">
-                                Let&apos;s walk it out together. With grace, grit, and a little
-                                laughter along the way.
-                            </p>
+                                <p>
+                                    Let&apos;s walk it out together. With grace, grit, and a little
+                                    laughter along the way.
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    {/* Speaker Bio */}
-                    <div className="max-w-3xl mx-auto mt-16 pt-12 border-t border-[var(--color-gray-light)]/50">
-                        <p className="text-[var(--color-gray-medium)] italic leading-relaxed">
-                            Lizi Shaw is a Christian writer and speaker passionate about
-                            helping women anchor their motherhood in God&apos;s truth. With
-                            warmth, honesty, and insight, she invites moms to notice the Lord
-                            in the everyday and build homes shaped by peace, purpose, and
-                            eternal perspective. She lives in Niwot, Colorado with her
-                            husband, Matt, and their three children who provide endless
-                            sanctification and even more material for her writing.
-                        </p>
+            {/* Speaker Bio Section */}
+            <section className="section">
+                <div className="container-prose">
+                    <div className="divider-ornament mb-12">
+                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
+                    </div>
+
+                    <blockquote className="text-h3 text-center text-[var(--color-ink-muted)] italic leading-relaxed">
+                        Lizi Shaw is a Christian writer and speaker passionate about
+                        helping women anchor their motherhood in God&apos;s truth. With
+                        warmth, honesty, and insight, she invites moms to notice the Lord
+                        in the everyday and build homes shaped by peace, purpose, and
+                        eternal perspective. She lives in Niwot, Colorado with her
+                        husband, Matt, and their three children who provide endless
+                        sanctification and even more material for her writing.
+                    </blockquote>
+
+                    <div className="divider-ornament mt-12">
+                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
                     </div>
                 </div>
             </section>

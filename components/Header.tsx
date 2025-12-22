@@ -1,88 +1,175 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
 
 const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About Me" },
-    { href: "/speaking", label: "Speaking Topics" },
-    { href: "/contact", label: "Contact Me" },
+    { href: "/about", label: "About" },
+    { href: "/speaking", label: "Speaking" },
+    { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <header className="sticky top-0 z-50 bg-[var(--color-cream)]/95 backdrop-blur-sm border-b border-[var(--color-gray-light)]/30">
-            <div className="container-main">
-                <div className="flex items-center justify-between py-4">
-                    {/* Logo */}
-                    <Link href="/" className="flex flex-col items-center group">
-                        {/* Leaf Icon */}
-                        <svg
-                            className="w-6 h-6 text-[var(--color-teal)] mb-1"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                        >
-                            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
-                        </svg>
-                        <span className="text-accent text-2xl text-[var(--color-gray-dark)] group-hover:text-[var(--color-teal)] transition-colors">
-                            Lizi Shaw
-                        </span>
-                        <span className="text-xs text-[var(--color-gray-medium)] tracking-wide">
-                            Speaker | Writer Encourager
-                        </span>
+        <header
+            className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
+                ? "bg-[var(--color-paper)]/95 backdrop-blur-md shadow-sm py-3"
+                : "bg-transparent py-5"
+                }`}
+        >
+            <div className="container">
+                <div className="flex items-center justify-between">
+                    {/* Logo with Peony Icon */}
+                    <Link href="/" className="group flex items-center gap-4">
+                        {/* Peony Icon - vibrant brand mark */}
+                        <div className="w-14 h-14 rounded-full shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 overflow-hidden flex items-center justify-center bg-[#4a7c7c]">
+                            <Image
+                                src="/images/peony-logo-v4.png"
+                                alt="Peony flower icon"
+                                width={56}
+                                height={56}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Text Lockup */}
+                        <div className="flex flex-col">
+                            <span className="text-h3 text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-tight">
+                                Lizi Shaw
+                            </span>
+                            <span className="text-caption text-[var(--color-ink-muted)] tracking-wide">
+                                Speaker · Writer · Encourager
+                            </span>
+                        </div>
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-8">
+                    <nav className="hidden md:flex items-center gap-10">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="text-[var(--color-gray-dark)] hover:text-[var(--color-teal)] text-sm font-medium transition-colors"
+                                className="text-caption font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
                             >
                                 {link.label}
                             </Link>
                         ))}
+                        <Link
+                            href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
+                            className="btn btn-primary"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Get the Notes
+                            <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                />
+                            </svg>
+                        </Link>
                     </nav>
 
                     {/* Mobile Menu Button */}
                     <button
-                        className="md:hidden p-2 text-[var(--color-gray-dark)]"
+                        className="md:hidden p-2 text-[var(--color-ink)]"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        aria-label="Toggle menu"
+                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                        aria-expanded={mobileMenuOpen}
                     >
                         {mobileMenuOpen ? (
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
                             </svg>
                         ) : (
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
+                                />
                             </svg>
                         )}
                     </button>
                 </div>
 
                 {/* Mobile Navigation */}
-                {mobileMenuOpen && (
-                    <nav className="md:hidden py-4 border-t border-[var(--color-gray-light)]/30">
+                <div
+                    className={`md:hidden overflow-hidden transition-all duration-300 ${mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                        }`}
+                >
+                    <nav className="py-6 border-t border-[var(--color-border)] mt-4">
                         <div className="flex flex-col gap-4">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="text-[var(--color-gray-dark)] hover:text-[var(--color-teal)] text-sm font-medium transition-colors"
+                                    className="text-body font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors py-2"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {link.label}
                                 </Link>
                             ))}
+                            <Link
+                                href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
+                                className="btn btn-primary mt-2 text-center justify-center"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                Get the Notes
+                                <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={2}
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                    />
+                                </svg>
+                            </Link>
                         </div>
                     </nav>
-                )}
+                </div>
             </div>
         </header>
     );

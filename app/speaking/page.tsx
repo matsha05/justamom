@@ -12,7 +12,7 @@ const speakingTopics = [
     {
         title: "How to make Mom Friends",
         description:
-            "They say it takes a village... but are you wondering where that village is? Making friends can be hard and uncomfortable. You might be thinking, \"Why does it feel like I should know how to do this?\" I offer practical tips about how to make (and maintain) friendships during this crazy season of motherhood.",
+            'They say it takes a village... but are you wondering where that village is? Making friends can be hard and uncomfortable. You might be thinking, "Why does it feel like I should know how to do this?" I offer practical tips about how to make (and maintain) friendships during this crazy season of motherhood.',
         image: "/images/speaking-mom-friends.png",
         alt: "Two moms connecting over coffee",
     },
@@ -36,55 +36,69 @@ export default function SpeakingPage() {
     return (
         <>
             {/* Hero Section */}
-            <section className="bg-gradient-hero py-16 md:py-20">
-                <div className="container-main max-w-3xl">
-                    <h1 className="text-heading text-3xl md:text-4xl mb-6">
-                        Speaking Topics
-                    </h1>
-                    <p className="text-[var(--color-gray-dark)] text-lg leading-relaxed">
-                        Motherhood is beautiful...and messy. It&apos;s full of holy moments,
-                        loud questions, and days that feel both too long and too short. As a
-                        speaker, I&apos;m passionate about encouraging women, especially
-                        moms, to live with peace, purpose, and clarity in the midst of
-                        cultural noise and daily overwhelm.
-                    </p>
-                    <p className="text-[var(--color-gray-dark)] mt-4 leading-relaxed">
-                        I love sharing about motherhood, faith, identity, and simplifying
-                        life in a way that brings joy and direction. While the topics below
-                        represent some of my favorite messages, I&apos;m happy to tailor a
-                        talk to fit the unique needs of your group or event.
-                    </p>
-                    <p className="text-[var(--color-gray-dark)] mt-4 leading-relaxed">
-                        Whether your audience is full of tired moms, curious seekers, or
-                        women hungry for Biblical truth in a practical way, I&apos;d be
-                        honored to serve.
-                    </p>
+            <section className="section section-warm">
+                <div className="container-prose">
+                    <p className="text-label mb-6">Speaking</p>
+                    <h1 className="text-display mb-10">Speaking Topics</h1>
+
+                    <div className="prose space-y-6 text-body-lg text-[var(--color-ink-soft)]">
+                        <p className="drop-cap">
+                            Motherhood is beautiful...and messy. It&apos;s full of holy moments,
+                            loud questions, and days that feel both too long and too short. As a
+                            speaker, I&apos;m passionate about encouraging women, especially
+                            moms, to live with peace, purpose, and clarity in the midst of
+                            cultural noise and daily overwhelm.
+                        </p>
+
+                        <p>
+                            I love sharing about motherhood, faith, identity, and simplifying
+                            life in a way that brings joy and direction. While the topics below
+                            represent some of my favorite messages, I&apos;m happy to tailor a
+                            talk to fit the unique needs of your group or event.
+                        </p>
+
+                        <p>
+                            Whether your audience is full of tired moms, curious seekers, or
+                            women hungry for Biblical truth in a practical way, I&apos;d be
+                            honored to serve.
+                        </p>
+                    </div>
                 </div>
             </section>
 
-            {/* Topics Grid with Illustrations */}
-            <section className="py-12 md:py-16">
-                <div className="container-main">
-                    <div className="grid md:grid-cols-3 gap-8">
+            {/* Topics Section */}
+            <section className="section">
+                <div className="container">
+                    <div className="space-y-16">
                         {speakingTopics.map((topic, index) => (
                             <div
                                 key={index}
-                                className="bg-[var(--color-cream-light)] border border-[var(--color-gray-light)]/30 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                                className={`grid lg:grid-cols-12 gap-8 lg:gap-16 items-center ${index % 2 === 1 ? "lg:flex-row-reverse" : ""
+                                    }`}
                             >
                                 {/* Illustration */}
-                                <div className="relative aspect-[4/3] bg-white">
-                                    <Image
-                                        src={topic.image}
-                                        alt={topic.alt}
-                                        fill
-                                        className="object-contain p-4"
-                                        quality={90}
-                                    />
+                                <div
+                                    className={`lg:col-span-4 ${index % 2 === 1 ? "lg:order-2" : ""
+                                        }`}
+                                >
+                                    <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md">
+                                        <Image
+                                            src={topic.image}
+                                            alt={topic.alt}
+                                            fill
+                                            className="object-contain p-6"
+                                            quality={90}
+                                        />
+                                    </div>
                                 </div>
+
                                 {/* Content */}
-                                <div className="p-6">
-                                    <h3 className="text-heading text-lg mb-4">{topic.title}</h3>
-                                    <p className="text-[var(--color-gray-medium)] text-sm leading-relaxed">
+                                <div
+                                    className={`lg:col-span-8 ${index % 2 === 1 ? "lg:order-1" : ""
+                                        }`}
+                                >
+                                    <h3 className="text-h2 mb-6">{topic.title}</h3>
+                                    <p className="text-body-lg text-[var(--color-ink-muted)] leading-relaxed">
                                         {topic.description}
                                     </p>
                                 </div>
@@ -95,20 +109,39 @@ export default function SpeakingPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="bg-[var(--color-teal-light)] py-12 md:py-16">
-                <div className="container-main text-center">
-                    <h2 className="text-heading text-2xl md:text-3xl mb-4">
-                        Ready to Connect?
-                    </h2>
-                    <p className="text-[var(--color-gray-dark)] max-w-xl mx-auto mb-8">
+            <section className="section section-soft">
+                <div className="container text-center">
+                    <div className="divider-ornament mb-12">
+                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
+                    </div>
+
+                    <h2 className="text-h2 mb-6">Ready to Connect?</h2>
+                    <p className="text-body-lg text-[var(--color-ink-muted)] max-w-xl mx-auto mb-10">
                         If you&apos;re hosting a moms&apos; event, retreat, or group
                         gathering, I&apos;d love to be a part of it. I&apos;m happy to speak
                         in person or virtually. Let&apos;s connect and talk about what would
                         serve your women best.
                     </p>
-                    <Link href="/contact" className="btn-primary">
+                    <Link href="/contact" className="btn btn-primary">
                         Let&apos;s get in touch!
+                        <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                            />
+                        </svg>
                     </Link>
+
+                    <div className="divider-ornament mt-12">
+                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
+                    </div>
                 </div>
             </section>
         </>

@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Poppins, Dancing_Script } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const dancingScript = Dancing_Script({
-  variable: "--font-dancing-script",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -58,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${dancingScript.variable} antialiased`}
+        className={`${cormorant.variable} ${inter.variable} antialiased`}
       >
         <Header />
         <main>{children}</main>
