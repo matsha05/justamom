@@ -26,7 +26,7 @@ const speakingTopics = [
     {
         title: "My Yoke is Easy",
         description:
-            "News Flash. Life isn't easy (duh). We can spend so much energy trying to make life run smoothly. Obedient kids, clean home, everything going to plan, when the fact is that we were never promised and easy life. What Jesus does offer is an easy Yoke.",
+            "News Flash. Life isn't easy (duh). We can spend so much energy trying to make life run smoothly. Obedient kids, clean home, everything going to plan, when the fact is that we were never promised an easy life. What Jesus does offer is an easy Yoke.",
         image: "/images/speaking-easy-yoke.png",
         alt: "Woman at rest with open book",
     },

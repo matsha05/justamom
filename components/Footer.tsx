@@ -41,11 +41,11 @@ export function Footer() {
                         </nav>
                     </div>
 
-                    {/* Newsletter Column */}
+                    {/* Notes Column */}
                     <div>
                         <h4 className="text-label mb-4">Stay Connected</h4>
                         <p className="text-caption text-[var(--color-ink-muted)] mb-4">
-                            A quiet moment of encouragement delivered to your inbox.
+                            A quiet note from one mom to another.
                         </p>
                         <Link
                             href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
@@ -53,7 +53,7 @@ export function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Join the Newsletter
+                            Get the Notes
                         </Link>
                     </div>
                 </div>
