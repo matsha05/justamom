@@ -85,19 +85,7 @@ export default function HomePage() {
           <div className="mt-8">
             <Link href="/about" className="link-arrow">
               Read more about me
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
+              <ArrowIcon />
             </Link>
           </div>
         </div>
@@ -162,19 +150,7 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <Link href="/speaking" className="link-arrow">
               View all speaking topics
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
+              <ArrowIcon />
             </Link>
           </div>
         </div>

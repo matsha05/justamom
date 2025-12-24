@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { ArrowIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
     title: "Notes for Moms",
@@ -75,19 +76,7 @@ export default function NotesPage() {
                                                     </p>
                                                     <span className="text-caption font-medium text-[var(--color-accent)] inline-flex items-center gap-2 group-hover:gap-3 transition-all">
                                                         Read this note
-                                                        <svg
-                                                            className="w-4 h-4"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                            strokeWidth={2}
-                                                        >
-                                                            <path
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                                                            />
-                                                        </svg>
+                                                        <ArrowIcon />
                                                     </span>
                                                 </div>
                                             </div>
