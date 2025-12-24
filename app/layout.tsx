@@ -1,8 +1,27 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
+
+// JSON-LD Structured Data for Author Profile
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Lizi Shaw",
+  url: "https://lizishaw.com",
+  jobTitle: "Christian Speaker & Writer",
+  description:
+    "Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.",
+  sameAs: [],
+  knowsAbout: [
+    "Christian motherhood",
+    "Biblical parenting",
+    "Women's ministry",
+    "Faith-based speaking",
+  ],
+};
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -56,12 +75,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${cormorant.variable} ${inter.variable} antialiased`}
       >
         <Header />
         <main>{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

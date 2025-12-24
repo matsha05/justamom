@@ -1,0 +1,57 @@
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+
+export interface NoteMetadata {
+    slug: string;
+    title: string;
+    date: string;
+    excerpt: string;
+}
+
+const notesDirectory = path.join(process.cwd(), "content/notes");
+
+export function getAllNotes(): NoteMetadata[] {
+    const fileNames = fs.readdirSync(notesDirectory);
+    const notes = fileNames
+        .filter((fileName) => fileName.endsWith(".mdx"))
+        .map((fileName) => {
+            const slug = fileName.replace(/\.mdx$/, "");
+            const fullPath = path.join(notesDirectory, fileName);
+            const fileContents = fs.readFileSync(fullPath, "utf8");
+            const { data } = matter(fileContents);
+
+            return {
+                slug,
+                title: data.title,
+                date: data.date,
+                excerpt: data.excerpt,
+            };
+        });
+
+    // Sort by date, newest first
+    return notes.sort((a, b) => (a.date > b.date ? -1 : 1));
+}
+
+export function getNoteBySlug(slug: string) {
+    const fullPath = path.join(notesDirectory, `${slug}.mdx`);
+    const fileContents = fs.readFileSync(fullPath, "utf8");
+    const { data, content } = matter(fileContents);
+
+    return {
+        slug,
+        metadata: {
+            title: data.title,
+            date: data.date,
+            excerpt: data.excerpt,
+        },
+        content,
+    };
+}
+
+export function getAllNoteSlugs(): string[] {
+    const fileNames = fs.readdirSync(notesDirectory);
+    return fileNames
+        .filter((fileName) => fileName.endsWith(".mdx"))
+        .map((fileName) => fileName.replace(/\.mdx$/, ""));
+}

@@ -216,16 +216,22 @@ body {
   margin-bottom: 0;
 }
 
-/* Drop Cap */
+/* Drop Cap - Applied to first paragraph only */
+.drop-cap>p:first-child::first-letter,
 .drop-cap::first-letter {
   font-family: var(--font-heading), serif;
   font-size: 3.5em;
   font-weight: 500;
   float: left;
-  line-height: 0.8;
-  padding-right: 0.1em;
-  padding-top: 0.1em;
+  line-height: 1;
+  margin-right: 0.1em;
+  margin-top: 0.05em;
   color: var(--color-accent);
+}
+
+/* Ensure subsequent paragraphs clear the float */
+.drop-cap>p:nth-child(2) {
+  clear: left;
 }
 
 /* ============================================
@@ -585,4 +591,210 @@ body {
 .text-accent {
   font-family: var(--font-heading), serif;
   font-style: italic;
+}
+
+/* ============================================
+   NOTES PAGES
+   ============================================ */
+
+/* Archive Page */
+.notes-page {
+  padding: var(--space-16) 0 var(--space-24);
+}
+
+.notes-hero {
+  max-width: var(--container-narrow);
+  margin: 0 auto var(--space-16);
+  padding: 0 var(--space-6);
+  text-align: center;
+}
+
+.notes-hero-subtitle {
+  font-size: var(--text-body);
+  color: var(--color-ink-muted);
+  line-height: 1.7;
+  margin-top: var(--space-4);
+}
+
+.notes-grid {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.notes-cta {
+  max-width: var(--container-narrow);
+  margin: var(--space-16) auto 0;
+  padding: 0 var(--space-6);
+}
+
+/* Note Card */
+.note-card {
+  padding: var(--space-8);
+  background: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.note-card:hover {
+  border-color: var(--color-accent-soft);
+  box-shadow: var(--shadow-md);
+}
+
+.note-card-date {
+  font-size: var(--text-caption);
+  color: var(--color-ink-muted);
+  letter-spacing: 0.02em;
+}
+
+.note-card-title {
+  font-family: var(--font-heading), serif;
+  font-size: var(--text-h3);
+  font-weight: 500;
+  margin: var(--space-2) 0 var(--space-3);
+  line-height: 1.3;
+}
+
+.note-card-title a {
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.note-card-title a:hover {
+  color: var(--color-accent);
+}
+
+.note-card-excerpt {
+  font-size: var(--text-body);
+  color: var(--color-ink-muted);
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+
+.note-card-link {
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.note-card-link:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Individual Note Page */
+.note-page {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6) var(--space-24);
+}
+
+.note-back {
+  margin-bottom: var(--space-8);
+}
+
+.note-back a {
+  font-size: var(--text-caption);
+  color: var(--color-ink-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.note-back a:hover {
+  color: var(--color-accent);
+}
+
+.note-header {
+  margin-bottom: var(--space-10);
+}
+
+.note-date {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--color-ink-muted);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-3);
+}
+
+.note-content {
+  margin-bottom: var(--space-16);
+}
+
+.note-footer {
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Prose Styling for MDX Content */
+.prose {
+  font-size: var(--text-body);
+  line-height: 1.8;
+  color: var(--color-ink);
+}
+
+.prose p {
+  margin-bottom: var(--space-6);
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose blockquote {
+  margin: var(--space-8) 0;
+  padding-left: var(--space-6);
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-ink-soft);
+}
+
+.prose blockquote p {
+  margin-bottom: var(--space-2);
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--color-accent-hover);
+}
+
+.prose h2 {
+  font-family: var(--font-heading), serif;
+  font-size: var(--text-h3);
+  font-weight: 500;
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-4);
+}
+
+.prose h3 {
+  font-family: var(--font-heading), serif;
+  font-size: var(--text-h4);
+  font-weight: 500;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-3);
+}
+
+.prose ul,
+.prose ol {
+  margin: var(--space-6) 0;
+  padding-left: var(--space-6);
+}
+
+.prose li {
+  margin-bottom: var(--space-2);
 }
