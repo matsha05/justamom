@@ -247,23 +247,35 @@ html {
   margin-bottom: 0;
 }
 
-/* Drop Cap - Applied to first paragraph only */
-.drop-cap>p:first-child::first-letter,
-.drop-cap::first-letter {
-  font-family: var(--font-heading), serif;
-  font-size: 3.5em;
-  font-weight: 500;
+/* Drop Cap - Premium editorial styling
+   The letter should occupy exactly 3 lines of paragraph text,
+   with proper baseline alignment and text wrapping. */
+
+.dropcap {
   float: left;
-  line-height: 1;
-  margin-right: 0.1em;
+  font-family: var(--font-heading), serif;
+  font-size: 4.2em;
+  font-weight: 500;
+  line-height: 0.85;
+  margin-right: 0.22em;
   margin-top: 0.05em;
   color: var(--color-accent);
 }
 
-/* Ensure subsequent paragraphs clear the float */
-.drop-cap>p:nth-child(2) {
-  clear: left;
+.dropcap-paragraph {
+  margin-bottom: 1.5em;
 }
+
+/* Responsive - smaller on mobile to prevent column wreck */
+@media (max-width: 480px) {
+  .dropcap {
+    font-size: 3.2em;
+    margin-right: 0.18em;
+    margin-top: 0.02em;
+  }
+}
+
+/* Note content wrapper - no special styling needed */
 
 /* ============================================
    LAYOUT UTILITIES

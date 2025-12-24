@@ -44,10 +44,10 @@ const mdxComponents = {
     ),
     blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
         <blockquote
-            className="my-10 py-8 px-8 bg-[var(--color-paper-warm)] border-l-4 border-[var(--color-accent)] rounded-r-lg"
+            className="my-10 py-8 px-8 bg-[var(--color-paper-warm)] rounded-lg text-center [&_p]:text-[var(--color-accent)] [&_p]:mb-0"
             {...props}
         >
-            <div className="text-h4 italic text-[var(--color-ink-soft)] leading-relaxed">
+            <div className="text-h4 italic text-[var(--color-accent)] leading-relaxed">
                 {children}
             </div>
         </blockquote>
@@ -78,13 +78,13 @@ export default async function NotePage({ params }: PageProps) {
     return (
         <>
             {/* Hero */}
-            <section className="section bg-[var(--color-paper-warm)]">
+            <section className="pt-12 pb-6 bg-[var(--color-paper-warm)]">
                 <div className="container">
                     <div className="max-w-2xl mx-auto">
                         {/* Back link */}
                         <Link
                             href="/notes"
-                            className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-10 animate-fade-in"
+                            className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-6 animate-fade-in"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -94,21 +94,21 @@ export default async function NotePage({ params }: PageProps) {
 
                         {/* Header */}
                         <header className="animate-fade-in" style={{ animationDelay: "75ms" }}>
-                            <time className="text-label block mb-4">
+                            <h1 className="text-display">{note.metadata.title}</h1>
+                            <time className="text-caption text-[var(--color-ink-muted)] mt-4 block">
                                 {formattedDate}
                             </time>
-                            <h1 className="text-display">{note.metadata.title}</h1>
                         </header>
                     </div>
                 </div>
             </section>
 
             {/* Content */}
-            <section className="section">
+            <section className="pt-10 pb-16">
                 <div className="container">
                     <article className="max-w-2xl mx-auto">
-                        {/* Article body */}
-                        <div className="text-body-lg text-[var(--color-ink)] animate-fade-in" style={{ animationDelay: "150ms" }}>
+                        {/* Article body with drop-cap on first paragraph */}
+                        <div className="text-body-lg text-[var(--color-ink)] animate-fade-in drop-cap" style={{ animationDelay: "150ms" }}>
                             <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
