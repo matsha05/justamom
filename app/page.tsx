@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { NewsletterForm } from "@/components/NewsletterForm";
+import { ArrowIcon } from "@/components/icons";
 
 export default function HomePage() {
   return (
@@ -35,33 +37,16 @@ export default function HomePage() {
 
               {/* CTAs */}
               <div
-                className="flex flex-wrap gap-4 animate-fade-in"
-                style={{ animationDelay: "225ms" }}
+                className="animate-fade-in delay-3 max-w-lg"
               >
-                <Link
-                  href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
-                  className="btn btn-primary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Get my monthly Notes for Moms
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                    />
-                  </svg>
-                </Link>
-                <Link href="/speaking" className="btn btn-secondary">
-                  Book Me to Speak
-                </Link>
+                <NewsletterForm variant="hero" className="mb-4" />
+                <div className="flex items-center justify-center sm:justify-start gap-4">
+                  <span className="text-caption text-[var(--color-ink-faint)]">or</span>
+                  <Link href="/speaking" className="btn btn-secondary">
+                    Book Me to Speak
+                    <ArrowIcon />
+                  </Link>
+                </div>
               </div>
             </div>
 

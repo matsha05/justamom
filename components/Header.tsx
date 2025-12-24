@@ -3,17 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-
-const navLinks = [
-    { href: "/about", label: "About" },
-    { href: "/notes", label: "Notes" },
-    { href: "/speaking", label: "Speaking" },
-    { href: "/contact", label: "Contact" },
-];
+import { usePathname } from "next/navigation";
+import { siteConfig } from "@/lib/config";
+import { ArrowIcon } from "@/components/icons";
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -58,36 +55,18 @@ export function Header() {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-10">
-                        {navLinks.map((link) => (
+                        {siteConfig.navLinks.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="text-caption font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
+                                className={`text-caption font-medium transition-colors ${pathname === link.href
+                                    ? "text-[var(--color-accent)]"
+                                    : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]"
+                                    }`}
                             >
                                 {link.label}
                             </Link>
                         ))}
-                        <Link
-                            href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
-                            className="btn btn-primary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Get the Notes
-                            <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                strokeWidth={2}
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                                />
-                            </svg>
-                        </Link>
                     </nav>
 
                     {/* Mobile Menu Button */}
@@ -136,38 +115,19 @@ export function Header() {
                 >
                     <nav className="py-6 border-t border-[var(--color-border)] mt-4">
                         <div className="flex flex-col gap-4">
-                            {navLinks.map((link) => (
+                            {siteConfig.navLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="text-body font-medium text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors py-2"
+                                    className={`text-body font-medium transition-colors py-2 ${pathname === link.href
+                                        ? "text-[var(--color-accent)]"
+                                        : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]"
+                                        }`}
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {link.label}
                                 </Link>
                             ))}
-                            <Link
-                                href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
-                                className="btn btn-primary mt-2 text-center justify-center"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                Get the Notes
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                                    />
-                                </svg>
-                            </Link>
                         </div>
                     </nav>
                 </div>

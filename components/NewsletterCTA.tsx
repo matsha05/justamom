@@ -1,13 +1,10 @@
-import Link from "next/link";
+import { NewsletterForm } from "./NewsletterForm";
 
 interface NewsletterCTAProps {
     variant?: "default" | "compact";
 }
 
 export function NewsletterCTA({ variant = "default" }: NewsletterCTAProps) {
-    const mailerliteUrl =
-        "https://preview.mailerlite.io/forms/1931972/171530137383208676/share";
-
     if (variant === "compact") {
         return (
             <div className="text-center py-12">
@@ -16,14 +13,7 @@ export function NewsletterCTA({ variant = "default" }: NewsletterCTAProps) {
                     Twice each month I send a short reflection for moms who want wisdom,
                     honesty, and encouragement rooted in Scripture.
                 </p>
-                <Link
-                    href={mailerliteUrl}
-                    className="btn btn-primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Get the Notes
-                </Link>
+                <NewsletterForm variant="compact" className="max-w-md mx-auto" />
             </div>
         );
     }
@@ -41,27 +31,7 @@ export function NewsletterCTA({ variant = "default" }: NewsletterCTAProps) {
                     Twice each month I send a short reflection for moms who want wisdom,
                     honesty, and encouragement rooted in Scripture.
                 </p>
-                <Link
-                    href={mailerliteUrl}
-                    className="btn btn-primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Get the Notes
-                    <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                        />
-                    </svg>
-                </Link>
+                <NewsletterForm variant="compact" className="max-w-md mx-auto" />
 
                 {/* Ornamental Divider */}
                 <div className="divider-ornament mt-12">

@@ -1,11 +1,10 @@
 import Link from "next/link";
+import { siteConfig } from "@/lib/config";
+import { NewsletterForm } from "./NewsletterForm";
 
 const footerLinks = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/notes", label: "Notes" },
-    { href: "/speaking", label: "Speaking" },
-    { href: "/contact", label: "Contact" },
+    ...siteConfig.navLinks,
 ];
 
 export function Footer() {
@@ -19,10 +18,10 @@ export function Footer() {
                     {/* Brand Column */}
                     <div>
                         <Link href="/" className="inline-block mb-4">
-                            <span className="text-h3 text-[var(--color-ink)]">Lizi Shaw</span>
+                            <span className="text-h3 text-[var(--color-ink)]">{siteConfig.site.name}</span>
                         </Link>
                         <p className="text-body text-[var(--color-ink-muted)] max-w-xs">
-                            Helping moms find clarity, courage and peace in a noisy world.
+                            {siteConfig.site.description}
                         </p>
                     </div>
 
@@ -42,20 +41,13 @@ export function Footer() {
                         </nav>
                     </div>
 
-                    {/* Notes Column */}
+                    {/* Newsletter Column */}
                     <div>
                         <h4 className="text-label mb-4">Stay Connected</h4>
                         <p className="text-caption text-[var(--color-ink-muted)] mb-4">
                             A quiet note from one mom to another.
                         </p>
-                        <Link
-                            href="https://preview.mailerlite.io/forms/1931972/171530137383208676/share"
-                            className="btn btn-secondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Get the Notes
-                        </Link>
+                        <NewsletterForm variant="compact" />
                     </div>
                 </div>
 
