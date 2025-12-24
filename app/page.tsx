@@ -10,9 +10,9 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="section bg-[var(--color-paper-warm)]">
         <div className="container">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Text Content - Asymmetric: takes more space */}
-            <div className="lg:col-span-7 order-2 lg:order-1">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Text Content */}
+            <div className="order-2 lg:order-1">
               {/* Eyebrow */}
               <p className="text-label mb-6 animate-fade-in">
                 Speaker · Writer · Encourager
@@ -50,9 +50,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Photo - Asymmetric: takes less space */}
+            {/* Photo */}
             <div
-              className="lg:col-span-5 order-1 lg:order-2 animate-fade-in"
+              className="order-1 lg:order-2 animate-fade-in"
               style={{ animationDelay: "150ms" }}
             >
               <div className="image-editorial aspect-[3/4] relative max-w-md mx-auto lg:max-w-none">
