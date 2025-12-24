@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { siteConfig } from "@/lib/config";
 import { ContactForm } from "@/components/ContactForm";
+import { NewsletterForm } from "@/components/NewsletterForm";
 
 export const metadata: Metadata = {
     title: "Contact",
@@ -51,14 +50,7 @@ export default function ContactPage() {
                             <p className="text-body text-[var(--color-ink-muted)] mb-6 max-w-md mx-auto">
                                 A quiet note from one mom to another, delivered twice a month.
                             </p>
-                            <Link
-                                href={siteConfig.newsletterUrl}
-                                className="btn btn-secondary"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Subscribe
-                            </Link>
+                            <NewsletterForm variant="compact" className="max-w-sm mx-auto" />
                         </div>
                     </div>
                 </div>
