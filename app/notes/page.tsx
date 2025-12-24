@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getAllNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { ArrowIcon } from "@/components/icons";
@@ -35,6 +36,14 @@ export default function NotesPage() {
                             Twice each month, I send a short reflection for moms who want
                             wisdom, honesty, and encouragement rooted in Scripture.
                         </p>
+                        <Image
+                            src="/images/signature.png"
+                            alt="Lizi"
+                            width={80}
+                            height={74}
+                            className="mx-auto mt-8 opacity-70 animate-fade-in"
+                            style={{ animationDelay: "225ms" }}
+                        />
                     </div>
                 </div>
             </section>
