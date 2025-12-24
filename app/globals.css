@@ -375,12 +375,12 @@ html {
   display: block;
   width: 100%;
   padding: 0.875rem 1rem;
-  font-size: var(--text-body);
+  font-size: var(--text-caption);
   font-family: var(--font-body), system-ui, sans-serif;
   color: var(--color-ink);
   background: var(--color-paper);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   transition: border-color var(--duration-fast) var(--ease-out),
     box-shadow var(--duration-fast) var(--ease-out);
 }
