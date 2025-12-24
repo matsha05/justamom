@@ -114,12 +114,16 @@ export default async function NotePage({ params }: PageProps) {
 
                         {/* Sign-off */}
                         <footer className="mt-16 pt-8 border-t border-[var(--color-border)] animate-fade-in" style={{ animationDelay: "225ms" }}>
-                            <p className="text-h4 italic text-[var(--color-ink-soft)]">
+                            <p className="text-h4 italic text-[var(--color-ink-soft)] mb-3">
                                 In it with you,
                             </p>
-                            <p className="text-h3 mt-2 font-medium">
-                                Lizi
-                            </p>
+                            <Image
+                                src="/images/signature.png"
+                                alt="Lizi"
+                                width={120}
+                                height={111}
+                                className="opacity-90"
+                            />
                         </footer>
 
                         {/* Prev/Next Navigation */}
