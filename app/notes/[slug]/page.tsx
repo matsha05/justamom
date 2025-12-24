@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllNoteSlugs, getNoteBySlug } from "@/lib/notes";
+import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 interface PageProps {
@@ -71,6 +72,8 @@ export default async function NotePage({ params }: PageProps) {
         }
     );
 
+    const { prev, next } = getAdjacentNotes(slug);
+
     return (
         <>
             {/* Hero */}
@@ -117,6 +120,49 @@ export default async function NotePage({ params }: PageProps) {
                                 Lizi
                             </p>
                         </footer>
+
+                        {/* Prev/Next Navigation */}
+                        {(prev || next) && (
+                            <nav className="mt-12 pt-8 border-t border-[var(--color-border)] animate-fade-in" style={{ animationDelay: "300ms" }}>
+                                <div className="flex justify-between items-start gap-8">
+                                    {/* Previous (newer) */}
+                                    <div className="flex-1">
+                                        {prev && (
+                                            <Link
+                                                href={`/notes/${prev.slug}`}
+                                                className="group block"
+                                            >
+                                                <span className="text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2">
+                                                    <ArrowIcon direction="left" />
+                                                    Previous
+                                                </span>
+                                                <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors">
+                                                    {prev.title}
+                                                </span>
+                                            </Link>
+                                        )}
+                                    </div>
+
+                                    {/* Next (older) */}
+                                    <div className="flex-1 text-right">
+                                        {next && (
+                                            <Link
+                                                href={`/notes/${next.slug}`}
+                                                className="group block"
+                                            >
+                                                <span className="text-caption text-[var(--color-ink-muted)] flex items-center justify-end gap-2 mb-2">
+                                                    Next
+                                                    <ArrowIcon />
+                                                </span>
+                                                <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors">
+                                                    {next.title}
+                                                </span>
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
+                            </nav>
+                        )}
                     </article>
                 </div>
             </section>

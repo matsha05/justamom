@@ -55,3 +55,22 @@ export function getAllNoteSlugs(): string[] {
         .filter((fileName) => fileName.endsWith(".mdx"))
         .map((fileName) => fileName.replace(/\.mdx$/, ""));
 }
+
+export function getAdjacentNotes(currentSlug: string): {
+    prev: NoteMetadata | null;
+    next: NoteMetadata | null;
+} {
+    const notes = getAllNotes(); // Already sorted by date, newest first
+    const currentIndex = notes.findIndex((note) => note.slug === currentSlug);
+
+    if (currentIndex === -1) {
+        return { prev: null, next: null };
+    }
+
+    return {
+        // Prev = newer note (earlier in array)
+        prev: currentIndex > 0 ? notes[currentIndex - 1] : null,
+        // Next = older note (later in array)
+        next: currentIndex < notes.length - 1 ? notes[currentIndex + 1] : null,
+    };
+}
