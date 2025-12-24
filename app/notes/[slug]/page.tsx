@@ -107,8 +107,8 @@ export default async function NotePage({ params }: PageProps) {
             <section className="pt-10 pb-16">
                 <div className="container">
                     <article className="max-w-2xl mx-auto">
-                        {/* Article body with drop-cap on first paragraph */}
-                        <div className="text-body-lg text-[var(--color-ink)] animate-fade-in drop-cap" style={{ animationDelay: "150ms" }}>
+                        {/* Article body */}
+                        <div className="text-body-lg text-[var(--color-ink)] animate-fade-in" style={{ animationDelay: "150ms" }}>
                             <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
