@@ -1,0 +1,14 @@
+{
+    "name": "Lizi Shaw",
+    "short_name": "Lizi",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "theme_color": "#1f2937",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

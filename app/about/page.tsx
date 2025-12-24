@@ -34,7 +34,7 @@ export default function AboutPage() {
                             <h1 className="text-display mb-10">Hi, I&apos;m Lizi Shaw.</h1>
 
                             <div className="prose space-y-6 text-body-lg text-[var(--color-ink-soft)]">
-                                <p className="drop-cap">
+                                <p>
                                     I&apos;m a wife, mom of three young kids, and someone who deeply
                                     understands how overwhelming modern motherhood can feel. Between
                                     cultural pressure, information overload, and the everyday demands

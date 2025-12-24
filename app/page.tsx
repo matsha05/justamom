@@ -89,7 +89,7 @@ export default function HomePage() {
       <section className="section">
         <div className="container-prose">
           <p className="text-label mb-6">About Me</p>
-          <p className="text-h2 leading-relaxed drop-cap">
+          <p className="text-h2 leading-relaxed">
             Hi, I&apos;m Lizi. I&apos;m a wife, a mom of three, and a woman who is
             learning every day what it means to walk closely with Jesus in the
             middle of real life. I love helping other women find clarity and

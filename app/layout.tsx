@@ -44,27 +44,33 @@ export const metadata: Metadata = {
   description:
     "Helping moms find clarity, courage and peace in a noisy world. Real stories. Biblical truth. A lighthearted look at the everyday moments that shape our lives.",
   keywords: [
-    "Lizi Shaw",
-    "Christian speaker",
-    "mom encouragement",
     "biblical motherhood",
-    "women's ministry",
   ],
   authors: [{ name: "Lizi Shaw" }],
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg", // SVG works for now, or use PNG if generated
+  },
+  manifest: "/site.webmanifest",
+  metadataBase: new URL("https://lizishaw.com"),
   openGraph: {
-    type: "website",
-    locale: "en_US",
+    title: "Lizi Shaw | Speaker, Writer, Encourager",
+    description: "Stories and encouragement for everyday women. Helping moms find clarity, courage and peace in a noisy world.",
     url: "https://lizishaw.com",
     siteName: "Lizi Shaw",
-    title: "Lizi Shaw | Speaker, Writer, Encourager",
-    description:
-      "Helping moms find clarity, courage and peace in a noisy world.",
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Lizi Shaw | Speaker, Writer, Encourager",
-    description:
-      "Helping moms find clarity, courage and peace in a noisy world.",
+    description: "Stories and encouragement for everyday women.",
+    creator: "@lizishaw", // Placeholder if she has one
+  },
+  other: {
+    "theme-color": "#1f2937",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
   },
 };
 
@@ -81,9 +87,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body
-        className={`${cormorant.variable} ${inter.variable} antialiased`}
-      >
+      <body>
         <Header />
         <main>{children}</main>
         <Footer />

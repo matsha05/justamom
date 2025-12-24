@@ -42,7 +42,7 @@ export default function SpeakingPage() {
                     <h1 className="text-display mb-10">Speaking Topics</h1>
 
                     <div className="prose space-y-6 text-body-lg text-[var(--color-ink-soft)]">
-                        <p className="drop-cap">
+                        <p>
                             Motherhood is beautiful...and messy. It&apos;s full of holy moments,
                             loud questions, and days that feel both too long and too short. As a
                             speaker, I&apos;m passionate about encouraging women, especially

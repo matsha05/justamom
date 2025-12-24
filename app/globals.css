@@ -40,14 +40,19 @@
   --font-heading: var(--font-cormorant);
   --font-body: var(--font-inter);
 
-  /* Type Scale */
-  --text-display: clamp(2.5rem, 5vw, 3.5rem);
-  --text-h1: clamp(2.25rem, 4vw, 3rem);
+  /* Type Scale - Publisher-Grade (Refined) */
+  --text-display: clamp(3rem, 5vw, 4.25rem);
+  /* 48-68px */
+  --text-h1: clamp(2.25rem, 4vw, 3.25rem);
+  /* 36-52px */
   --text-h2: clamp(1.75rem, 3vw, 2.25rem);
+  /* 28-36px */
   --text-h3: clamp(1.25rem, 2vw, 1.5rem);
   --text-h4: clamp(1.125rem, 1.5vw, 1.25rem);
-  --text-body-lg: clamp(1.125rem, 1.25vw, 1.25rem);
-  --text-body: 1rem;
+  --text-body-lg: clamp(1.125rem, 1.25vw, 1.1875rem);
+  /* 18-19px */
+  --text-body: 1.0625rem;
+  /* 17px */
   --text-caption: 0.875rem;
   --text-label: 0.75rem;
 
@@ -117,6 +122,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  /* Prevents sticky header from covering targets */
+}
+
+/* Premium Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
 
@@ -136,27 +153,31 @@ body {
 .text-display {
   font-family: var(--font-heading), serif;
   font-size: var(--text-display);
-  font-weight: 400;
+  font-weight: 300;
+  /* Lighter for elegance */
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  /* Tighter tracking */
   color: var(--color-ink);
 }
 
 .text-h1 {
   font-family: var(--font-heading), serif;
   font-size: var(--text-h1);
-  font-weight: 500;
+  font-weight: 400;
+  /* Regular instead of Medium */
   line-height: 1.15;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   color: var(--color-ink);
 }
 
 .text-h2 {
   font-family: var(--font-heading), serif;
   font-size: var(--text-h2);
-  font-weight: 500;
+  font-weight: 400;
+  /* Regular for elegance */
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   color: var(--color-ink);
 }
 

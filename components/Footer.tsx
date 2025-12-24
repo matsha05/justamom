@@ -67,9 +67,9 @@ export function Footer() {
                     <p className="text-caption text-[var(--color-ink-muted)]">
                         © {currentYear} Lizi Shaw. All rights reserved.
                     </p>
-                    <p className="text-caption text-[var(--color-ink-faint)]">
-                        Speaker · Writer · Encourager
-                    </p>
+                    <div className="flex items-center gap-2 text-caption text-[var(--color-ink-faint)]">
+                        <span>Made with care.</span>
+                    </div>
                 </div>
             </div>
         </footer>
