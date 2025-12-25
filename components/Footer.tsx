@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { NewsletterForm } from "./NewsletterForm";
 
@@ -14,17 +15,7 @@ export function Footer() {
         <footer className="bg-[var(--color-paper-warm)] border-t border-[var(--color-border)]">
             <div className="container py-12">
                 {/* Main Footer Content */}
-                <div className="grid md:grid-cols-3 gap-12 mb-12">
-                    {/* Brand Column */}
-                    <div>
-                        <Link href="/" className="inline-block mb-4">
-                            <span className="text-h3 text-[var(--color-ink)]">{siteConfig.site.name}</span>
-                        </Link>
-                        <p className="text-body text-[var(--color-ink-muted)] max-w-xs">
-                            {siteConfig.site.description}
-                        </p>
-                    </div>
-
+                <div className="grid md:grid-cols-2 gap-12 mb-12">
                     {/* Navigation Column */}
                     <div>
                         <h4 className="text-label mb-4">Navigate</h4>
@@ -59,8 +50,17 @@ export function Footer() {
                     <p className="text-caption text-[var(--color-ink-muted)]">
                         © {currentYear} Lizi Shaw. All rights reserved.
                     </p>
-                    <div className="text-caption text-[var(--color-ink-faint)]">
-                        From Niwot, Colorado <span className="text-[var(--color-accent)]">♥</span>
+                    <div className="flex flex-col items-center md:items-end gap-2">
+                        <Image
+                            src="/images/signature.png"
+                            alt="Lizi"
+                            width={60}
+                            height={55}
+                            className="opacity-80"
+                        />
+                        <div className="text-caption text-[var(--color-ink-faint)]">
+                            From Niwot, Colorado <span className="text-[var(--color-accent)]">♥</span>
+                        </div>
                     </div>
                 </div>
             </div>

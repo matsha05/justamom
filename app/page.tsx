@@ -55,15 +55,20 @@ export default function HomePage() {
               className="order-1 lg:order-2 animate-fade-in"
               style={{ animationDelay: "150ms" }}
             >
-              <div className="image-editorial aspect-[3/4] relative max-w-md mx-auto lg:max-w-none">
-                <Image
-                  src="/images/landingpagefamily.avif"
-                  alt="Lizi Shaw with her family"
-                  fill
-                  className="object-cover object-top"
-                  priority
-                  quality={95}
-                />
+              <div className="relative max-w-md mx-auto lg:max-w-none">
+                {/* Decorative Offset Border */}
+                <div className="absolute top-4 -right-4 w-full h-full border border-[var(--color-ink-faint)] rounded-lg -z-10 hidden lg:block" />
+
+                <div className="image-editorial aspect-[3/4] relative">
+                  <Image
+                    src="/images/landingpagefamily.avif"
+                    alt="Lizi Shaw with her family"
+                    fill
+                    className="object-cover object-top"
+                    priority
+                    quality={95}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -101,49 +106,46 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 stagger-children">
+          <div className="grid md:grid-cols-3 gap-12 stagger-children">
             {/* Topic 1 */}
-            <div className="card">
-              <div className="card-body">
-                <h3 className="text-h4 mb-4">
-                  Making Confident Decisions in a Confusing Culture
-                </h3>
-                <p className="text-body text-[var(--color-ink-muted)]">
-                  A practical and encouraging message for moms who feel pulled in a
-                  thousand directions. Lizi unpacks why motherhood feels noisier
-                  than it used to, how cultural messages shape our confidence, and
-                  how to ground decisions in biblical truth.
-                </p>
-              </div>
+            <div className="space-y-4">
+              <span className="text-[var(--color-accent)] font-medium text-xs tracking-widest uppercase border-b border-[var(--color-accent-soft)] pb-2 inline-block">Confidence</span>
+              <h3 className="text-h4 mb-4">
+                Making Confident Decisions in a Confusing Culture
+              </h3>
+              <p className="text-body text-[var(--color-ink-muted)]">
+                A practical and encouraging message for moms who feel pulled in a
+                thousand directions. Lizi unpacks why motherhood feels noisier
+                than it used to, how cultural messages shape our confidence, and
+                how to ground decisions in biblical truth.
+              </p>
             </div>
 
             {/* Topic 2 */}
-            <div className="card">
-              <div className="card-body">
-                <h3 className="text-h4 mb-4">
-                  Finding God in the Small Moments of Motherhood
-                </h3>
-                <p className="text-body text-[var(--color-ink-muted)]">
-                  A reflective, hope-filled message about recognizing God&apos;s
-                  presence in the mundane. Perfect for groups needing refreshment
-                  and encouragement.
-                </p>
-              </div>
+            <div className="space-y-4">
+              <span className="text-[var(--color-accent)] font-medium text-xs tracking-widest uppercase border-b border-[var(--color-accent-soft)] pb-2 inline-block">Perspective</span>
+              <h3 className="text-h4 mb-4">
+                Finding God in the Small Moments of Motherhood
+              </h3>
+              <p className="text-body text-[var(--color-ink-muted)]">
+                A reflective, hope-filled message about recognizing God&apos;s
+                presence in the mundane. Perfect for groups needing refreshment
+                and encouragement.
+              </p>
             </div>
 
             {/* Topic 3 */}
-            <div className="card">
-              <div className="card-body">
-                <h3 className="text-h4 mb-4">
-                  The Stories We Tell Ourselves and the Truth That Frees Us
-                </h3>
-                <p className="text-body text-[var(--color-ink-muted)]">
-                  A talk that blends emotional honesty with biblical grounding.
-                  Lizi helps moms identify the quiet narratives that lead to
-                  anxiety, comparison, or confusion and offers truth-centered
-                  tools for replacing them.
-                </p>
-              </div>
+            <div className="space-y-4">
+              <span className="text-[var(--color-accent)] font-medium text-xs tracking-widest uppercase border-b border-[var(--color-accent-soft)] pb-2 inline-block">Identity</span>
+              <h3 className="text-h4 mb-4">
+                The Stories We Tell Ourselves and the Truth That Frees Us
+              </h3>
+              <p className="text-body text-[var(--color-ink-muted)]">
+                A talk that blends emotional honesty with biblical grounding.
+                Lizi helps moms identify the quiet narratives that lead to
+                anxiety, comparison, or confusion and offers truth-centered
+                tools for replacing them.
+              </p>
             </div>
           </div>
 
