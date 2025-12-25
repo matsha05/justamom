@@ -12,7 +12,7 @@ export function Footer() {
 
     return (
         <footer className="bg-[var(--color-paper-warm)] border-t border-[var(--color-border)]">
-            <div className="container py-16">
+            <div className="container py-12">
                 {/* Main Footer Content */}
                 <div className="grid md:grid-cols-3 gap-12 mb-12">
                     {/* Brand Column */}

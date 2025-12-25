@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
+import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
 
 export const metadata: Metadata = {
     title: "Speaking Topics",
@@ -42,7 +43,7 @@ export default function SpeakingPage() {
                     <p className="text-label mb-6">Speaking</p>
                     <h1 className="text-display mb-10">Speaking Topics</h1>
 
-                    <div className="prose space-y-6 text-body-lg text-[var(--color-ink-soft)]">
+                    <div className="prose text-body-lg text-[var(--color-ink-soft)]">
                         <p>
                             Motherhood is beautiful...and messy. It&apos;s full of holy moments,
                             loud questions, and days that feel both too long and too short. As a
@@ -109,27 +110,23 @@ export default function SpeakingPage() {
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="section section-soft">
-                <div className="container text-center">
-                    <div className="divider-ornament mb-12">
-                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
-                    </div>
+            {/* Inquiry Form Section */}
+            <section className="section section-soft" id="book">
+                <div className="container">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="text-center mb-12">
+                            <div className="divider-ornament mb-8">
+                                <span className="text-[var(--color-accent)] text-2xl">✦</span>
+                            </div>
+                            <h2 className="text-h2 mb-4">Invite Lizi to Speak</h2>
+                            <p className="text-body-lg text-[var(--color-ink-muted)] max-w-xl mx-auto">
+                                Whether it&apos;s a conference, a retreat, or a living room bible study—I&apos;d love to join you. Check availability for your dates below.
+                            </p>
+                        </div>
 
-                    <h2 className="text-h2 mb-6">Ready to Connect?</h2>
-                    <p className="text-body-lg text-[var(--color-ink-muted)] max-w-xl mx-auto mb-10">
-                        If you&apos;re hosting a moms&apos; event, retreat, or group
-                        gathering, I&apos;d love to be a part of it. I&apos;m happy to speak
-                        in person or virtually. Let&apos;s connect and talk about what would
-                        serve your women best.
-                    </p>
-                    <Link href="/contact" className="btn btn-primary">
-                        Let&apos;s get in touch!
-                        <ArrowIcon />
-                    </Link>
-
-                    <div className="divider-ornament mt-12">
-                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
+                        <div className="max-w-2xl mx-auto">
+                            <SpeakingInquiryForm />
+                        </div>
                     </div>
                 </div>
             </section>

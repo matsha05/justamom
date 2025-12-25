@@ -35,7 +35,7 @@ export default function AboutPage() {
                             <p className="text-label mb-6">About Me</p>
                             <h1 className="text-display mb-10">Hi, I&apos;m Lizi Shaw.</h1>
 
-                            <div className="prose space-y-6 text-body-lg text-[var(--color-ink-soft)]">
+                            <div className="prose text-body-lg text-[var(--color-ink-soft)]">
                                 <p>
                                     I&apos;m a wife, mom of three young kids, and someone who deeply
                                     understands how overwhelming modern motherhood can feel. Between
@@ -80,10 +80,6 @@ export default function AboutPage() {
                         husband, Matt, and their three children who provide endless
                         sanctification and even more material for her writing.
                     </blockquote>
-
-                    <div className="divider-ornament mt-12">
-                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
-                    </div>
                 </div>
             </section>
 

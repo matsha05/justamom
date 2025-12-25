@@ -32,11 +32,6 @@ export function NewsletterCTA({ variant = "default" }: NewsletterCTAProps) {
                     honesty, and encouragement rooted in Scripture.
                 </p>
                 <NewsletterForm variant="compact" className="max-w-md mx-auto" />
-
-                {/* Ornamental Divider */}
-                <div className="divider-ornament mt-12">
-                    <span className="text-[var(--color-accent)] text-2xl">✦</span>
-                </div>
             </div>
         </section>
     );

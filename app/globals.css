@@ -918,5 +918,42 @@ textarea.input {
 }
 
 .prose li {
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-xs);
+}
+
+.prose p {
+  margin-bottom: var(--space-lg) !important;
+}
+
+.prose p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* General body text paragraph spacing */
+.text-body+.text-body,
+.text-body-lg+.text-body-lg {
+  margin-top: var(--space-md);
+}
+
+/* ----------------------------------------
+   React Day Picker Overrides
+   ---------------------------------------- */
+.rdp-button_previous,
+.rdp-button_next {
+  color: var(--color-ink) !important;
+}
+
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+  background-color: var(--color-paper-soft) !important;
+  color: var(--color-ink) !important;
+}
+
+.rdp-day_button:hover {
+  background-color: var(--color-paper-soft) !important;
+}
+
+.rdp-today {
+  color: var(--color-ink) !important;
+  font-weight: 600;
 }

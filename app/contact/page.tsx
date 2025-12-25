@@ -24,7 +24,7 @@ export default function ContactPage() {
             </section>
 
             {/* Contact Form */}
-            <section className="section">
+            <section className="py-12">
                 <div className="container-narrow">
                     <div className="card">
                         <div className="card-body p-8 md:p-10">
