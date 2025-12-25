@@ -55,20 +55,15 @@ export default function HomePage() {
               className="order-1 lg:order-2 animate-fade-in"
               style={{ animationDelay: "150ms" }}
             >
-              <div className="relative max-w-md mx-auto lg:max-w-none">
-                {/* Decorative Offset Border */}
-                <div className="absolute top-4 -right-4 w-full h-full border border-[var(--color-ink-faint)] rounded-lg -z-10 hidden lg:block" />
-
-                <div className="image-editorial aspect-[3/4] relative">
-                  <Image
-                    src="/images/landingpagefamily.avif"
-                    alt="Lizi Shaw with her family"
-                    fill
-                    className="object-cover object-top"
-                    priority
-                    quality={95}
-                  />
-                </div>
+              <div className="image-editorial aspect-[3/4] relative max-w-md mx-auto lg:max-w-none">
+                <Image
+                  src="/images/landingpagefamily.avif"
+                  alt="Lizi Shaw with her family"
+                  fill
+                  className="object-cover object-top"
+                  priority
+                  quality={95}
+                />
               </div>
             </div>
           </div>
