@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const apiKey = process.env.MAILERLITE_API_KEY;
+        const apiKey = process.env.MAILER_LITE_API_KEY;
         const groupId = process.env.MAILERLITE_GROUP_ID;
 
         if (!apiKey || !groupId) {
