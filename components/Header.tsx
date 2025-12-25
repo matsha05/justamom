@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config";
-import { ArrowIcon } from "@/components/icons";
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,9 +58,9 @@ export function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-caption font-medium transition-colors ${pathname === link.href
-                                    ? "text-[var(--color-accent)]"
-                                    : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]"
+                                className={`relative text-caption font-medium transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:bg-[var(--color-accent)] after:transition-all after:duration-200 ${pathname === link.href
+                                    ? "text-[var(--color-accent)] after:w-full"
+                                    : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] after:w-0 hover:after:w-full"
                                     }`}
                             >
                                 {link.label}
@@ -113,7 +112,7 @@ export function Header() {
                     className={`md:hidden overflow-hidden transition-all duration-300 ${mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                         }`}
                 >
-                    <nav className="py-6 border-t border-[var(--color-border)] mt-4">
+                    <nav className="py-6 border-t border-[var(--color-border)] mt-4 bg-[var(--color-paper-warm)]/95 backdrop-blur-sm -mx-6 px-6">
                         <div className="flex flex-col gap-4">
                             {siteConfig.navLinks.map((link) => (
                                 <Link

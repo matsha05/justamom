@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* ============================================
    Lizi Shaw — Premium Author Design System
@@ -101,11 +104,38 @@
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
-}
-
-:root {
-  --background: var(--color-paper);
-  --foreground: var(--color-ink);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 /* ============================================
@@ -113,8 +143,6 @@
    ============================================ */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: var(--text-body);
   line-height: 1.7;
@@ -598,8 +626,33 @@ textarea.input {
   }
 }
 
+@keyframes pulse-success {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn var(--duration-slow) var(--ease-out) forwards;
+}
+
+.animate-pulse-success {
+  animation: pulse-success 0.5s var(--ease-spring) 1;
+}
+
+/* Link arrow slide on hover */
+.link-arrow svg {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.link-arrow:hover svg {
+  transform: translateX(4px);
 }
 
 /* Staggered children */
@@ -765,6 +818,7 @@ textarea.input {
 .note-card:hover {
   border-color: var(--color-accent-soft);
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .note-card-date {
@@ -956,4 +1010,84 @@ textarea.input {
 .rdp-today {
   color: var(--color-ink) !important;
   font-weight: 600;
+}
+
+:root {
+  --radius: 0.25rem;
+  /* Map shadcn variables to author design tokens */
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --card: white;
+  --card-foreground: var(--color-ink);
+  --popover: white;
+  --popover-foreground: var(--color-ink);
+  --primary: var(--color-accent);
+  --primary-foreground: white;
+  --secondary: var(--color-paper-warm);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-paper-soft);
+  --muted-foreground: var(--color-ink-muted);
+  --accent: var(--color-accent-soft);
+  --accent-foreground: var(--color-accent);
+  --destructive: var(--color-error);
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-accent);
+  --chart-1: var(--color-accent);
+  --chart-2: var(--color-accent-light);
+  --chart-3: var(--color-ink-muted);
+  --chart-4: var(--color-success);
+  --chart-5: var(--color-error);
+  --sidebar: var(--color-paper-warm);
+  --sidebar-foreground: var(--color-ink);
+  --sidebar-primary: var(--color-accent);
+  --sidebar-primary-foreground: white;
+  --sidebar-accent: var(--color-accent-soft);
+  --sidebar-accent-foreground: var(--color-accent);
+  --sidebar-border: var(--color-border);
+  --sidebar-ring: var(--color-accent);
+}
+
+.dark {
+  --background: oklch(0.147 0.004 49.25);
+  --foreground: oklch(0.985 0.001 106.423);
+  --card: oklch(0.216 0.006 56.043);
+  --card-foreground: oklch(0.985 0.001 106.423);
+  --popover: oklch(0.216 0.006 56.043);
+  --popover-foreground: oklch(0.985 0.001 106.423);
+  --primary: oklch(0.923 0.003 48.717);
+  --primary-foreground: oklch(0.216 0.006 56.043);
+  --secondary: oklch(0.268 0.007 34.298);
+  --secondary-foreground: oklch(0.985 0.001 106.423);
+  --muted: oklch(0.268 0.007 34.298);
+  --muted-foreground: oklch(0.709 0.01 56.259);
+  --accent: oklch(0.268 0.007 34.298);
+  --accent-foreground: oklch(0.985 0.001 106.423);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.553 0.013 58.071);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.216 0.006 56.043);
+  --sidebar-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
+  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.553 0.013 58.071);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }

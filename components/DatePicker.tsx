@@ -52,12 +52,12 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                     value={inputValue}
                     readOnly
                     onClick={() => setIsPopperOpen(!isPopperOpen)}
-                    className="input w-full cursor-pointer pr-10"
+                    className="h-10 w-full rounded border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] shadow-sm transition-all outline-none cursor-pointer pr-10 placeholder:text-[var(--color-ink-muted)] hover:border-[var(--color-ink-faint)] focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-soft)]"
                     placeholder="Select a date..."
                     autoComplete="off"
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-ink-muted)] pointer-events-none">
-                    <CalendarIcon size={18} />
+                    <CalendarIcon size={16} />
                 </div>
             </div>
 
@@ -87,8 +87,10 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                             },
                         }}
                         styles={{
-                            head_cell: { color: "var(--color-ink-muted)", fontSize: "0.875rem" },
-                            cell: { fontSize: "0.875rem" },
+                            head_cell: { color: "var(--color-ink-muted)", fontSize: "0.75rem", fontWeight: 500 },
+                            cell: { fontSize: "0.8125rem" },
+                            day: { fontSize: "0.8125rem" },
+                            caption_label: { fontSize: "0.875rem", fontWeight: 600 },
                         }}
                     />
                 </div>

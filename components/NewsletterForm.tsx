@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 
-type SubmitStatus = "idle" | "submitting" | "success" | "error";
+type SubmitStatus = "idle" | "submitting" | "success";
 
 interface NewsletterFormProps {
     variant?: "default" | "compact" | "hero";
@@ -16,12 +20,10 @@ export function NewsletterForm({
 }: NewsletterFormProps) {
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<SubmitStatus>("idle");
-    const [message, setMessage] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus("submitting");
-        setMessage("");
 
         try {
             const response = await fetch("/api/newsletter", {
@@ -34,15 +36,15 @@ export function NewsletterForm({
 
             if (response.ok) {
                 setStatus("success");
-                setMessage(data.message || "You're in! Check your inbox.");
                 setEmail("");
+                toast.success(data.message || "You're in! Check your inbox.");
             } else {
-                setStatus("error");
-                setMessage(data.error || "Something went wrong. Please try again.");
+                setStatus("idle");
+                toast.error(data.error || "Something went wrong. Please try again.");
             }
         } catch {
-            setStatus("error");
-            setMessage("Network error. Please try again.");
+            setStatus("idle");
+            toast.error("Network error. Please try again.");
         }
     };
 
@@ -50,57 +52,45 @@ export function NewsletterForm({
     if (status === "success") {
         return (
             <div className={`flex justify-center ${className}`}>
-                <div className="flex items-start gap-2 text-[var(--color-success)] text-center">
-                    <svg
-                        className="w-5 h-5 flex-shrink-0 mt-0.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5 13l4 4L19 7"
-                        />
-                    </svg>
-                    <span className="text-body font-medium">{message}</span>
+                <div className="flex items-center gap-2 text-[var(--color-success)]">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="text-body font-medium">You&apos;re on the list!</span>
                 </div>
             </div>
         );
     }
+
+    const isSubmitting = status === "submitting";
+    const buttonText = variant === "hero" ? "Get the Notes" : "Subscribe";
 
     // Compact variant (single line)
     if (variant === "compact" || variant === "hero") {
         return (
             <form onSubmit={handleSubmit} className={className}>
                 <div className="flex flex-col sm:flex-row gap-3">
-                    <input
+                    <Input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Your email"
                         required
-                        className="input flex-1"
+                        disabled={isSubmitting}
+                        className="flex-1"
                     />
-                    <button
-                        type="submit"
-                        disabled={status === "submitting"}
-                        className="btn btn-primary whitespace-nowrap disabled:opacity-60"
-                    >
-                        {status === "submitting" ? (
-                            "Subscribing..."
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Subscribing...
+                            </>
                         ) : (
                             <>
-                                {variant === "hero" ? "Get the Notes" : "Subscribe"}
+                                {buttonText}
                                 <ArrowIcon />
                             </>
                         )}
-                    </button>
+                    </Button>
                 </div>
-                {status === "error" && (
-                    <p className="text-sm text-[var(--color-error)] mt-2">{message}</p>
-                )}
             </form>
         );
     }
@@ -109,32 +99,29 @@ export function NewsletterForm({
     return (
         <form onSubmit={handleSubmit} className={className}>
             <div className="space-y-4">
-                <input
+                <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     required
-                    className="input w-full"
+                    disabled={isSubmitting}
+                    className="w-full"
                 />
-                <button
-                    type="submit"
-                    disabled={status === "submitting"}
-                    className="btn btn-primary w-full disabled:opacity-60"
-                >
-                    {status === "submitting" ? (
-                        "Subscribing..."
+                <Button type="submit" disabled={isSubmitting} className="w-full">
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Subscribing...
+                        </>
                     ) : (
                         <>
                             Get the Notes
                             <ArrowIcon />
                         </>
                     )}
-                </button>
+                </Button>
             </div>
-            {status === "error" && (
-                <p className="text-sm text-[var(--color-error)] mt-3">{message}</p>
-            )}
         </form>
     );
 }

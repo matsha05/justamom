@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowIcon } from "@/components/icons";
 import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
 
 export const metadata: Metadata = {
@@ -83,12 +81,12 @@ export default function SpeakingPage() {
                                     className={`lg:col-span-4 ${index % 2 === 1 ? "lg:order-2" : ""
                                         }`}
                                 >
-                                    <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md">
+                                    <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg group">
                                         <Image
                                             src={topic.image}
                                             alt={topic.alt}
                                             fill
-                                            className="object-contain p-6"
+                                            className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
                                             quality={90}
                                         />
                                     </div>

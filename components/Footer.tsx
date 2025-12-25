@@ -24,7 +24,7 @@ export function Footer() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="text-caption text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
+                                    className="relative text-caption text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors w-fit after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-[var(--color-accent)] after:w-0 hover:after:w-full after:transition-all after:duration-200"
                                 >
                                     {link.label}
                                 </Link>
