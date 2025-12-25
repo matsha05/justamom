@@ -49,10 +49,10 @@ export function NewsletterForm({
     // Success state
     if (status === "success") {
         return (
-            <div className={`text-center ${className}`}>
-                <div className="inline-flex items-center gap-2 text-[var(--color-success)]">
+            <div className={`flex justify-center ${className}`}>
+                <div className="flex items-start gap-2 text-[var(--color-success)] text-center">
                     <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 flex-shrink-0 mt-0.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
