@@ -70,7 +70,7 @@ export function Header() {
 
                     {/* Mobile Menu Button */}
                     <button
-                        className="md:hidden p-2 text-[var(--color-ink)]"
+                        className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-paper-dark)]/10 rounded-full"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                         aria-expanded={mobileMenuOpen}
@@ -108,26 +108,27 @@ export function Header() {
                 </div>
 
                 {/* Mobile Navigation */}
+                {/* Mobile Navigation Overlay */}
                 <div
-                    className={`md:hidden overflow-hidden transition-all duration-300 ${mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                    className={`fixed inset-0 z-40 bg-[var(--color-paper)]/98 backdrop-blur-sm transition-all duration-300 md:hidden flex items-center justify-center ${mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                         }`}
+                    style={{ top: "0", minHeight: "100vh" }}
+                    onClick={() => setMobileMenuOpen(false)}
                 >
-                    <nav className="py-6 border-t border-[var(--color-border)] mt-4 bg-[var(--color-paper-warm)]/95 backdrop-blur-sm -mx-6 px-6">
-                        <div className="flex flex-col gap-4">
-                            {siteConfig.navLinks.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={`text-body font-medium transition-colors py-2 ${pathname === link.href
-                                        ? "text-[var(--color-accent)]"
-                                        : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]"
-                                        }`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </div>
+                    <nav className="flex flex-col items-center gap-8 p-6">
+                        {siteConfig.navLinks.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`text-h2 font-serif transition-colors ${pathname === link.href
+                                    ? "text-[var(--color-accent)]"
+                                    : "text-[var(--color-ink)] hover:text-[var(--color-accent)]"
+                                    }`}
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
                     </nav>
                 </div>
             </div>

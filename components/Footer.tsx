@@ -15,7 +15,7 @@ export function Footer() {
         <footer className="bg-[var(--color-paper-warm)] border-t border-[var(--color-border)]">
             <div className="container py-12">
                 {/* Main Footer Content */}
-                <div className="grid md:grid-cols-2 gap-12 mb-12">
+                <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-12 mb-12">
                     {/* Navigation Column */}
                     <div>
                         <h4 className="text-label mb-4">Navigate</h4>
