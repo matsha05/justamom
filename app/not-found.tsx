@@ -7,9 +7,9 @@ export default function NotFound() {
         <main className="min-h-[80vh] grid place-items-center bg-[var(--color-paper)] p-6">
             <section className="max-w-md text-center animate-fade-in">
                 <p className="text-label tracking-widest text-[var(--color-ink-muted)] mb-4">404</p>
-                <h1 className="text-h2 mb-4">Can&apos;t find that page</h1>
+                <h1 className="text-h2 mb-4">Oops. This page wandered off.</h1>
                 <p className="text-body text-[var(--color-ink-soft)] mb-8">
-                    It seems you&apos;ve wandered a bit too far. Let&apos;s get you back to where you meant to go.
+                    Probably looking for a snack. Let&apos;s get you back on track.
                 </p>
 
                 {/* Primary CTA */}

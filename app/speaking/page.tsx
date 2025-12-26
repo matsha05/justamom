@@ -59,8 +59,8 @@ export default function SpeakingPage() {
 
                         <p>
                             Whether your audience is full of tired moms, curious seekers, or
-                            women hungry for Biblical truth in a practical way, I&apos;d be
-                            honored to serve.
+                            women hungry for Biblical truth in a practical way, I&apos;d love
+                            to be there. Coffee optional. Encouragement guaranteed.
                         </p>
                     </div>
                 </div>

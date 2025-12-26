@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowIcon } from "@/components/icons";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { NewsletterForm } from "@/components/NewsletterForm";
-import { Testimonials } from "@/components/Testimonials";
+
 
 export default function HomePage() {
   return (
@@ -154,8 +154,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <Testimonials />
+
 
       {/* Bottom Newsletter CTA */}
       <NewsletterCTA />
