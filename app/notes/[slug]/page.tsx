@@ -75,8 +75,38 @@ export default async function NotePage({ params }: PageProps) {
 
     const { prev, next } = getAdjacentNotes(slug);
 
+    // Article JSON-LD for rich search results
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: note.metadata.title,
+        description: note.metadata.excerpt,
+        datePublished: note.metadata.date,
+        dateModified: note.metadata.date,
+        author: {
+            "@type": "Person",
+            name: "Lizi Shaw",
+            url: "https://lizishaw.com/about",
+        },
+        publisher: {
+            "@type": "Person",
+            name: "Lizi Shaw",
+            url: "https://lizishaw.com",
+        },
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `https://lizishaw.com/notes/${slug}`,
+        },
+    };
+
     return (
         <>
+            {/* Article Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+            />
+
             {/* Hero */}
             <section className="pt-12 pb-6 bg-[var(--color-paper-warm)]">
                 <div className="container">

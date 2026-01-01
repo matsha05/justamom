@@ -12,15 +12,23 @@ const jsonLd = {
   "@type": "Person",
   name: "Lizi Shaw",
   url: "https://lizishaw.com",
+  image: "https://lizishaw.com/images/aboutmepic.avif",
   jobTitle: "Christian Speaker & Writer",
   description:
     "Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.",
-  sameAs: [],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Niwot",
+    addressRegion: "Colorado",
+    addressCountry: "US",
+  },
   knowsAbout: [
     "Christian motherhood",
     "Biblical parenting",
     "Women's ministry",
     "Faith-based speaking",
+    "Mom encouragement",
+    "Finding God in everyday life",
   ],
 };
 
@@ -46,6 +54,11 @@ export const metadata: Metadata = {
     "Helping moms find clarity, courage and peace in a noisy world. Real stories. Biblical truth. A lighthearted look at the everyday moments that shape our lives.",
   keywords: [
     "biblical motherhood",
+    "christian mom speaker",
+    "faith and motherhood",
+    "mom encouragement",
+    "women's ministry speaker",
+    "biblical parenting",
   ],
   authors: [{ name: "Lizi Shaw" }],
   icons: {
