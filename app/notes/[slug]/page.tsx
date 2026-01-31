@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { DownloadCard } from "@/components/DownloadCard";
 import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
@@ -52,6 +53,7 @@ const mdxComponents = {
             </div>
         </blockquote>
     ),
+    DownloadCard,
 };
 
 export default async function NotePage({ params }: PageProps) {
