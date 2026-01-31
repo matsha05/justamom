@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { DownloadCard } from "@/components/DownloadCard";
+import { NoteSignOff } from "@/components/NoteSignOff";
 import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
@@ -145,18 +145,7 @@ export default async function NotePage({ params }: PageProps) {
                         </div>
 
                         {/* Sign-off */}
-                        <footer className="mt-16 pt-8 border-t border-[var(--color-border)] animate-fade-in" style={{ animationDelay: "225ms" }}>
-                            <p className="text-h4 italic text-[var(--color-ink-soft)] mb-3">
-                                In it with you,
-                            </p>
-                            <Image
-                                src="/images/signature.png"
-                                alt="Lizi"
-                                width={120}
-                                height={111}
-                                className="opacity-90"
-                            />
-                        </footer>
+                        <NoteSignOff />
 
                         {/* Prev/Next Navigation */}
                         {(prev || next) && (

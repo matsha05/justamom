@@ -37,6 +37,7 @@ export function getNoteBySlug(slug: string) {
     const fullPath = path.join(notesDirectory, `${slug}.mdx`);
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
+    const normalizedContent = stripTrailingSignOff(content);
 
     return {
         slug,
@@ -45,8 +46,18 @@ export function getNoteBySlug(slug: string) {
             date: data.date,
             excerpt: data.excerpt,
         },
-        content,
+        content: normalizedContent,
     };
+}
+
+function stripTrailingSignOff(content: string): string {
+    const trimmed = content.trimEnd();
+    const signOffPattern = /(?:^|\n)\s*In it with you,\s*\n\s*Lizi\s*$/i;
+    if (!signOffPattern.test(trimmed)) {
+        return content;
+    }
+    const withoutSignOff = trimmed.replace(signOffPattern, "");
+    return `${withoutSignOff.trimEnd()}\n`;
 }
 
 export function getAllNoteSlugs(): string[] {
