@@ -10,12 +10,16 @@ export const size = {
 
 export const contentType = "image/png";
 
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3001";
+
 const loraSemiBold = fetch(
-  "https://unpkg.com/@fontsource/lora/files/lora-latin-600-normal.woff"
+  new URL("/fonts/lora-latin-600-normal.woff", baseUrl)
 ).then((res) => res.arrayBuffer());
 
 const interRegular = fetch(
-  "https://unpkg.com/@fontsource/inter/files/inter-latin-400-normal.woff"
+  new URL("/fonts/inter-latin-400-normal.woff", baseUrl)
 ).then((res) => res.arrayBuffer());
 
 export default async function Image() {
@@ -66,7 +70,7 @@ export default async function Image() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://lizishaw.com/images/peony-logo-v4.png"
+            src={new URL("/images/peony-logo-v4.png", baseUrl).toString()}
             width={140}
             height={140}
             alt=""
