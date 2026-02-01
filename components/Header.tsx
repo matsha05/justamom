@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config";
 
@@ -10,6 +10,7 @@ export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const pathname = usePathname();
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -18,6 +19,55 @@ export function Header() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    useEffect(() => {
+        if (!mobileMenuOpen) {
+            document.body.style.overflow = "";
+            return;
+        }
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
+        const focusables = mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+            "a, button"
+        );
+        focusables?.[0]?.focus();
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setMobileMenuOpen(false);
+                return;
+            }
+
+            if (event.key !== "Tab" || !mobileMenuRef.current) {
+                return;
+            }
+
+            const nodes = Array.from(
+                mobileMenuRef.current.querySelectorAll<HTMLElement>("a, button")
+            );
+            if (nodes.length === 0) return;
+            const first = nodes[0];
+            const last = nodes[nodes.length - 1];
+            const active = document.activeElement;
+
+            if (event.shiftKey && active === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && active === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [mobileMenuOpen]);
 
     return (
         <header
@@ -54,18 +104,25 @@ export function Header() {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-10">
-                        {siteConfig.navLinks.map((link) => (
+                        {siteConfig.navLinks.map((link) => {
+                            const isNotes = link.href === "/notes";
+                            const isActive = isNotes
+                                ? pathname?.startsWith("/notes")
+                                : pathname === link.href;
+
+                            return (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`relative text-caption font-medium transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:bg-[var(--color-accent)] after:transition-all after:duration-200 ${pathname === link.href
+                                className={`relative text-caption font-medium transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:bg-[var(--color-accent)] after:transition-all after:duration-200 ${isActive
                                     ? "text-[var(--color-accent)] after:w-full"
                                     : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] after:w-0 hover:after:w-full"
                                     }`}
                             >
                                 {link.label}
                             </Link>
-                        ))}
+                            );
+                        })}
                     </nav>
 
                     {/* Mobile Menu Button */}
@@ -74,6 +131,7 @@ export function Header() {
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                         aria-expanded={mobileMenuOpen}
+                        aria-controls="mobile-menu"
                     >
                         {mobileMenuOpen ? (
                             <svg
@@ -114,13 +172,24 @@ export function Header() {
                         }`}
                     style={{ top: "0", minHeight: "100vh" }}
                     onClick={() => setMobileMenuOpen(false)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-hidden={!mobileMenuOpen}
+                    aria-label="Mobile navigation"
                 >
-                    <nav className="flex flex-col items-center gap-8 p-6">
+                    <nav
+                        ref={mobileMenuRef}
+                        id="mobile-menu"
+                        className="flex flex-col items-center gap-8 p-6"
+                        onClick={(event) => event.stopPropagation()}
+                    >
                         {siteConfig.navLinks.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-h2 font-serif transition-colors ${pathname === link.href
+                                className={`text-h2 font-serif transition-colors ${(link.href === "/notes"
+                                    ? pathname?.startsWith("/notes")
+                                    : pathname === link.href)
                                     ? "text-[var(--color-accent)]"
                                     : "text-[var(--color-ink)] hover:text-[var(--color-accent)]"
                                     }`}

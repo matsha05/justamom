@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { format, parseISO } from "date-fns";
 import { getAllNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { ArrowIcon } from "@/components/icons";
@@ -54,11 +55,10 @@ export default function NotesPage() {
                     <div className="max-w-3xl mx-auto">
                         <div className="space-y-0">
                             {notes.map((note, index) => {
-                                const formattedDate = new Date(note.date).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                });
+                                const formattedDate = format(
+                                    parseISO(note.date),
+                                    "MMMM d, yyyy"
+                                );
 
                                 return (
                                     <article

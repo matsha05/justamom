@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { format, parseISO } from "date-fns";
 import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { DownloadCard } from "@/components/DownloadCard";
@@ -66,13 +67,9 @@ export default async function NotePage({ params }: PageProps) {
         notFound();
     }
 
-    const formattedDate = new Date(note.metadata.date).toLocaleDateString(
-        "en-US",
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        }
+    const formattedDate = format(
+        parseISO(note.metadata.date),
+        "MMMM d, yyyy"
     );
 
     const { prev, next } = getAdjacentNotes(slug);

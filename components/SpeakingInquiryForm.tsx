@@ -30,6 +30,13 @@ export function SpeakingInquiryForm() {
         const form = e.currentTarget;
         const formData = new FormData(form);
         formData.append("subject", "New Speaking Inquiry");
+        const company = String(formData.get("company") ?? "").trim();
+
+        if (company) {
+            setStatus("success");
+            form.reset();
+            return;
+        }
 
         try {
             const response = await fetch("https://formspree.io/f/mqezoggn", {
@@ -105,6 +112,16 @@ export function SpeakingInquiryForm() {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="sr-only" aria-hidden="true">
+                    <Label htmlFor="company">Company</Label>
+                    <Input
+                        type="text"
+                        id="company"
+                        name="company"
+                        tabIndex={-1}
+                        autoComplete="off"
+                    />
+                </div>
                 {/* Contact Info Group */}
                 <div className="grid md:grid-cols-2 gap-5">
                     <div className="space-y-2">

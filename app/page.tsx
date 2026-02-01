@@ -64,6 +64,7 @@ export default function HomePage() {
                   className="object-cover object-top"
                   priority
                   quality={95}
+                  sizes="(min-width: 1024px) 50vw, 90vw"
                 />
               </div>
             </div>

@@ -88,6 +88,7 @@ export default function SpeakingPage() {
                                             fill
                                             className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
                                             quality={90}
+                                            sizes="(min-width: 1024px) 33vw, 80vw"
                                         />
                                     </div>
                                 </div>

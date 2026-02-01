@@ -29,6 +29,14 @@ export function ContactForm() {
 
         const form = e.currentTarget;
         const formData = new FormData(form);
+        const company = String(formData.get("company") ?? "").trim();
+
+        if (company) {
+            setStatus("success");
+            form.reset();
+            setSelectedSubject("");
+            return;
+        }
 
         try {
             const response = await fetch("https://formspree.io/f/mqezoggn", {
@@ -84,6 +92,16 @@ export function ContactForm() {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
+            <div className="sr-only" aria-hidden="true">
+                <Label htmlFor="company">Company</Label>
+                <Input
+                    type="text"
+                    id="company"
+                    name="company"
+                    tabIndex={-1}
+                    autoComplete="off"
+                />
+            </div>
             {/* Name & Email Row */}
             <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
