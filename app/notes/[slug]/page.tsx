@@ -6,6 +6,7 @@ import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { DownloadCard } from "@/components/DownloadCard";
 import { NoteSignOff } from "@/components/NoteSignOff";
+import { MDXImage } from "@/components/MDXImage";
 import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
@@ -54,6 +55,7 @@ const mdxComponents = {
             </div>
         </blockquote>
     ),
+    img: MDXImage,
     DownloadCard,
 };
 

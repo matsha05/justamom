@@ -13,21 +13,21 @@ const speakingTopics = [
         title: "How to make Mom Friends",
         description:
             'They say it takes a village... but are you wondering where that village is? Making friends can be hard and uncomfortable. You might be thinking, "Why does it feel like I should know how to do this?" I offer practical tips about how to make (and maintain) friendships during this crazy season of motherhood.',
-        image: "/images/speaking-mom-friends.png",
+        image: "/images/speaking-mom-friends.avif",
         alt: "Two moms connecting over coffee",
     },
     {
         title: "Hope in the Unseen",
         description:
             "Motherhood has changed. In this era of technology and media, we are being bombarded with decision overload. But it is in the unseen and hidden places of motherhood that Jesus is calling us to lift up our gaze and fix our eyes on Him.",
-        image: "/images/speaking-hope-unseen.png",
+        image: "/images/speaking-hope-unseen.avif",
         alt: "Mother and child looking toward light",
     },
     {
         title: "My Yoke is Easy",
         description:
             "News Flash. Life isn't easy (duh). We can spend so much energy trying to make life run smoothly. Obedient kids, clean home, everything going to plan, when the fact is that we were never promised an easy life. What Jesus does offer is an easy Yoke.",
-        image: "/images/speaking-easy-yoke.png",
+        image: "/images/speaking-easy-yoke.avif",
         alt: "Woman at rest with open book",
     },
 ];

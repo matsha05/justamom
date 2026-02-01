@@ -83,7 +83,7 @@ export function Header() {
                         {/* Peony Icon - vibrant brand mark */}
                         <div className="w-14 h-14 rounded-full shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 overflow-hidden flex items-center justify-center bg-[#4a7c7c]">
                             <Image
-                                src="/images/peony-logo-v4.png"
+                                src="/images/peony-logo-v4.avif"
                                 alt="Peony flower icon"
                                 width={56}
                                 height={56}

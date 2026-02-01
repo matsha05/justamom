@@ -74,12 +74,21 @@ export const metadata: Metadata = {
     siteName: "Lizi Shaw",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Lizi Shaw | Speaker, Writer, Encourager",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Lizi Shaw | Speaker, Writer, Encourager",
     description: "Stories and encouragement for everyday women.",
     creator: "@lizishaw", // Placeholder if she has one
+    images: ["/og.png"],
   },
   other: {
     "theme-color": "#1f2937",
