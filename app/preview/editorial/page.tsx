@@ -93,19 +93,19 @@ export default function EditorialPreviewPage() {
                   </p>
                   <h1 className="text-display">A Note for Moms.</h1>
                   <p className="text-body-lg text-[var(--color-ink-soft)]">
-                    Short reflections on motherhood, identity, and quiet faith for
-                    women who want to live from a steadier place.
+                    A small, steady reminder for mothers who feel the noise. Twice a
+                    month. No spam. Just the note.
                   </p>
                   <div className="flex flex-wrap gap-6">
                     <Link
-                      className="inline-flex items-center gap-2 border border-[var(--color-border-strong)] px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]"
-                      href="#notes"
+                      className="inline-flex items-center gap-2 border border-[var(--color-ink)] bg-[var(--color-paper-warm)] px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]"
+                      href="#contact"
                     >
-                      Read a note
+                      Join A Note for Moms
                       <ArrowIcon />
                     </Link>
-                    <Link className="link-arrow" href="#contact">
-                      Join A Note for Moms
+                    <Link className="link-arrow" href="#notes">
+                      Read a note
                       <ArrowIcon />
                     </Link>
                   </div>
@@ -132,10 +132,10 @@ export default function EditorialPreviewPage() {
                   <p className="text-label text-[var(--color-ink-muted)]">
                     Notes for Moms
                   </p>
-                  <h1 className="text-h2">A Note for Moms</h1>
+                  <h1 className="text-h1">A Note for Moms</h1>
                   <p className="text-body text-[var(--color-ink-soft)]">
-                    Twice each month I send A Note for Moms - a small, steady
-                    reminder for mothers who feel the noise. These are the notes.
+                    A small, steady reminder for mothers who feel the noise. Twice a
+                    month. No spam. Just the note.
                   </p>
                 </div>
                 <div className="divide-y divide-[var(--color-border)]">
@@ -172,14 +172,14 @@ export default function EditorialPreviewPage() {
             </div>
           </section>
 
-          <section id="work" className="section">
+          <section id="work" className="section section-soft">
             <div className="container">
               <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
                 <div className="space-y-6">
                   <p className="text-label text-[var(--color-ink-muted)]">
                     Current Work
                   </p>
-                  <h2 className="text-h2">Just a Mom</h2>
+                  <h2 className="text-h1">Just a Mom</h2>
                   <p className="text-body-lg text-[var(--color-ink-soft)]">
                     {currentWorkSummary}
                   </p>
@@ -219,17 +219,24 @@ export default function EditorialPreviewPage() {
             </div>
           </section>
 
-          <section id="speaking" className="section">
+          <section
+            id="speaking"
+            className="section pt-[clamp(7rem,13vw,12rem)]"
+          >
             <div className="container">
               <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
                 <div className="space-y-4">
                   <p className="text-label text-[var(--color-ink-muted)]">
                     Speaking
                   </p>
-                  <h2 className="text-h2">Selected topics</h2>
+                  <h2 className="text-h1">Selected topics</h2>
                   <p className="text-body text-[var(--color-ink-soft)]">
                     For churches, retreats, and women’s gatherings seeking biblical
                     encouragement with clear, grounded theology and practical care.
+                  </p>
+                  <p className="text-body text-[var(--color-ink-muted)]">
+                    This is for leaders who want thoughtful, grounded teaching rather
+                    than hype.
                   </p>
                 </div>
                 <div className="space-y-8">
@@ -275,10 +282,10 @@ export default function EditorialPreviewPage() {
                 Notes by email
               </p>
               <h3 className="text-h3">A Note for Moms, twice a month.</h3>
-              <p className="text-body text-[var(--color-ink-muted)]">
-                Short reflections for mothers seeking clarity, courage, and
-                peace in the noise.
-              </p>
+                  <p className="text-body text-[var(--color-ink-muted)]">
+                    A small, steady reminder for mothers who feel the noise. Twice a
+                    month. No spam. Just the note.
+                  </p>
                   <NewsletterForm variant="compact" />
                 </div>
               </div>

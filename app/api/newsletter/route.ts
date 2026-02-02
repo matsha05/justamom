@@ -31,14 +31,7 @@ function isRateLimited(ip: string): boolean {
 
 export async function POST(request: NextRequest) {
     try {
-        const { email, company } = await request.json();
-
-        if (company) {
-            return NextResponse.json(
-                { success: true, message: "Welcome! Check your inbox for a confirmation." },
-                { status: 200 }
-            );
-        }
+        const { email } = await request.json();
 
         const ip = getClientIp(request);
         if (isRateLimited(ip)) {

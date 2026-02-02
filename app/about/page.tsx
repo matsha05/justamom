@@ -98,7 +98,7 @@ export default function AboutPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Get the Notes
+                            Join A Note for Moms
                         </a>
                     </div>
                 </div>

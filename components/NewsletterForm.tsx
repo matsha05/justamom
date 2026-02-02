@@ -24,21 +24,11 @@ export function NewsletterForm({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus("submitting");
-        const form = e.currentTarget as HTMLFormElement;
-        const formData = new FormData(form);
-        const company = String(formData.get("company") ?? "").trim();
-
-        if (company) {
-            setStatus("success");
-            setEmail("");
-            return;
-        }
-
         try {
             const response = await fetch("/api/newsletter", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, company }),
+                body: JSON.stringify({ email }),
             });
 
             const data = await response.json();
@@ -70,29 +60,18 @@ export function NewsletterForm({
     }
 
     const isSubmitting = status === "submitting";
-    const buttonText = variant === "hero" || variant === "compact"
-        ? "Get the Notes"
-        : "Subscribe";
+    const buttonText = "Join A Note for Moms";
 
     // Compact variant (single line)
     if (variant === "compact" || variant === "hero") {
         return (
             <form onSubmit={handleSubmit} className={className}>
-                <div className="sr-only" aria-hidden="true">
-                    <label htmlFor="company">Company</label>
-                    <Input
-                        type="text"
-                        id="company"
-                        name="company"
-                        tabIndex={-1}
-                        autoComplete="off"
-                    />
-                </div>
                 <div className="flex flex-col sm:flex-row gap-3">
                     <Input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        aria-label="Email address"
                         placeholder="Your email"
                         required
                         disabled={isSubmitting}
@@ -102,7 +81,7 @@ export function NewsletterForm({
                         {isSubmitting ? (
                             <>
                                 <Loader2 className="w-4 h-4 animate-spin" />
-                                Subscribing...
+                                Joining...
                             </>
                         ) : (
                             <>
@@ -120,20 +99,11 @@ export function NewsletterForm({
     return (
         <form onSubmit={handleSubmit} className={className}>
             <div className="space-y-4">
-                <div className="sr-only" aria-hidden="true">
-                    <label htmlFor="company">Company</label>
-                    <Input
-                        type="text"
-                        id="company"
-                        name="company"
-                        tabIndex={-1}
-                        autoComplete="off"
-                    />
-                </div>
                 <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    aria-label="Email address"
                     placeholder="Enter your email"
                     required
                     disabled={isSubmitting}
@@ -143,11 +113,11 @@ export function NewsletterForm({
                     {isSubmitting ? (
                         <>
                             <Loader2 className="w-4 h-4 animate-spin" />
-                            Subscribing...
+                            Joining...
                         </>
                     ) : (
                         <>
-                            Get the Notes
+                            {buttonText}
                             <ArrowIcon />
                         </>
                     )}

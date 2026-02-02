@@ -152,39 +152,39 @@ export function Header() {
 
                 {/* Mobile Navigation */}
                 {/* Mobile Navigation Overlay */}
-                <div
-                    className={`fixed inset-0 z-40 bg-[var(--color-paper)]/98 backdrop-blur-sm transition-all duration-300 md:hidden flex items-center justify-center ${mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-                        }`}
-                    style={{ top: "0", minHeight: "100vh" }}
-                    onClick={() => setMobileMenuOpen(false)}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-hidden={!mobileMenuOpen}
-                    aria-label="Mobile navigation"
-                >
-                    <nav
-                        ref={mobileMenuRef}
-                        id="mobile-menu"
-                        className="flex flex-col items-center gap-8 p-6"
-                        onClick={(event) => event.stopPropagation()}
+                {mobileMenuOpen ? (
+                    <div
+                        className="fixed inset-0 z-40 bg-[var(--color-paper)]/98 backdrop-blur-sm transition-all duration-300 md:hidden flex items-center justify-center"
+                        style={{ top: "0", minHeight: "100vh" }}
+                        onClick={() => setMobileMenuOpen(false)}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Mobile navigation"
                     >
-                        {siteConfig.navLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`text-h3 uppercase tracking-[0.2em] transition-colors ${(link.href === "/notes"
-                                    ? pathname?.startsWith("/notes")
-                                    : pathname === link.href)
-                                    ? "text-[var(--color-ink)]"
-                                    : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-                                    }`}
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
-                    </nav>
-                </div>
+                        <nav
+                            ref={mobileMenuRef}
+                            id="mobile-menu"
+                            className="flex flex-col items-center gap-8 p-6"
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                            {siteConfig.navLinks.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`text-h3 uppercase tracking-[0.2em] transition-colors ${(link.href === "/notes"
+                                        ? pathname?.startsWith("/notes")
+                                        : pathname === link.href)
+                                        ? "text-[var(--color-ink)]"
+                                        : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
+                                        }`}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </nav>
+                    </div>
+                ) : null}
             </div>
         </header>
     );

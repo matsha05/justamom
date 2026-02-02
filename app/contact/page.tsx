@@ -28,7 +28,7 @@ export default function ContactPage() {
                 <div className="container-prose space-y-10">
                     <div className="space-y-4">
                         <p className="text-label">Message</p>
-                        <h2 className="text-h2">Send a note</h2>
+                        <h2 className="text-h2">Send a message</h2>
                         <p className="text-body text-[var(--color-ink-muted)]">
                             For speaking inquiries, collaborations, or just to say hello.
                         </p>
@@ -39,8 +39,8 @@ export default function ContactPage() {
                         <p className="text-label">Notes by email</p>
                         <h3 className="text-h3">A Note for Moms, twice a month.</h3>
                         <p className="text-body text-[var(--color-ink-muted)]">
-                            A short note for mothers who want wisdom, honesty, and
-                            encouragement rooted in Scripture.
+                            A small, steady reminder for mothers who feel the noise. Twice
+                            a month. No spam. Just the note.
                         </p>
                         <NewsletterForm variant="compact" />
                     </div>
