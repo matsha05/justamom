@@ -65,22 +65,18 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Speaker Bio Section */}
+            {/* Short Bio Section */}
             <section className="section">
-                <div className="container-prose">
-                    <div className="divider-ornament mb-12">
-                        <span className="text-[var(--color-accent)] text-2xl">✦</span>
-                    </div>
-
-                    <blockquote className="text-h3 text-center text-[var(--color-ink-muted)] italic leading-relaxed">
+                <div className="container-prose space-y-4">
+                    <p className="text-label">Short bio</p>
+                    <p className="text-body-lg text-[var(--color-ink-soft)]">
                         Lizi Shaw is a Christian writer and speaker passionate about
                         helping women anchor their motherhood in God&apos;s truth. With
                         warmth, honesty, and insight, she invites moms to notice the Lord
                         in the everyday and build homes shaped by peace, purpose, and
                         eternal perspective. She lives in Niwot, Colorado with her
-                        husband, Matt, and their three children who provide endless
-                        sanctification and even more material for her writing.
-                    </blockquote>
+                        husband, Matt, and their three children.
+                    </p>
                 </div>
             </section>
 

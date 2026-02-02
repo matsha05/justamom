@@ -70,7 +70,9 @@ export function NewsletterForm({
     }
 
     const isSubmitting = status === "submitting";
-    const buttonText = variant === "hero" ? "Get the Notes" : "Subscribe";
+    const buttonText = variant === "hero" || variant === "compact"
+        ? "Get the Notes"
+        : "Subscribe";
 
     // Compact variant (single line)
     if (variant === "compact" || variant === "hero") {

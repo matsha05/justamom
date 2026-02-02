@@ -13,49 +13,39 @@ export default function ContactPage() {
         <>
             {/* Hero Section */}
             <section className="section section-warm">
-                <div className="container-prose">
-                    <p className="text-label mb-6">Contact</p>
-                    <h1 className="text-display mb-10">Let&apos;s Connect</h1>
+                <div className="container-prose space-y-6">
+                    <p className="text-label">Contact</p>
+                    <h1 className="text-display">Let's connect</h1>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
                         Whether you have a question, want to book a speaking date, or
-                        simply want to say hello, I&apos;d love to hear from you.
+                        simply want to say hello, I'd love to hear from you.
                     </p>
                 </div>
             </section>
 
             {/* Contact Form */}
-            <section className="py-12">
-                <div className="container-narrow">
-                    <div className="card">
-                        <div className="card-body p-8 md:p-10">
-                            <div className="mb-8">
-                                <h2 className="text-h3 mb-2">Send me a message</h2>
-                                <p className="text-body text-[var(--color-ink-muted)]">
-                                    For speaking inquiries, collaborations, or just to say hello.
-                                </p>
-                            </div>
-                            <ContactForm />
-                        </div>
+            <section className="section">
+                <div className="container-prose space-y-10">
+                    <div className="space-y-4">
+                        <p className="text-label">Message</p>
+                        <h2 className="text-h2">Send a note</h2>
+                        <p className="text-body text-[var(--color-ink-muted)]">
+                            For speaking inquiries, collaborations, or just to say hello.
+                        </p>
+                        <ContactForm />
                     </div>
 
-                    {/* Divider */}
-                    <div className="divider-ornament my-12">
-                        <span className="text-[var(--color-accent)] text-lg">or</span>
-                    </div>
-
-                    {/* Notes Option */}
-                    <div className="card">
-                        <div className="card-body text-center py-12">
-                            <h3 className="text-h4 mb-3">Get the Notes</h3>
-                            <p className="text-body text-[var(--color-ink-muted)] mb-6 max-w-md mx-auto">
-                                A quiet note from one mom to another, delivered twice a month.
-                            </p>
-                            <NewsletterForm variant="compact" className="max-w-sm mx-auto" />
-                        </div>
+                    <div className="space-y-4">
+                        <p className="text-label">Notes by email</p>
+                        <h3 className="text-h3">A Note for Moms, twice a month.</h3>
+                        <p className="text-body text-[var(--color-ink-muted)]">
+                            A short note for mothers who want wisdom, honesty, and
+                            encouragement rooted in Scripture.
+                        </p>
+                        <NewsletterForm variant="compact" />
                     </div>
                 </div>
             </section>
         </>
     );
 }
-

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config";
@@ -72,38 +71,24 @@ export function Header() {
     return (
         <header
             className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
-                ? "bg-[var(--color-paper)]/95 backdrop-blur-md shadow-sm py-3"
+                ? "bg-[var(--color-paper)]/96 backdrop-blur-sm border-b border-[var(--color-border)] py-3"
                 : "bg-transparent py-5"
                 }`}
         >
             <div className="container">
                 <div className="flex items-center justify-between">
-                    {/* Logo with Peony Icon */}
-                    <Link href="/" className="group flex items-center gap-4">
-                        {/* Peony Icon - vibrant brand mark */}
-                        <div className="w-14 h-14 rounded-full shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 overflow-hidden flex items-center justify-center bg-[#4a7c7c]">
-                            <Image
-                                src="/images/peony-logo-v4.avif"
-                                alt="Peony flower icon"
-                                width={56}
-                                height={56}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-
-                        {/* Text Lockup */}
-                        <div className="flex flex-col">
-                            <span className="text-h3 text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-tight">
-                                Lizi Shaw
-                            </span>
-                            <span className="text-caption text-[var(--color-ink-muted)] tracking-wide">
-                                Speaker · Writer · Encourager
-                            </span>
-                        </div>
+                    {/* Wordmark */}
+                    <Link href="/" className="group flex flex-col">
+                        <span className="text-h3 text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-tight">
+                            Lizi Shaw
+                        </span>
+                        <span className="text-caption text-[var(--color-ink-muted)] tracking-wide">
+                            Speaker · Writer · Encourager
+                        </span>
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-10">
+                    <nav className="hidden md:flex items-center gap-8">
                         {siteConfig.navLinks.map((link) => {
                             const isNotes = link.href === "/notes";
                             const isActive = isNotes
@@ -114,9 +99,9 @@ export function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`relative text-caption font-medium transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:bg-[var(--color-accent)] after:transition-all after:duration-200 ${isActive
-                                    ? "text-[var(--color-accent)] after:w-full"
-                                    : "text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] after:w-0 hover:after:w-full"
+                                className={`relative text-[11px] uppercase tracking-[0.18em] transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-[var(--color-ink)] after:transition-all after:duration-200 ${isActive
+                                    ? "text-[var(--color-ink)] after:w-full"
+                                    : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] after:w-0 hover:after:w-full"
                                     }`}
                             >
                                 {link.label}
@@ -187,11 +172,11 @@ export function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-h2 font-serif transition-colors ${(link.href === "/notes"
+                                className={`text-h3 uppercase tracking-[0.2em] transition-colors ${(link.href === "/notes"
                                     ? pathname?.startsWith("/notes")
                                     : pathname === link.href)
-                                    ? "text-[var(--color-accent)]"
-                                    : "text-[var(--color-ink)] hover:text-[var(--color-accent)]"
+                                    ? "text-[var(--color-ink)]"
+                                    : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
                                     }`}
                                 onClick={() => setMobileMenuOpen(false)}
                             >

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
 
 export const metadata: Metadata = {
@@ -10,25 +9,19 @@ export const metadata: Metadata = {
 
 const speakingTopics = [
     {
-        title: "How to make Mom Friends",
+        title: "Identity in the Noise",
         description:
-            'They say it takes a village... but are you wondering where that village is? Making friends can be hard and uncomfortable. You might be thinking, "Why does it feel like I should know how to do this?" I offer practical tips about how to make (and maintain) friendships during this crazy season of motherhood.',
-        image: "/images/speaking-mom-friends.avif",
-        alt: "Two moms connecting over coffee",
+            "A steadying look at the cultural pressure points shaping modern motherhood and how to live from a secure identity instead of performance.",
     },
     {
-        title: "Hope in the Unseen",
+        title: "Finding God in the Ordinary",
         description:
-            "Motherhood has changed. In this era of technology and media, we are being bombarded with decision overload. But it is in the unseen and hidden places of motherhood that Jesus is calling us to lift up our gaze and fix our eyes on Him.",
-        image: "/images/speaking-hope-unseen.avif",
-        alt: "Mother and child looking toward light",
+            "A reflective message about the sacred weight of everyday motherhood and the quiet faithfulness that carries it.",
     },
     {
-        title: "My Yoke is Easy",
+        title: "A Calling, Not a Consequence",
         description:
-            "News Flash. Life isn't easy (duh). We can spend so much energy trying to make life run smoothly. Obedient kids, clean home, everything going to plan, when the fact is that we were never promised an easy life. What Jesus does offer is an easy Yoke.",
-        image: "/images/speaking-easy-yoke.avif",
-        alt: "Woman at rest with open book",
+            "A biblical reframe that restores dignity to motherhood without diminishing calling, gifts, or work outside the home.",
     },
 ];
 
@@ -37,74 +30,46 @@ export default function SpeakingPage() {
         <>
             {/* Hero Section */}
             <section className="section section-warm">
-                <div className="container-prose">
-                    <p className="text-label mb-6">Speaking</p>
-                    <h1 className="text-display mb-10">Speaking Topics</h1>
-
-                    <div className="prose text-body-lg text-[var(--color-ink-soft)]">
-                        <p>
-                            Motherhood is beautiful...and messy. It&apos;s full of holy moments,
-                            loud questions, and days that feel both too long and too short. As a
-                            speaker, I&apos;m passionate about encouraging women, especially
-                            moms, to live with peace, purpose, and clarity in the midst of
-                            cultural noise and daily overwhelm.
-                        </p>
-
-                        <p>
-                            I love sharing about motherhood, faith, identity, and simplifying
-                            life in a way that brings joy and direction. While the topics below
-                            represent some of my favorite messages, I&apos;m happy to tailor a
-                            talk to fit the unique needs of your group or event.
-                        </p>
-
-                        <p>
-                            Whether your audience is full of tired moms, curious seekers, or
-                            women hungry for Biblical truth in a practical way, I&apos;d love
-                            to be there. Coffee optional. Encouragement guaranteed.
-                        </p>
-                    </div>
+                <div className="container-prose space-y-6">
+                    <p className="text-label">Speaking</p>
+                    <h1 className="text-display">Speaking</h1>
+                    <p className="text-body-lg text-[var(--color-ink-soft)]">
+                        I speak to women about the holy work of motherhood, the quiet
+                        places where God meets us, and the steadier identity we can
+                        live from when the noise gets loud.
+                    </p>
+                    <p className="text-body text-[var(--color-ink-muted)]">
+                        Talks are grounded in Scripture and shaped by real life. I am
+                        happy to tailor a message for your group or event.
+                    </p>
                 </div>
             </section>
 
             {/* Topics Section */}
             <section className="section">
                 <div className="container">
-                    <div className="space-y-16">
-                        {speakingTopics.map((topic, index) => (
-                            <div
-                                key={index}
-                                className={`grid lg:grid-cols-12 gap-8 lg:gap-16 items-center ${index % 2 === 1 ? "lg:flex-row-reverse" : ""
-                                    }`}
-                            >
-                                {/* Illustration */}
+                    <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
+                        <div className="space-y-4">
+                            <p className="text-label">Selected topics</p>
+                            <h2 className="text-h2">Current messages</h2>
+                            <p className="text-body text-[var(--color-ink-soft)]">
+                                These are a few of the messages I most often share. Each
+                                can be shaped for a retreat, church, or women's gathering.
+                            </p>
+                        </div>
+                        <div className="space-y-8">
+                            {speakingTopics.map((topic) => (
                                 <div
-                                    className={`lg:col-span-4 ${index % 2 === 1 ? "lg:order-2" : ""
-                                        }`}
+                                    key={topic.title}
+                                    className="border-l border-[var(--color-border-strong)] pl-6"
                                 >
-                                    <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg group">
-                                        <Image
-                                            src={topic.image}
-                                            alt={topic.alt}
-                                            fill
-                                            className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
-                                            quality={90}
-                                            sizes="(min-width: 1024px) 33vw, 80vw"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Content */}
-                                <div
-                                    className={`lg:col-span-8 ${index % 2 === 1 ? "lg:order-1" : ""
-                                        }`}
-                                >
-                                    <h3 className="text-h2 mb-6">{topic.title}</h3>
-                                    <p className="text-body-lg text-[var(--color-ink-muted)] leading-relaxed">
+                                    <h3 className="text-h3 mb-2">{topic.title}</h3>
+                                    <p className="text-body text-[var(--color-ink-muted)]">
                                         {topic.description}
                                     </p>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -112,20 +77,21 @@ export default function SpeakingPage() {
             {/* Inquiry Form Section */}
             <section className="section section-soft" id="book">
                 <div className="container">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="text-center mb-12">
-                            <div className="divider-ornament mb-8">
-                                <span className="text-[var(--color-accent)] text-2xl">✦</span>
-                            </div>
-                            <h2 className="text-h2 mb-4">Invite Lizi to Speak</h2>
-                            <p className="text-body-lg text-[var(--color-ink-muted)] max-w-xl mx-auto">
-                                Whether it&apos;s a conference, a retreat, or a living room bible study—I&apos;d love to join you. Check availability for your dates below.
-                            </p>
-                        </div>
-
-                        <div className="max-w-2xl mx-auto">
-                            <SpeakingInquiryForm />
-                        </div>
+                    <div className="max-w-3xl mx-auto space-y-6">
+                        <p className="text-label">Inquiries</p>
+                        <h2 className="text-h2">Invite Lizi to speak</h2>
+                        <p className="text-body text-[var(--color-ink-soft)]">
+                            For availability, dates, and event details, share a few
+                            basics below or email{" "}
+                            <a
+                                href="mailto:hello@lizishaw.com"
+                                className="underline underline-offset-4"
+                            >
+                                hello@lizishaw.com
+                            </a>
+                            .
+                        </p>
+                        <SpeakingInquiryForm />
                     </div>
                 </div>
             </section>

@@ -36,8 +36,9 @@ export const siteConfig = {
 
     // Navigation Links
     navLinks: [
-        { href: "/about", label: "About" },
         { href: "/notes", label: "Notes" },
+        { href: "/work", label: "Work" },
+        { href: "/about", label: "About" },
         { href: "/speaking", label: "Speaking" },
         { href: "/contact", label: "Contact" },
     ],

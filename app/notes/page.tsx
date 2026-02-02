@@ -9,7 +9,7 @@ import { ArrowIcon } from "@/components/icons";
 export const metadata: Metadata = {
     title: "Notes for Moms",
     description:
-        "A quiet note from one mom to another. Reflections on faith, motherhood, and finding God in the everyday moments.",
+        "A Note for Moms—short reflections on faith, motherhood, and the quiet work of ordinary days.",
 };
 
 export default function NotesPage() {
@@ -21,28 +21,27 @@ export default function NotesPage() {
             <section className="section bg-[var(--color-paper-warm)]">
                 <div className="container">
                     <div className="max-w-2xl mx-auto text-center">
-                        <p className="text-label mb-6 animate-fade-in">
-                            Notes for Moms
-                        </p>
+                        <p className="text-label mb-6 animate-fade-in">Notes for Moms</p>
                         <h1
                             className="text-display mb-8 animate-fade-in"
                             style={{ animationDelay: "75ms" }}
                         >
-                            A quiet note from one mom to another
+                            A Note for Moms
                         </h1>
                         <p
                             className="text-body-lg text-[var(--color-ink-muted)] animate-fade-in"
                             style={{ animationDelay: "150ms" }}
                         >
-                            Twice each month, I send a short reflection for moms who want
-                            wisdom, honesty, and encouragement rooted in Scripture.
+                            Twice each month I send A Note for Moms - a small, steady
+                            reminder for mothers who feel the noise. This page holds
+                            the archive.
                         </p>
                         <Image
                             src="/images/signature.png"
-                            alt="Lizi"
+                            alt="Lizi Shaw signature"
                             width={80}
-                            height={74}
-                            className="mx-auto mt-8 opacity-70 animate-fade-in"
+                            height={72}
+                            className="mx-auto mt-10 opacity-75 animate-fade-in"
                             style={{ animationDelay: "225ms" }}
                         />
                     </div>
