@@ -41,3 +41,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Drafts (keep local)
+docs/Just a Mom (Book Draft) - Google Docs.pdf
