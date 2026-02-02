@@ -93,8 +93,7 @@ export default function EditorialPreviewPage() {
                   </p>
                   <h1 className="text-display">A Note for Moms.</h1>
                   <p className="text-body-lg text-[var(--color-ink-soft)]">
-                    A small, steady reminder for mothers who feel the noise. Twice a
-                    month. No spam. Just the note.
+                    A small, steady reminder for mothers who feel the noise.
                   </p>
                   <div className="flex flex-wrap gap-6">
                     <Link
@@ -134,8 +133,7 @@ export default function EditorialPreviewPage() {
                   </p>
                   <h1 className="text-h1">A Note for Moms</h1>
                   <p className="text-body text-[var(--color-ink-soft)]">
-                    A small, steady reminder for mothers who feel the noise. Twice a
-                    month. No spam. Just the note.
+                    Short notes for mothers, sent twice a month.
                   </p>
                 </div>
                 <div className="divide-y divide-[var(--color-border)]">
@@ -283,8 +281,7 @@ export default function EditorialPreviewPage() {
               </p>
               <h3 className="text-h3">A Note for Moms, twice a month.</h3>
                   <p className="text-body text-[var(--color-ink-muted)]">
-                    A small, steady reminder for mothers who feel the noise. Twice a
-                    month. No spam. Just the note.
+                    Twice a month. No spam. Just the note.
                   </p>
                   <NewsletterForm variant="compact" />
                 </div>

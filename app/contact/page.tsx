@@ -39,8 +39,7 @@ export default function ContactPage() {
                         <p className="text-label">Notes by email</p>
                         <h3 className="text-h3">A Note for Moms, twice a month.</h3>
                         <p className="text-body text-[var(--color-ink-muted)]">
-                            A small, steady reminder for mothers who feel the noise. Twice
-                            a month. No spam. Just the note.
+                            Twice a month. No spam. Just the note.
                         </p>
                         <NewsletterForm variant="compact" />
                     </div>

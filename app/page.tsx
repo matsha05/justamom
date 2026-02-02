@@ -51,8 +51,7 @@ export default function HomePage() {
               <p className="text-label">Speaker · Writer · Encourager</p>
               <h1 className="text-display">A Note for Moms.</h1>
               <p className="text-body-lg text-[var(--color-ink-soft)]">
-                A small, steady reminder for mothers who feel the noise. Twice a month.
-                No spam. Just the note.
+                A small, steady reminder for mothers who feel the noise.
               </p>
               <div className="flex flex-wrap gap-6 pt-2">
                 <Link
@@ -91,8 +90,7 @@ export default function HomePage() {
               <p className="text-label">Notes for Moms</p>
               <h1 className="text-h1">A Note for Moms</h1>
               <p className="text-body text-[var(--color-ink-soft)]">
-                A small, steady reminder for mothers who feel the noise. Twice a month.
-                No spam. Just the note.
+                Short notes for mothers, sent twice a month.
               </p>
             </div>
             <div className="divide-y divide-[var(--color-border)]">
@@ -134,8 +132,7 @@ export default function HomePage() {
           <p className="text-label">Join the notes</p>
           <h2 className="text-h2">A Note for Moms, twice a month.</h2>
           <p className="text-body text-[var(--color-ink-muted)]">
-            A small, steady reminder for mothers who feel the noise. Twice a month.
-            No spam. Just the note.
+            Twice a month. No spam. Just the note.
           </p>
           <div className="max-w-md mx-auto">
             <NewsletterForm variant="compact" />

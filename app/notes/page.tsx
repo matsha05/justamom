@@ -32,8 +32,7 @@ export default function NotesPage() {
                             className="text-body-lg text-[var(--color-ink-muted)] animate-fade-in"
                             style={{ animationDelay: "150ms" }}
                         >
-                            A small, steady reminder for mothers who feel the noise. Twice
-                            a month. No spam. Just the note.
+                            Short notes for mothers, sent twice a month.
                         </p>
                         <Image
                             src="/images/signature.png"
