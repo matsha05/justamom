@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
+import { siteConfig } from "@/lib/config";
 
 export const metadata: Metadata = {
     title: "Speaking Topics",
     description:
-        "Book Lizi Shaw to speak at your moms' event, retreat, or group gathering. Topics include motherhood, faith, identity, and simplifying life.",
+        `Book ${siteConfig.author.name} to speak at your moms' event, retreat, or group gathering. Topics include motherhood, faith, identity, and simplifying life.`,
 };
 
 const speakingTopics = [
@@ -54,7 +55,7 @@ export default function SpeakingPage() {
                             <h2 className="text-h2">Current messages</h2>
                             <p className="text-body text-[var(--color-ink-soft)]">
                                 These are a few of the messages I most often share. Each
-                                can be shaped for a retreat, church, or women's gathering.
+                                can be shaped for a retreat, church, or women&apos;s gathering.
                             </p>
                         </div>
                         <div className="space-y-8">
@@ -84,10 +85,10 @@ export default function SpeakingPage() {
                             For availability, dates, and event details, share a few
                             basics below or email{" "}
                             <a
-                                href="mailto:hello@lizishaw.com"
+                                href={`mailto:${siteConfig.contact.email}`}
                                 className="underline underline-offset-4"
                             >
-                                hello@lizishaw.com
+                                {siteConfig.contact.email}
                             </a>
                             .
                         </p>

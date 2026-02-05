@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og";
+import { siteConfig } from "@/lib/config";
 
 export const runtime = "edge";
 
-export const alt = "Lizi Shaw | Speaker, Writer, Encourager";
+export const alt = `${siteConfig.site.name} | ${siteConfig.site.tagline}`;
 export const size = {
   width: 1200,
   height: 630,
@@ -68,7 +69,6 @@ export default async function Image() {
             overflow: "hidden",
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={new URL("/images/peony-logo-v4.png", baseUrl).toString()}
             width={140}
@@ -89,7 +89,7 @@ export default async function Image() {
             letterSpacing: "-0.02em",
           }}
         >
-          Lizi Shaw
+          {siteConfig.site.name}
         </div>
 
         <div
@@ -102,7 +102,7 @@ export default async function Image() {
             textTransform: "uppercase",
           }}
         >
-          Speaker · Writer · Encourager
+          {siteConfig.site.tagline}
         </div>
       </div>
     ),

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
+import { siteConfig } from "@/lib/config";
 
 export const metadata: Metadata = {
     title: "Contact",
     description:
-        "Get in touch with Lizi Shaw for speaking inquiries, questions, or just to say hello.",
+        `Get in touch with ${siteConfig.author.name} for speaking inquiries, questions, or just to say hello.`,
 };
 
 export default function ContactPage() {
@@ -14,10 +15,10 @@ export default function ContactPage() {
             <section className="section section-warm">
                 <div className="container-prose space-y-6">
                     <p className="text-label">Contact</p>
-                    <h1 className="text-display">Let's connect</h1>
+                    <h1 className="text-display">Let&apos;s connect</h1>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
                         Whether you have a question, want to book a speaking date, or
-                        simply want to say hello, I'd love to hear from you.
+                        simply want to say hello, I&apos;d love to hear from you.
                     </p>
                 </div>
             </section>

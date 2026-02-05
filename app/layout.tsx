@@ -3,33 +3,8 @@ import { Newsreader, Source_Sans_3 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { Chrome } from "@/components/Chrome";
+import { personJsonLd, siteConfig } from "@/lib/config";
 import "./globals.css";
-
-// JSON-LD Structured Data for Author Profile
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Lizi Shaw",
-  url: "https://lizishaw.com",
-  image: "https://lizishaw.com/images/aboutmepic.avif",
-  jobTitle: "Christian Speaker & Writer",
-  description:
-    "Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Niwot",
-    addressRegion: "Colorado",
-    addressCountry: "US",
-  },
-  knowsAbout: [
-    "Christian motherhood",
-    "Biblical parenting",
-    "Women's ministry",
-    "Faith-based speaking",
-    "Mom encouragement",
-    "Finding God in everyday life",
-  ],
-};
 
 const newsreader = Newsreader({
   variable: "--font-lora",
@@ -47,42 +22,34 @@ const sourceSans = Source_Sans_3({
 
 export const metadata: Metadata = {
   title: {
-    default: "Lizi Shaw | Speaker, Writer, Encourager",
-    template: "%s | Lizi Shaw",
+    default: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
+    template: `%s | ${siteConfig.site.name}`,
   },
-  description:
-    "Helping moms find clarity, courage and peace in a noisy world. Real stories. Biblical truth. A lighthearted look at the everyday moments that shape our lives.",
-  keywords: [
-    "biblical motherhood",
-    "christian mom speaker",
-    "faith and motherhood",
-    "mom encouragement",
-    "women's ministry speaker",
-    "biblical parenting",
-  ],
-  authors: [{ name: "Lizi Shaw" }],
+  description: siteConfig.content.seoDescription,
+  keywords: [...siteConfig.content.keywords],
+  authors: [{ name: siteConfig.author.name }],
   icons: {
     icon: "/favicon.svg",
-    apple: "/favicon.svg", // SVG works for now, or use PNG if generated
+    apple: "/favicon.svg",
   },
   manifest: "/site.webmanifest",
-  metadataBase: new URL("https://lizishaw.com"),
+  metadataBase: new URL(siteConfig.site.url),
   openGraph: {
-    title: "Lizi Shaw | Speaker, Writer, Encourager",
-    description: "Stories and encouragement for everyday women. Helping moms find clarity, courage and peace in a noisy world.",
-    url: "https://lizishaw.com",
-    siteName: "Lizi Shaw",
-    locale: "en_US",
+    title: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
+    description: siteConfig.content.openGraphDescription,
+    url: siteConfig.site.url,
+    siteName: siteConfig.site.name,
+    locale: siteConfig.site.locale,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lizi Shaw | Speaker, Writer, Encourager",
-    description: "Stories and encouragement for everyday women.",
-    creator: "@lizishaw", // Placeholder if she has one
+    title: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
+    description: siteConfig.content.twitterDescription,
+    creator: siteConfig.social.twitterHandle,
   },
   other: {
-    "theme-color": "#1f2937",
+    "theme-color": siteConfig.theme.color,
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
   },
@@ -98,10 +65,13 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>
       <body className={`${newsreader.variable} ${sourceSans.variable}`}>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <Chrome>{children}</Chrome>
         <Toaster />
         <Analytics />

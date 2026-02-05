@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { ArrowIcon } from "@/components/icons";
@@ -6,7 +7,7 @@ import { ArrowIcon } from "@/components/icons";
 export const metadata: Metadata = {
     title: "About Me",
     description:
-        "Learn about Lizi Shaw - a wife, mom of three, and Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.",
+        `Learn about ${siteConfig.author.name} - a wife, mom of three, and Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.`,
 };
 
 export default function AboutPage() {
@@ -88,12 +89,12 @@ export default function AboutPage() {
                         I&apos;d love to encourage your group with biblical truth and a lighthearted perspective on real motherhood.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <a href="/speaking" className="btn btn-primary">
+                        <Link href="/speaking" className="btn btn-primary">
                             View Speaking Topics
                             <ArrowIcon />
-                        </a>
+                        </Link>
                         <a
-                            href={siteConfig.newsletterUrl}
+                            href={siteConfig.newsletter.shareUrl}
                             className="btn btn-secondary"
                             target="_blank"
                             rel="noopener noreferrer"

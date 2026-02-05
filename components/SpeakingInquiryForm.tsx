@@ -25,6 +25,7 @@ export function SpeakingInquiryForm() {
     const [eventType, setEventType] = useState("");
     const [audienceSize, setAudienceSize] = useState("");
     const [selectError, setSelectError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -39,29 +40,26 @@ export function SpeakingInquiryForm() {
         const form = e.currentTarget;
         const formData = new FormData(form);
         formData.append("subject", "New Speaking Inquiry");
-        const company = String(formData.get("company") ?? "").trim();
-
-        if (company) {
-            setStatus("success");
-            form.reset();
-            return;
-        }
+        formData.set("form_type", "speaking");
 
         try {
-            const response = await fetch("https://formspree.io/f/mqezoggn", {
+            const response = await fetch("/api/contact", {
                 method: "POST",
                 body: formData,
-                headers: {
-                    Accept: "application/json",
-                },
             });
+            const data = await response.json().catch(() => null);
 
             if (response.ok) {
                 setStatus("success");
+                setSuccessMessage(data?.data?.message || data?.message || null);
                 form.reset();
+                setEventType("");
+                setAudienceSize("");
+                setSelectError(null);
             } else {
-                const data = await response.json();
-                toast.error(data.error || "Something went wrong. Please try again.");
+                toast.error(
+                    data?.error?.message || data?.error || "Something went wrong. Please try again."
+                );
                 setStatus("error");
             }
         } catch {
@@ -78,9 +76,18 @@ export function SpeakingInquiryForm() {
                 </div>
                 <h3 className="text-h3 mb-3">Inquiry Received!</h3>
                 <p className="text-body mb-6 max-w-md mx-auto">
-                    Thank you so much for considering me for your event. I&apos;ve received your details and will get back to you shortly.
+                    {successMessage || "Thank you so much for considering me for your event. I've received your details and will get back to you shortly."}
                 </p>
-                <Button variant="outline" onClick={() => setStatus("idle")}>
+                <Button
+                    variant="outline"
+                    onClick={() => {
+                        setStatus("idle");
+                        setSuccessMessage(null);
+                        setEventType("");
+                        setAudienceSize("");
+                        setSelectError(null);
+                    }}
+                >
                     Send Another Inquiry
                 </Button>
             </div>

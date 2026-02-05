@@ -38,33 +38,28 @@ export function ContactForm() {
 
         const form = e.currentTarget;
         const formData = new FormData(form);
-        const company = String(formData.get("company") ?? "").trim();
-
-        if (company) {
-            setStatus("success");
-            setSuccessMessage("Message sent! I will get back to you as soon as I can.");
-            form.reset();
-            setSelectedSubject("");
-            return;
-        }
+        formData.set("form_type", "contact");
 
         try {
-            const response = await fetch("https://formspree.io/f/mqezoggn", {
+            const response = await fetch("/api/contact", {
                 method: "POST",
                 body: formData,
-                headers: {
-                    Accept: "application/json",
-                },
             });
+            const data = await response.json().catch(() => null);
 
             if (response.ok) {
                 setStatus("success");
-                setSuccessMessage("Message sent! I will get back to you as soon as I can.");
+                setSuccessMessage(
+                    data?.data?.message ||
+                        data?.message ||
+                        "Message sent! I will get back to you as soon as I can."
+                );
                 form.reset();
                 setSelectedSubject("");
             } else {
-                const data = await response.json();
-                toast.error(data.error || "Something went wrong. Please try again.");
+                toast.error(
+                    data?.error?.message || data?.error || "Something went wrong. Please try again."
+                );
                 setStatus("error");
             }
         } catch {

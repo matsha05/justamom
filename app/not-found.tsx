@@ -13,12 +13,12 @@ export default function NotFound() {
                 </p>
 
                 {/* Primary CTA */}
-                <Link href="/">
-                    <Button size="lg" className="mb-8">
+                <Button asChild size="lg" className="mb-8">
+                    <Link href="/">
                         Go Home
                         <ArrowIcon />
-                    </Button>
-                </Link>
+                    </Link>
+                </Button>
 
                 {/* Secondary Links */}
                 <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-caption">

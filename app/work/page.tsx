@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
+import { siteConfig } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Current Work",
@@ -78,10 +79,10 @@ export default function WorkPage() {
               For proposal materials, the full manuscript, or speaking inquiries,
               email{" "}
               <a
-                href="mailto:hello@lizishaw.com"
+                href={`mailto:${siteConfig.contact.email}`}
                 className="underline underline-offset-4"
               >
-                hello@lizishaw.com
+                {siteConfig.contact.email}
               </a>
               .
             </p>

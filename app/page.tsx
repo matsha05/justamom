@@ -5,6 +5,7 @@ import { getAllNotes } from "@/lib/notes";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/config";
 
 const currentWorkSummary =
   "A long-form project on motherhood, identity, and the steadier place where worth is received before it is performed.";
@@ -214,10 +215,10 @@ export default function HomePage() {
                 For literary, editorial, or speaking inquiries, email directly:
               </p>
               <a
-                href="mailto:hello@lizishaw.com"
+                href={`mailto:${siteConfig.contact.email}`}
                 className="text-body-lg text-[var(--color-ink)] underline underline-offset-4"
               >
-                hello@lizishaw.com
+                {siteConfig.contact.email}
               </a>
             </div>
           </div>

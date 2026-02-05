@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { Label } from "@/components/ui/label";
 
@@ -37,17 +37,19 @@ export function NewsletterForm({
                 body: JSON.stringify({ email }),
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => null);
 
             if (response.ok) {
                 setStatus("success");
                 setEmail("");
-                const message = data.message || "You're in! Check your inbox.";
+                const message =
+                    data?.data?.message || data?.message || "You're in! Check your inbox.";
                 setSuccessMessage(message);
                 toast.success(message);
             } else {
                 setStatus("idle");
-                const message = data.error || "Something went wrong. Please try again.";
+                const message =
+                    data?.error?.message || data?.error || "Something went wrong. Please try again.";
                 setErrorMessage(message);
                 toast.error(message);
             }

@@ -7,6 +7,8 @@ export function MDXImage({
   ...props
 }: ImgHTMLAttributes<HTMLImageElement>) {
   return (
+    // Using img keeps MDX image syntax flexible for unknown dimensions.
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       alt={alt}
       loading="lazy"

@@ -63,6 +63,13 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
         }
     };
 
+    const handlePopoverKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        setIsPopperOpen(false);
+        returnFocusToInput();
+    };
+
     return (
         <div className="relative" ref={containerRef}>
             <div className="relative">
@@ -75,9 +82,10 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                     readOnly
                     onClick={() => setIsPopperOpen(!isPopperOpen)}
                     onKeyDown={handleKeyDown}
-                    aria-expanded={isPopperOpen}
+                    role="combobox"
                     aria-haspopup="dialog"
                     aria-controls={popoverId}
+                    aria-expanded={isPopperOpen}
                     ref={inputRef}
                     className="h-10 w-full rounded border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] shadow-sm transition-all outline-none cursor-pointer pr-10 placeholder:text-[var(--color-ink-muted)] hover:border-[var(--color-ink-faint)] focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-soft)]"
                     placeholder="Select a date..."
@@ -93,6 +101,7 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                     id={popoverId}
                     role="dialog"
                     aria-label="Choose date"
+                    onKeyDown={handlePopoverKeyDown}
                     className="absolute z-50 mt-2 bg-white rounded-lg border border-[var(--color-border)] shadow-lg p-2 animate-fade-in"
                 >
                     <DayPicker

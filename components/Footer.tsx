@@ -27,7 +27,7 @@ export function Footer() {
                             ))}
                         </nav>
                         <p className="text-caption text-[var(--color-ink-faint)]">
-                            © {currentYear} Lizi Shaw. Niwot, Colorado.
+                            © {currentYear} {siteConfig.author.name}. {siteConfig.author.location.city}, {siteConfig.author.location.region}.
                         </p>
                     </div>
                     <div className="flex flex-col items-start md:items-end gap-2">

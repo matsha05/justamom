@@ -9,6 +9,7 @@ import { NoteSignOff } from "@/components/NoteSignOff";
 import { MDXImage } from "@/components/MDXImage";
 import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { absoluteUrl, siteConfig } from "@/lib/config";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -86,17 +87,17 @@ export default async function NotePage({ params }: PageProps) {
         dateModified: note.metadata.date,
         author: {
             "@type": "Person",
-            name: "Lizi Shaw",
-            url: "https://lizishaw.com/about",
+            name: siteConfig.author.name,
+            url: absoluteUrl("/about"),
         },
         publisher: {
             "@type": "Person",
-            name: "Lizi Shaw",
-            url: "https://lizishaw.com",
+            name: siteConfig.author.name,
+            url: siteConfig.site.url,
         },
         mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://lizishaw.com/notes/${slug}`,
+            "@id": absoluteUrl(`/notes/${slug}`),
         },
     };
 
