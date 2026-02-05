@@ -34,10 +34,10 @@ export function Header() {
       <div className="container">
         <div className="flex items-center justify-between">
           <Link href="/" className="group flex flex-col">
-            <span className="text-h3 text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-tight">
+            <span className="text-h3 font-normal tracking-[-0.01em] text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-tight">
               {siteConfig.site.name}
             </span>
-            <span className="text-caption text-[var(--color-ink-muted)] tracking-wide">
+            <span className="text-caption font-medium text-[var(--color-ink-muted)] tracking-[0.08em]">
               {siteConfig.site.tagline}
             </span>
           </Link>

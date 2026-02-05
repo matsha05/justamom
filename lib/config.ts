@@ -17,7 +17,7 @@ export const siteConfig = {
     name: "Lizi Shaw",
     jobTitle: "Christian Speaker & Writer",
     description:
-      "Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.",
+      "Christian writer and speaker helping mothers live from identity received in Christ, not performance.",
     location: {
       city: "Niwot",
       region: "Colorado",
@@ -35,11 +35,12 @@ export const siteConfig = {
   },
   content: {
     seoDescription:
-      "Helping moms find clarity, courage and peace in a noisy world. Real stories. Biblical truth. A lighthearted look at the everyday moments that shape our lives.",
+      "A Note for Moms: quiet biblical encouragement for mothers navigating the tension between 'just a mom' and 'do it all.'",
     openGraphDescription:
-      "Stories and encouragement for everyday women. Helping moms find clarity, courage and peace in a noisy world.",
-    twitterDescription: "Stories and encouragement for everyday women.",
+      "Short notes and biblical encouragement for moms who need a steadier place to stand.",
+    twitterDescription: "Biblical encouragement for moms in the thick of everyday life.",
     keywords: [
+      "a note for moms",
       "biblical motherhood",
       "christian mom speaker",
       "faith and motherhood",

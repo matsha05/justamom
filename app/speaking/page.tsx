@@ -6,7 +6,7 @@ import { speakingTopics } from "@/lib/content";
 export const metadata: Metadata = {
     title: "Speaking Topics",
     description:
-        `Book ${siteConfig.author.name} to speak at your moms' event, retreat, or group gathering. Topics include motherhood, faith, identity, and simplifying life.`,
+        `Invite ${siteConfig.author.name} to encourage your women with biblical teaching on motherhood, identity, and everyday faithfulness.`,
 };
 
 export default function SpeakingPage() {
@@ -34,11 +34,11 @@ export default function SpeakingPage() {
                 <div className="container">
                     <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
                         <div className="space-y-4">
-                            <p className="text-label">Selected topics</p>
-                            <h2 className="text-h2">Current messages</h2>
+                            <p className="text-label">Topics I share</p>
+                            <h2 className="text-h2">Messages I return to</h2>
                             <p className="text-body text-[var(--color-ink-soft)]">
-                                These are a few of the messages I most often share. Each
-                                can be shaped for a retreat, church, or women&apos;s gathering.
+                                These are a few talks I come back to often. Each can be
+                                shaped for your church, retreat, or women&apos;s gathering.
                             </p>
                         </div>
                         <div className="space-y-8">
@@ -63,17 +63,17 @@ export default function SpeakingPage() {
                 <div className="container">
                     <div className="max-w-3xl mx-auto space-y-6">
                         <p className="text-label">Inquiries</p>
-                        <h2 className="text-h2">Invite Lizi to speak</h2>
+                        <h2 className="text-h2">Invite me to speak</h2>
                         <p className="text-body text-[var(--color-ink-soft)]">
                             For availability, dates, and event details, share a few
-                            basics below or email{" "}
+                            basics below, or email{" "}
                             <a
                                 href={`mailto:${siteConfig.contact.email}`}
                                 className="underline underline-offset-4"
                             >
                                 {siteConfig.contact.email}
                             </a>
-                            .
+                            . I&apos;ll follow up personally.
                         </p>
                         <SpeakingInquiryForm />
                     </div>

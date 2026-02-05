@@ -1,7 +1,9 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/lib/config";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = `${siteConfig.site.name} | ${siteConfig.site.tagline}`;
 export const size = {
@@ -11,23 +13,21 @@ export const size = {
 
 export const contentType = "image/png";
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3001";
-
-const newsreaderSemiBold = fetch(
-  new URL("/fonts/newsreader-latin-600-normal.woff", baseUrl)
-).then((res) => res.arrayBuffer());
-
-const sourceSansRegular = fetch(
-  new URL("/fonts/source-sans-3-latin-400-normal.woff", baseUrl)
-).then((res) => res.arrayBuffer());
+function toArrayBuffer(buffer: Buffer): ArrayBuffer {
+  return buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength
+  ) as ArrayBuffer;
+}
 
 export default async function Image() {
-  const [newsreaderData, sourceSansData] = await Promise.all([
-    newsreaderSemiBold,
-    sourceSansRegular,
+  const [newsreaderBuffer, sourceSansBuffer, logoBuffer] = await Promise.all([
+    readFile(join(process.cwd(), "public/fonts/newsreader-latin-600-normal.woff")),
+    readFile(join(process.cwd(), "public/fonts/source-sans-3-latin-400-normal.woff")),
+    readFile(join(process.cwd(), "public/images/peony-logo-v4.png")),
   ]);
+
+  const logoDataUrl = `data:image/png;base64,${logoBuffer.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -65,12 +65,11 @@ export default async function Image() {
             borderRadius: "50%",
             background: "#4a7c7c",
             marginBottom: 40,
-            boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
             overflow: "hidden",
           }}
         >
           <img
-            src={new URL("/images/peony-logo-v4.png", baseUrl).toString()}
+            src={logoDataUrl}
             width={140}
             height={140}
             alt=""
@@ -111,13 +110,13 @@ export default async function Image() {
       fonts: [
         {
           name: "Newsreader",
-          data: newsreaderData,
+          data: toArrayBuffer(newsreaderBuffer),
           weight: 600,
           style: "normal",
         },
         {
           name: "Source Sans 3",
-          data: sourceSansData,
+          data: toArrayBuffer(sourceSansBuffer),
           weight: 400,
           style: "normal",
         },

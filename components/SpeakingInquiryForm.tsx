@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2, X } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
@@ -15,7 +15,6 @@ import { fetchJson, getStringFromRecord } from "@/lib/client/http";
 
 export function SpeakingInquiryForm() {
   const { status, setStatus, isSubmitting } = useSubmitState();
-  const [isExpanded, setIsExpanded] = useState(false);
   const [eventType, setEventType] = useState("");
   const [audienceSize, setAudienceSize] = useState("");
   const [selectError, setSelectError] = useState<string | null>(null);
@@ -67,7 +66,7 @@ export function SpeakingInquiryForm() {
 
   if (status === "success") {
     return (
-      <div className="bg-white p-8 rounded-xl border border-[var(--color-border)] shadow-sm text-center animate-fade-in">
+      <div className="bg-white p-8 rounded-xl border border-[var(--color-border)] text-center animate-fade-in">
         <div className="w-16 h-16 bg-[var(--color-accent-soft)] rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="w-8 h-8 text-[var(--color-accent)]" />
         </div>
@@ -83,35 +82,11 @@ export function SpeakingInquiryForm() {
     );
   }
 
-  if (!isExpanded) {
-    return (
-      <div className="text-center">
-        <Button onClick={() => setIsExpanded(true)}>
-          Check Availability
-          <ArrowIcon />
-        </Button>
-        <p className="text-caption text-[var(--color-ink-muted)] mt-4">
-          Takes about 2 minutes to fill out
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-white p-6 md:p-8 rounded-xl border border-[var(--color-border)] shadow-sm animate-fade-in relative">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setIsExpanded(false)}
-        className="absolute top-4 right-4"
-        aria-label="Close form"
-      >
-        <X className="w-5 h-5" />
-      </Button>
-
+    <div className="bg-white p-6 md:p-8 rounded-xl border border-[var(--color-border)] animate-fade-in">
       <h3 className="text-h3 mb-2">Check Availability</h3>
       <p className="text-body mb-8">
-        Tell me a little about your event, and let&apos;s see if we&apos;re a good fit.
+        Tell me a little about your event. I&apos;ll follow up with availability and next steps.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-6" aria-busy={isSubmitting}>

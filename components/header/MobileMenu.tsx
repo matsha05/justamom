@@ -35,7 +35,8 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
             <Link
               key={link.href}
               href={link.href}
-              className={`text-h3 uppercase tracking-[0.2em] transition-colors ${
+              aria-current={isActive ? "page" : undefined}
+              className={`text-h3 font-medium uppercase tracking-[0.14em] transition-colors ${
                 isActive
                   ? "text-[var(--color-ink)]"
                   : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"

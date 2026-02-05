@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/config";
 export const metadata: Metadata = {
     title: "Contact",
     description:
-        `Get in touch with ${siteConfig.author.name} for speaking inquiries, questions, or just to say hello.`,
+        `Get in touch with ${siteConfig.author.name} for speaking inquiries, collaborations, or personal notes.`,
 };
 
 export default function ContactPage() {
@@ -17,8 +17,8 @@ export default function ContactPage() {
                     <p className="text-label">Contact</p>
                     <h1 className="text-display">Let&apos;s connect</h1>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
-                        Whether you have a question, want to book a speaking date, or
-                        simply want to say hello, I&apos;d love to hear from you.
+                        Whether you&apos;re planning an event, have a question, or just want
+                        to say hello, I&apos;d love to hear from you.
                     </p>
                 </div>
             </section>
@@ -30,7 +30,7 @@ export default function ContactPage() {
                         <p className="text-label">Message</p>
                         <h2 className="text-h2">Send a message</h2>
                         <p className="text-body">
-                            For speaking inquiries, collaborations, or just to say hello.
+                            For speaking inquiries, collaborations, or anything else on your mind.
                         </p>
                         <ContactForm />
                     </div>

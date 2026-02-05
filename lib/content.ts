@@ -53,6 +53,6 @@ export const speakingTopics: SpeakingTopic[] = [
 
 export const newsletterCtaCopy = {
   heading: "A Note for Moms, twice a month.",
-  description: "Twice a month. No spam. Just the note.",
+  description: "Twice a month. No spam. Just a steady note for moms.",
   button: "Join A Note for Moms",
 } as const;

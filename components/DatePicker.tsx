@@ -113,19 +113,19 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                         components={{
                             Chevron: ({ orientation }) => (
                                 orientation === "left"
-                                    ? <ChevronLeft size={16} className="text-[#1a1a1a]" />
-                                    : <ChevronRight size={16} className="text-[#1a1a1a]" />
+                                    ? <ChevronLeft size={16} className="text-[var(--color-ink)]" />
+                                    : <ChevronRight size={16} className="text-[var(--color-ink)]" />
                             ),
                         }}
                         modifiersStyles={{
                             selected: {
-                                backgroundColor: "#1a1a1a",
+                                backgroundColor: "var(--color-accent)",
                                 color: "white",
                                 borderRadius: "9999px"
                             },
                             today: {
                                 fontWeight: "bold",
-                                color: "#1a1a1a"
+                                color: "var(--color-ink)"
                             },
                         }}
                         styles={{

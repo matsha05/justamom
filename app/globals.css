@@ -106,10 +106,10 @@
   /* ----------------------------------------
      SHADOWS & RADII
      ---------------------------------------- */
-  --shadow-sm: 0 2px 5px rgba(29, 27, 25, 0.06);
-  --shadow-md: 0 10px 22px rgba(29, 27, 25, 0.08);
-  --shadow-lg: 0 18px 40px rgba(29, 27, 25, 0.12);
-  --shadow-image: 0 20px 44px rgba(29, 27, 25, 0.15);
+  --shadow-sm: 0 1px 2px rgba(29, 27, 25, 0.05);
+  --shadow-md: 0 5px 14px rgba(29, 27, 25, 0.07);
+  --shadow-lg: 0 10px 24px rgba(29, 27, 25, 0.09);
+  --shadow-image: 0 8px 18px rgba(29, 27, 25, 0.08);
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -216,8 +216,8 @@ html {
   font-size: var(--text-display);
   font-weight: 500;
   /* Medium weight for stronger presence */
-  line-height: 1.1;
-  letter-spacing: -0.018em;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   /* Slightly looser for friendlier feel */
   color: var(--color-ink);
   text-wrap: balance;
@@ -271,26 +271,26 @@ html {
 /* Body */
 .text-body-lg {
   font-size: var(--text-body-lg);
-  line-height: 1.82;
+  line-height: 1.76;
   color: var(--color-ink-soft);
 }
 
 .text-body {
   font-size: var(--text-body);
-  line-height: 1.82;
+  line-height: 1.76;
   color: var(--color-ink-soft);
 }
 
 .text-caption {
   font-size: var(--text-caption);
-  line-height: 1.65;
+  line-height: 1.58;
   color: var(--color-ink-muted);
 }
 
 .text-label {
   font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
 }
@@ -369,14 +369,14 @@ html {
 }
 
 .section-newsletter {
-  background: var(--color-paper);
+  background: var(--color-paper-warm);
 }
 
 .newsletter-panel {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  background: white;
-  box-shadow: var(--shadow-md);
+  background: var(--color-paper);
+  box-shadow: none;
   padding: clamp(2rem, 4vw, 3rem);
 }
 
@@ -405,18 +405,17 @@ html {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  color: var(--color-ink-muted);
+  color: var(--color-ink-soft);
   font-weight: 500;
   text-decoration: none;
   transition: all var(--duration-fast) var(--ease-out);
-  text-transform: uppercase;
-  letter-spacing: 0.17em;
-  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  font-size: 0.84rem;
 }
 
 .link-arrow:hover {
   gap: var(--space-sm);
-  color: var(--color-ink);
+  color: var(--color-accent);
 }
 
 /* ============================================
@@ -433,8 +432,7 @@ html {
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .card-body {
@@ -443,9 +441,8 @@ html {
 
 .feature-quote {
   border-left: 2px solid var(--color-border-strong);
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0));
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: transparent;
+  border-radius: 0;
   padding: clamp(1rem, 2.2vw, 1.6rem) 0 clamp(1rem, 2.2vw, 1.6rem) clamp(1.2rem, 2.5vw, 2.4rem);
 }
 
@@ -458,15 +455,13 @@ html {
 
 .topic-card:hover {
   border-color: var(--color-accent-light);
-  transform: translateX(3px);
 }
 
 .contact-panel {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.35));
-  box-shadow: var(--shadow-sm);
+  background: var(--color-paper);
+  box-shadow: none;
   padding: clamp(1.5rem, 3vw, 2.2rem);
 }
 
@@ -476,16 +471,13 @@ html {
 
 .image-editorial {
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-image);
+  box-shadow: none;
+  border: 1px solid var(--color-border);
   overflow: hidden;
 }
 
 .image-editorial img {
-  transition: transform var(--duration-slow) var(--ease-out);
-}
-
-.image-editorial:hover img {
-  transform: scale(1.02);
+  transition: none;
 }
 
 /* ============================================
@@ -565,7 +557,7 @@ html {
 }
 
 .link-arrow:hover svg {
-  transform: translateX(4px);
+  transform: translateX(2px);
 }
 
 /* Staggered children */

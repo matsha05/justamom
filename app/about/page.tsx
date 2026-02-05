@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
     title: "About Me",
     description:
-        `Learn about ${siteConfig.author.name} - a wife, mom of three, and Christian writer and speaker passionate about helping women anchor their motherhood in God's truth.`,
+        `Learn about ${siteConfig.author.name}, a Christian writer and speaker helping moms live from identity received in Christ.`,
 };
 
 export default function AboutPage() {
@@ -39,26 +39,23 @@ export default function AboutPage() {
 
                             <div className="prose text-body-lg text-[var(--color-ink-soft)]">
                                 <p>
-                                    I&apos;m a wife, mom of three young kids, and someone who deeply
-                                    understands how overwhelming modern motherhood can feel. Between
-                                    cultural pressure, information overload, and the everyday demands
-                                    of life, it&apos;s easy to lose sight of what really matters.
-                                    That&apos;s why I&apos;m passionate about helping women cut through
-                                    the noise and live with clarity, confidence, and peace rooted in
-                                    Biblical truth.
+                                    I&apos;m a wife and mom of three, and I know how motherhood can
+                                    feel holy and disorienting in the same breath. The days are full
+                                    and loud, and it&apos;s easy to feel pulled between two exhausting
+                                    stories: that you&apos;re &quot;just a mom,&quot; or that you have to do it all.
                                 </p>
 
                                 <p>
-                                    I don&apos;t claim to have it all figured out, but I&apos;ve
-                                    learned (sometimes the hard way) that small, faithful steps in the
-                                    right direction make a big difference. I love speaking to women in
-                                    every stage of life and helping them rediscover joy in the simple
-                                    and sacred work they&apos;re already doing.
+                                    My heart is to help women step out of that noise and back into
+                                    God&apos;s story. Scripture gives us something steadier: identity
+                                    received before performance, and purpose that does not depend on
+                                    perfect kids, perfect homes, or perfect plans.
                                 </p>
 
                                 <p>
-                                    Let&apos;s walk it out together. With grace, grit, and a little
-                                    laughter along the way.
+                                    Through speaking and writing, I want moms to leave with clear truth,
+                                    practical encouragement, and the quiet confidence that comes from
+                                    belonging to Christ.
                                 </p>
                             </div>
                         </div>
@@ -71,12 +68,11 @@ export default function AboutPage() {
                 <div className="container-prose space-y-4">
                     <p className="text-label">Short bio</p>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
-                        Lizi Shaw is a Christian writer and speaker passionate about
-                        helping women anchor their motherhood in God&apos;s truth. With
-                        warmth, honesty, and insight, she invites moms to notice the Lord
-                        in the everyday and build homes shaped by peace, purpose, and
-                        eternal perspective. She lives in Niwot, Colorado with her
-                        husband, Matt, and their three children.
+                        Lizi Shaw is a Christian writer and speaker who helps moms live from
+                        identity received in Christ, not performance. Her work invites women
+                        to notice God in ordinary days and recover a steady, biblical vision
+                        of motherhood. She lives in Niwot, Colorado with her husband, Matt,
+                        and their three children.
                     </p>
                 </div>
             </section>
@@ -84,14 +80,14 @@ export default function AboutPage() {
             {/* CTA Section */}
             <section className="section section-soft">
                 <div className="container text-center">
-                    <h2 className="text-h2 mb-4">Want to hear me speak?</h2>
+                    <h2 className="text-h2 mb-4">Need a speaker for your women&apos;s event?</h2>
                     <p className="text-body-lg max-w-lg mx-auto mb-8">
-                        I&apos;d love to encourage your group with biblical truth and a lighthearted perspective on real motherhood.
+                        I&apos;d love to serve your women with grounded biblical encouragement for real motherhood.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         <Button asChild>
                             <Link href="/speaking">
-                                View Speaking Topics
+                                Invite me to speak
                                 <ArrowIcon />
                             </Link>
                         </Button>
@@ -101,7 +97,7 @@ export default function AboutPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Join A Note for Moms
+                                Join the Newsletter
                             </a>
                         </Button>
                     </div>

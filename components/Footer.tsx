@@ -11,7 +11,7 @@ export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="border-t border-[var(--color-border)] bg-[linear-gradient(180deg,var(--color-paper)_0%,#f4efe9_100%)]">
+        <footer className="border-t border-[var(--color-border)] bg-[var(--color-paper)]">
             <div className="container py-12">
                 <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
                     <div className="space-y-5">
@@ -20,7 +20,7 @@ export function Footer() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="relative text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] transition-colors after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-[var(--color-ink)] after:w-0 hover:after:w-full after:transition-all after:duration-200"
+                                    className="relative text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] transition-colors after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-[var(--color-ink)] after:w-0 hover:after:w-full after:transition-all after:duration-200"
                                 >
                                     {link.label}
                                 </Link>
@@ -38,7 +38,7 @@ export function Footer() {
                             height={69}
                             className="opacity-85"
                         />
-                        <span className="text-caption text-[var(--color-ink-faint)]">
+                        <span className="text-caption font-medium tracking-[0.06em] text-[var(--color-ink-faint)]">
                             A Note for Moms
                         </span>
                     </div>

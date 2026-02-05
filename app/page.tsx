@@ -16,16 +16,8 @@ const currentWorkExcerpt =
 
 export default function HomePage() {
   const notes = getAllNotes();
-  const highlightSlugs = [
-    "dog-encounters",
-    "the-better-thing",
-    "a-different-kind-of-new-year",
-  ];
-  const selectedNotes = highlightSlugs
-    .map((slug) => notes.find((note) => note.slug === slug))
-    .filter((note): note is (typeof notes)[number] => Boolean(note));
-  const fallbackNotes = notes.slice(0, 3);
-  const writingNotes = selectedNotes.length > 0 ? selectedNotes : fallbackNotes;
+  const featuredNote = notes[0] ?? null;
+  const supportingNotes = notes.slice(1, 3);
 
   return (
     <>
@@ -35,8 +27,9 @@ export default function HomePage() {
             <div className="space-y-7">
               <p className="text-label">Speaker · Writer · Encourager</p>
               <h1 className="text-display max-w-[12ch]">A Note for Moms.</h1>
-              <p className="text-body-lg text-[var(--color-ink-soft)]">
-                A small, steady reminder for mothers who feel the noise.
+              <p className="text-body-lg max-w-[34ch] text-[var(--color-ink-soft)]">
+                A steady reminder for moms who feel stretched between
+                &quot;just a mom&quot; and &quot;do it all.&quot;
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Button asChild>
@@ -47,14 +40,11 @@ export default function HomePage() {
                 </Button>
                 <Button asChild variant="outline">
                   <Link href="/notes">
-                    Read Recent Notes
+                    Read the Latest Notes
                     <ArrowIcon />
                   </Link>
                 </Button>
               </div>
-              <p className="text-caption text-[var(--color-ink-faint)]">
-                Quiet encouragement twice a month. No noise, no fluff.
-              </p>
             </div>
             <div className="flex justify-center lg:justify-end">
               <div className="hero-portrait-shell w-[min(340px,82vw)] lg:w-[390px]">
@@ -79,40 +69,68 @@ export default function HomePage() {
           <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
             <div className="space-y-4">
               <p className="text-label">Latest Notes</p>
-              <h2 className="text-h1">A Note for Moms</h2>
-              <p className="text-body text-[var(--color-ink-soft)]">
-                Short notes for mothers, sent twice a month.
+              <h2 className="text-h1">For the mom in the thick of it</h2>
+              <p className="text-body max-w-[36ch] text-[var(--color-ink-soft)]">
+                A featured note and recent reflections for moms in the thick of
+                ordinary days.
               </p>
+              <Link className="link-arrow" href="/notes">
+                See all notes
+                <ArrowIcon />
+              </Link>
             </div>
-            <div className="divide-y divide-[var(--color-border)]">
-              {writingNotes.map((note) => {
-                const formattedDate = format(
-                  parseISO(note.date),
-                  "MMMM d, yyyy"
-                );
-                return (
-                  <article key={note.slug} className="group py-10 first:pt-0">
-                    <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
-                      {formattedDate}
-                    </div>
-                    <h2 className="text-h3 mb-3">
-                      <Link
-                        href={`/notes/${note.slug}`}
-                        className="transition-colors group-hover:text-[var(--color-accent)]"
-                      >
-                        {note.title}
-                      </Link>
-                    </h2>
-                    <p className="text-body mb-4">
-                      {note.excerpt}
-                    </p>
-                    <Link className="link-arrow" href={`/notes/${note.slug}`}>
-                      Read
-                      <ArrowIcon />
+            <div className="space-y-9">
+              {!featuredNote && supportingNotes.length === 0 ? (
+                <p className="text-body text-[var(--color-ink-soft)]">
+                  Notes are on the way.
+                </p>
+              ) : null}
+              {featuredNote ? (
+                <article className="border-b border-[var(--color-border)] pb-9">
+                  <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
+                    {format(parseISO(featuredNote.date), "MMMM d, yyyy")}
+                  </div>
+                  <h3 className="text-h2 mb-4">
+                    <Link
+                      href={`/notes/${featuredNote.slug}`}
+                      className="transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {featuredNote.title}
                     </Link>
-                  </article>
-                );
-              })}
+                  </h3>
+                  <p className="text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
+                  <Link className="link-arrow" href={`/notes/${featuredNote.slug}`}>
+                    Read this note
+                    <ArrowIcon />
+                  </Link>
+                </article>
+              ) : null}
+
+              <div className="divide-y divide-[var(--color-border)]">
+                {supportingNotes.map((note) => {
+                  const formattedDate = format(parseISO(note.date), "MMMM d, yyyy");
+                  return (
+                    <article key={note.slug} className="group py-8 first:pt-0">
+                      <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
+                        {formattedDate}
+                      </div>
+                      <h3 className="text-h3 mb-3">
+                        <Link
+                          href={`/notes/${note.slug}`}
+                          className="transition-colors group-hover:text-[var(--color-accent)]"
+                        >
+                          {note.title}
+                        </Link>
+                      </h3>
+                      <p className="text-body mb-4">{note.excerpt}</p>
+                      <Link className="link-arrow" href={`/notes/${note.slug}`}>
+                        Read
+                        <ArrowIcon />
+                      </Link>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -121,14 +139,14 @@ export default function HomePage() {
       <section id="newsletter" className="section section-newsletter">
         <div className="container-prose">
           <div className="newsletter-panel text-center space-y-4">
-            <p className="text-label">Join the notes</p>
+            <p className="text-label">Newsletter</p>
             <h2 className="text-h2">{newsletterCtaCopy.heading}</h2>
-            <p className="text-body">{newsletterCtaCopy.description}</p>
+            <p className="text-body mx-auto max-w-[34ch]">{newsletterCtaCopy.description}</p>
             <div className="max-w-md mx-auto">
               <NewsletterForm variant="compact" />
             </div>
             <p className="text-caption text-[var(--color-ink-faint)]">
-              A thoughtful rhythm for busy moms.
+              A small, steady rhythm for busy moms.
             </p>
           </div>
         </div>
@@ -171,14 +189,13 @@ export default function HomePage() {
           <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
             <div className="space-y-4">
               <p className="text-label">Speaking</p>
-              <h2 className="text-h1">Selected topics</h2>
+              <h2 className="text-h1">Topics I often share</h2>
               <p className="text-body text-[var(--color-ink-soft)]">
-                For churches, retreats, and women’s gatherings seeking biblical
-                encouragement with clear, grounded theology and practical care.
+                For churches, retreats, and women&apos;s gatherings. Messages rooted
+                in Scripture and shaped by ordinary life.
               </p>
               <p className="text-body">
-                This is for leaders who want thoughtful, grounded teaching rather than
-                hype.
+                Simple, honest, practical. No hype.
               </p>
             </div>
             <div className="space-y-8">
@@ -194,7 +211,7 @@ export default function HomePage() {
                 </div>
               ))}
               <Link className="link-arrow" href="/speaking">
-                View speaking page
+                Invite me to speak
                 <ArrowIcon />
               </Link>
             </div>
@@ -219,7 +236,7 @@ export default function HomePage() {
                   {siteConfig.contact.email}
                 </a>
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/contact">Open Contact Form</Link>
+                  <Link href="/contact">Use Contact Form</Link>
                 </Button>
               </div>
             </div>
