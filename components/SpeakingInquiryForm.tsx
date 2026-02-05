@@ -22,10 +22,19 @@ type SubmitStatus = "idle" | "submitting" | "success" | "error";
 export function SpeakingInquiryForm() {
     const [status, setStatus] = useState<SubmitStatus>("idle");
     const [isExpanded, setIsExpanded] = useState(false);
+    const [eventType, setEventType] = useState("");
+    const [audienceSize, setAudienceSize] = useState("");
+    const [selectError, setSelectError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!eventType || !audienceSize) {
+            setSelectError("Please select an event type and group size.");
+            return;
+        }
+
         setStatus("submitting");
+        setSelectError(null);
 
         const form = e.currentTarget;
         const formData = new FormData(form);
@@ -68,7 +77,7 @@ export function SpeakingInquiryForm() {
                     <CheckCircle className="w-8 h-8 text-[var(--color-accent)]" />
                 </div>
                 <h3 className="text-h3 mb-3">Inquiry Received!</h3>
-                <p className="text-body text-[var(--color-ink-muted)] mb-6 max-w-md mx-auto">
+                <p className="text-body mb-6 max-w-md mx-auto">
                     Thank you so much for considering me for your event. I&apos;ve received your details and will get back to you shortly.
                 </p>
                 <Button variant="outline" onClick={() => setStatus("idle")}>
@@ -93,6 +102,7 @@ export function SpeakingInquiryForm() {
     }
 
     const isSubmitting = status === "submitting";
+    const selectErrorId = "speaking-select-error";
 
     return (
         <div className="bg-white p-6 md:p-8 rounded-xl border border-[var(--color-border)] shadow-sm animate-fade-in relative">
@@ -107,7 +117,7 @@ export function SpeakingInquiryForm() {
             </Button>
 
             <h3 className="text-h3 mb-2">Check Availability</h3>
-            <p className="text-body text-[var(--color-ink-muted)] mb-8">
+            <p className="text-body mb-8">
                 Tell me a little about your event, and let&apos;s see if we&apos;re a good fit.
             </p>
 
@@ -181,8 +191,14 @@ export function SpeakingInquiryForm() {
                 <div className="grid md:grid-cols-2 gap-5">
                     <div className="space-y-2">
                         <Label htmlFor="event_type">Event Type</Label>
-                        <Select name="event_type">
-                            <SelectTrigger>
+                        <Select
+                            value={eventType}
+                            onValueChange={(value) => {
+                                setEventType(value);
+                                setSelectError(null);
+                            }}
+                        >
+                            <SelectTrigger aria-invalid={Boolean(selectError)} aria-describedby={selectError ? selectErrorId : undefined}>
                                 <SelectValue placeholder="Select a type..." />
                             </SelectTrigger>
                             <SelectContent>
@@ -196,11 +212,18 @@ export function SpeakingInquiryForm() {
                                 <SelectItem value="Other">Other</SelectItem>
                             </SelectContent>
                         </Select>
+                        <input type="hidden" name="event_type" value={eventType} required />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="audience_size">Approx. Group Size</Label>
-                        <Select name="audience_size">
-                            <SelectTrigger>
+                        <Select
+                            value={audienceSize}
+                            onValueChange={(value) => {
+                                setAudienceSize(value);
+                                setSelectError(null);
+                            }}
+                        >
+                            <SelectTrigger aria-invalid={Boolean(selectError)} aria-describedby={selectError ? selectErrorId : undefined}>
                                 <SelectValue placeholder="Select size..." />
                             </SelectTrigger>
                             <SelectContent>
@@ -210,8 +233,14 @@ export function SpeakingInquiryForm() {
                                 <SelectItem value="150+">150+</SelectItem>
                             </SelectContent>
                         </Select>
+                        <input type="hidden" name="audience_size" value={audienceSize} required />
                     </div>
                 </div>
+                {selectError ? (
+                    <p id={selectErrorId} className="text-caption text-[var(--color-error)]">
+                        {selectError}
+                    </p>
+                ) : null}
 
                 {/* Message */}
                 <div className="space-y-2">

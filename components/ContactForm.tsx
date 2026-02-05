@@ -22,10 +22,19 @@ type SubmitStatus = "idle" | "submitting" | "success" | "error";
 export function ContactForm() {
     const [status, setStatus] = useState<SubmitStatus>("idle");
     const [selectedSubject, setSelectedSubject] = useState("");
+    const [subjectError, setSubjectError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!selectedSubject) {
+            setSubjectError("Please select a topic.");
+            return;
+        }
+
         setStatus("submitting");
+        setSubjectError(null);
+        setSuccessMessage(null);
 
         const form = e.currentTarget;
         const formData = new FormData(form);
@@ -33,6 +42,7 @@ export function ContactForm() {
 
         if (company) {
             setStatus("success");
+            setSuccessMessage("Message sent! I will get back to you as soon as I can.");
             form.reset();
             setSelectedSubject("");
             return;
@@ -49,6 +59,7 @@ export function ContactForm() {
 
             if (response.ok) {
                 setStatus("success");
+                setSuccessMessage("Message sent! I will get back to you as soon as I can.");
                 form.reset();
                 setSelectedSubject("");
             } else {
@@ -69,29 +80,23 @@ export function ContactForm() {
         { value: "Something Else", label: "Something Else" },
     ];
 
-    // Success state
-    if (status === "success") {
-        return (
-            <div className="text-center py-12 animate-fade-in">
-                <div className="w-16 h-16 bg-[var(--color-accent-soft)] rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle className="w-8 h-8 text-[var(--color-accent)]" />
-                </div>
-                <h3 className="text-h3 mb-3">Message Sent!</h3>
-                <p className="text-body text-[var(--color-ink-muted)] mb-6">
-                    Thank you for reaching out. I&apos;ll get back to you as soon as I can.
-                </p>
-                <Button variant="outline" onClick={() => setStatus("idle")}>
-                    Send Another Message
-                </Button>
-            </div>
-        );
-    }
-
     const isSpeakingInquiry = selectedSubject === "Speaking Inquiry";
     const isSubmitting = status === "submitting";
+    const isSuccess = status === "success";
+    const subjectErrorId = "subject-error";
+    const successMessageId = "contact-success-message";
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
+        <form
+            onSubmit={handleSubmit}
+            onChange={() => {
+                if (isSuccess) {
+                    setStatus("idle");
+                    setSuccessMessage(null);
+                }
+            }}
+            className="space-y-6 animate-fade-in"
+        >
             <div className="sr-only" aria-hidden="true">
                 <Label htmlFor="company">Company</Label>
                 <Input
@@ -102,6 +107,22 @@ export function ContactForm() {
                     autoComplete="off"
                 />
             </div>
+            {successMessage ? (
+                <div
+                    id={successMessageId}
+                    className="rounded-md border border-[var(--color-accent-soft)] bg-[var(--color-paper-soft)] px-4 py-3 text-[var(--color-ink)] flex items-start gap-3"
+                    role="status"
+                    aria-live="polite"
+                >
+                    <CheckCircle className="w-5 h-5 text-[var(--color-success)] mt-0.5" />
+                    <div className="space-y-1">
+                        <p className="text-body font-medium">Message sent.</p>
+                        <p className="text-caption text-[var(--color-ink-muted)]">
+                            Thank you for reaching out. I&apos;ll get back to you as soon as I can.
+                        </p>
+                    </div>
+                </div>
+            ) : null}
             {/* Name & Email Row */}
             <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -130,12 +151,14 @@ export function ContactForm() {
             <div className="space-y-2">
                 <Label htmlFor="subject">What&apos;s this about?</Label>
                 <Select
-                    name="subject"
                     required
                     value={selectedSubject}
-                    onValueChange={setSelectedSubject}
+                    onValueChange={(value) => {
+                        setSelectedSubject(value);
+                        setSubjectError(null);
+                    }}
                 >
-                    <SelectTrigger>
+                    <SelectTrigger aria-invalid={Boolean(subjectError)} aria-describedby={subjectError ? subjectErrorId : undefined}>
                         <SelectValue placeholder="Select a topic..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -146,12 +169,18 @@ export function ContactForm() {
                         ))}
                     </SelectContent>
                 </Select>
+                <input type="hidden" name="subject" value={selectedSubject} required />
+                {subjectError ? (
+                    <p id={subjectErrorId} className="text-caption text-[var(--color-error)]">
+                        {subjectError}
+                    </p>
+                ) : null}
             </div>
 
             {/* Conditional Speaking Fields */}
             {isSpeakingInquiry && (
                 <div className="space-y-6 py-4 border-t border-b border-[var(--color-border)] animate-fade-in">
-                    <p className="text-body text-[var(--color-ink-muted)] bg-[var(--color-paper-soft)] p-4 rounded-md">
+                    <p className="text-body bg-[var(--color-paper-soft)] p-4 rounded-md">
                         <strong>Great!</strong> Tell me a bit about your event so I can check availability.
                     </p>
 
@@ -237,7 +266,7 @@ export function ContactForm() {
             </div>
 
             {/* Submit */}
-            <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto">
+            <Button type="submit" disabled={isSubmitting || isSuccess} className="w-full md:w-auto">
                 {isSubmitting ? (
                     <>
                         <Loader2 className="w-4 h-4 animate-spin" />

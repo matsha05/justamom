@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
+import { Label } from "@/components/ui/label";
 
 type SubmitStatus = "idle" | "submitting" | "success";
 
@@ -18,12 +19,17 @@ export function NewsletterForm({
     variant = "default",
     className = "",
 }: NewsletterFormProps) {
+    const inputId = useId();
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<SubmitStatus>("idle");
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus("submitting");
+        setErrorMessage(null);
+        setSuccessMessage(null);
         try {
             const response = await fetch("/api/newsletter", {
                 method: "POST",
@@ -36,42 +42,50 @@ export function NewsletterForm({
             if (response.ok) {
                 setStatus("success");
                 setEmail("");
-                toast.success(data.message || "You're in! Check your inbox.");
+                const message = data.message || "You're in! Check your inbox.";
+                setSuccessMessage(message);
+                toast.success(message);
             } else {
                 setStatus("idle");
-                toast.error(data.error || "Something went wrong. Please try again.");
+                const message = data.error || "Something went wrong. Please try again.";
+                setErrorMessage(message);
+                toast.error(message);
             }
         } catch {
             setStatus("idle");
-            toast.error("Network error. Please try again.");
+            const message = "Network error. Please try again.";
+            setErrorMessage(message);
+            toast.error(message);
         }
     };
 
-    // Success state
-    if (status === "success") {
-        return (
-            <div className={`flex justify-center ${className}`}>
-                <div className="flex items-center gap-2 text-[var(--color-success)]">
-                    <CheckCircle className="w-5 h-5" />
-                    <span className="text-body font-medium">You&apos;re on the list!</span>
-                </div>
-            </div>
-        );
-    }
-
     const isSubmitting = status === "submitting";
+    const errorId = `${inputId}-error`;
+    const successId = `${inputId}-success`;
     const buttonText = "Join A Note for Moms";
 
     // Compact variant (single line)
     if (variant === "compact" || variant === "hero") {
         return (
             <form onSubmit={handleSubmit} className={className}>
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="space-y-2">
+                    <Label htmlFor={inputId} className="text-caption text-[var(--color-ink-muted)]">
+                        Email address
+                    </Label>
+                    <div className="flex flex-col sm:flex-row gap-3">
                     <Input
                         type="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        aria-label="Email address"
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            if (errorMessage) setErrorMessage(null);
+                            if (successMessage) setSuccessMessage(null);
+                        }}
+                        id={inputId}
+                        aria-describedby={
+                            errorMessage ? errorId : successMessage ? successId : undefined
+                        }
+                        aria-invalid={Boolean(errorMessage)}
                         placeholder="Your email"
                         required
                         disabled={isSubmitting}
@@ -90,6 +104,17 @@ export function NewsletterForm({
                             </>
                         )}
                     </Button>
+                    </div>
+                    {errorMessage ? (
+                        <p id={errorId} className="text-caption text-[var(--color-error)]">
+                            {errorMessage}
+                        </p>
+                    ) : null}
+                    {successMessage ? (
+                        <p id={successId} className="text-caption text-[var(--color-success)]">
+                            {successMessage}
+                        </p>
+                    ) : null}
                 </div>
             </form>
         );
@@ -99,16 +124,39 @@ export function NewsletterForm({
     return (
         <form onSubmit={handleSubmit} className={className}>
             <div className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor={inputId} className="text-caption text-[var(--color-ink-muted)]">
+                        Email address
+                    </Label>
                 <Input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    aria-label="Email address"
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errorMessage) setErrorMessage(null);
+                        if (successMessage) setSuccessMessage(null);
+                    }}
+                    id={inputId}
+                    aria-describedby={
+                        errorMessage ? errorId : successMessage ? successId : undefined
+                    }
+                    aria-invalid={Boolean(errorMessage)}
                     placeholder="Enter your email"
                     required
                     disabled={isSubmitting}
                     className="w-full"
                 />
+                {errorMessage ? (
+                    <p id={errorId} className="text-caption text-[var(--color-error)]">
+                        {errorMessage}
+                    </p>
+                ) : null}
+                {successMessage ? (
+                    <p id={successId} className="text-caption text-[var(--color-success)]">
+                        {successMessage}
+                    </p>
+                ) : null}
+                </div>
                 <Button type="submit" disabled={isSubmitting} className="w-full">
                     {isSubmitting ? (
                         <>

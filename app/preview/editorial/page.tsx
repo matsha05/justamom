@@ -6,6 +6,7 @@ import { getAllNotes } from "@/lib/notes";
 import { PreviewShell } from "@/components/PreviewShell";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ArrowIcon } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Editorial Preview",
@@ -96,17 +97,12 @@ export default function EditorialPreviewPage() {
                     A small, steady reminder for mothers who feel the noise.
                   </p>
                   <div className="flex flex-wrap gap-6">
-                    <Link
-                      className="inline-flex items-center gap-2 border border-[var(--color-ink)] bg-[var(--color-paper-warm)] px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]"
-                      href="#contact"
-                    >
-                      Join A Note for Moms
-                      <ArrowIcon />
-                    </Link>
-                    <Link className="link-arrow" href="#notes">
-                      Read a note
-                      <ArrowIcon />
-                    </Link>
+                    <Button asChild>
+                      <Link href="#newsletter">
+                        Join A Note for Moms
+                        <ArrowIcon />
+                      </Link>
+                    </Button>
                   </div>
                 </div>
                 <div className="flex justify-center lg:justify-end">
@@ -131,7 +127,7 @@ export default function EditorialPreviewPage() {
                   <p className="text-label text-[var(--color-ink-muted)]">
                     Notes for Moms
                   </p>
-                  <h1 className="text-h1">A Note for Moms</h1>
+                  <h2 className="text-h1">A Note for Moms</h2>
                   <p className="text-body text-[var(--color-ink-soft)]">
                     Short notes for mothers, sent twice a month.
                   </p>
@@ -155,7 +151,7 @@ export default function EditorialPreviewPage() {
                             {note.title}
                           </Link>
                         </h3>
-                        <p className="text-body text-[var(--color-ink-muted)] mb-4">
+                        <p className="text-body mb-4">
                           {note.excerpt}
                         </p>
                         <Link className="link-arrow" href={`/notes/${note.slug}`}>
@@ -232,7 +228,7 @@ export default function EditorialPreviewPage() {
                     For churches, retreats, and women’s gatherings seeking biblical
                     encouragement with clear, grounded theology and practical care.
                   </p>
-                  <p className="text-body text-[var(--color-ink-muted)]">
+                  <p className="text-body">
                     This is for leaders who want thoughtful, grounded teaching rather
                     than hype.
                   </p>
@@ -244,7 +240,7 @@ export default function EditorialPreviewPage() {
                       className="border-l border-[var(--color-border-strong)] pl-6"
                     >
                       <h3 className="text-h3 mb-2">{topic.title}</h3>
-                      <p className="text-body text-[var(--color-ink-muted)]">
+                      <p className="text-body">
                         {topic.description}
                       </p>
                     </div>
@@ -275,12 +271,12 @@ export default function EditorialPreviewPage() {
                     hello@lizishaw.com
                   </a>
                 </div>
-                <div className="space-y-4 lg:border-l lg:border-[var(--color-border)] lg:pl-10">
+                <div id="newsletter" className="space-y-4 lg:border-l lg:border-[var(--color-border)] lg:pl-10">
               <p className="text-label text-[var(--color-ink-muted)]">
                 Notes by email
               </p>
               <h3 className="text-h3">A Note for Moms, twice a month.</h3>
-                  <p className="text-body text-[var(--color-ink-muted)]">
+                  <p className="text-body">
                     Twice a month. No spam. Just the note.
                   </p>
                   <NewsletterForm variant="compact" />

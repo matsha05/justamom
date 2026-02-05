@@ -84,7 +84,7 @@ export default function AboutPage() {
             <section className="section section-soft">
                 <div className="container text-center">
                     <h2 className="text-h2 mb-4">Want to hear me speak?</h2>
-                    <p className="text-body-lg text-[var(--color-ink-muted)] max-w-lg mx-auto mb-8">
+                    <p className="text-body-lg max-w-lg mx-auto mb-8">
                         I&apos;d love to encourage your group with biblical truth and a lighthearted perspective on real motherhood.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">

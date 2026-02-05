@@ -29,7 +29,7 @@ export default function NotesPage() {
                             A Note for Moms
                         </h1>
                         <p
-                            className="text-body-lg text-[var(--color-ink-muted)] animate-fade-in"
+                            className="text-body-lg text-[var(--color-ink-soft)] animate-fade-in"
                             style={{ animationDelay: "150ms" }}
                         >
                             Short notes for mothers, sent twice a month.
@@ -77,7 +77,7 @@ export default function NotesPage() {
                                                     <h2 className="text-h3 mb-3 group-hover:text-[var(--color-accent)] transition-colors">
                                                         {note.title}
                                                     </h2>
-                                                    <p className="text-body text-[var(--color-ink-muted)] leading-relaxed mb-4">
+                                                    <p className="text-body text-[var(--color-ink-soft)] leading-relaxed mb-4">
                                                         {note.excerpt}
                                                     </p>
                                                     <span className="text-caption font-medium text-[var(--color-accent)] inline-flex items-center gap-2 group-hover:gap-3 transition-all">

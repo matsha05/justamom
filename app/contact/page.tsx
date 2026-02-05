@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { NewsletterForm } from "@/components/NewsletterForm";
 
 export const metadata: Metadata = {
     title: "Contact",
@@ -29,19 +28,10 @@ export default function ContactPage() {
                     <div className="space-y-4">
                         <p className="text-label">Message</p>
                         <h2 className="text-h2">Send a message</h2>
-                        <p className="text-body text-[var(--color-ink-muted)]">
+                        <p className="text-body">
                             For speaking inquiries, collaborations, or just to say hello.
                         </p>
                         <ContactForm />
-                    </div>
-
-                    <div className="space-y-4">
-                        <p className="text-label">Notes by email</p>
-                        <h3 className="text-h3">A Note for Moms, twice a month.</h3>
-                        <p className="text-body text-[var(--color-ink-muted)]">
-                            Twice a month. No spam. Just the note.
-                        </p>
-                        <NewsletterForm variant="compact" />
                     </div>
                 </div>
             </section>

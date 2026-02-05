@@ -57,7 +57,7 @@
   --text-body: 1.03rem;
   /* 17px */
   --text-caption: 0.875rem;
-  --text-label: 0.72rem;
+  --text-label: 0.84rem;
 
   /* ----------------------------------------
      SPACING
@@ -257,7 +257,7 @@ html {
 .text-label {
   font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
 }

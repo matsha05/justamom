@@ -38,7 +38,7 @@ export default function SpeakingPage() {
                         places where God meets us, and the steadier identity we can
                         live from when the noise gets loud.
                     </p>
-                    <p className="text-body text-[var(--color-ink-muted)]">
+                    <p className="text-body">
                         Talks are grounded in Scripture and shaped by real life. I am
                         happy to tailor a message for your group or event.
                     </p>
@@ -64,7 +64,7 @@ export default function SpeakingPage() {
                                     className="border-l border-[var(--color-border-strong)] pl-6"
                                 >
                                     <h3 className="text-h3 mb-2">{topic.title}</h3>
-                                    <p className="text-body text-[var(--color-ink-muted)]">
+                                    <p className="text-body">
                                         {topic.description}
                                     </p>
                                 </div>

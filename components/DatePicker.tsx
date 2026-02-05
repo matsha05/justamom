@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useId, useState, useRef, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
@@ -14,12 +14,14 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ id, name, required = false, defaultValue = "" }: DatePickerProps) {
+    const popoverId = useId();
     const [selected, setSelected] = useState<Date | undefined>();
     const [inputValue, setInputValue] = useState(defaultValue);
     const [isPopperOpen, setIsPopperOpen] = useState(false);
 
     // Manage popover closing on outside click
     const containerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -31,13 +33,33 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const returnFocusToInput = () => {
+        requestAnimationFrame(() => {
+            inputRef.current?.focus();
+        });
+    };
+
     const handleDaySelect = (date: Date | undefined) => {
         setSelected(date);
         if (date) {
             setInputValue(format(date, "MMM d, yyyy"));
             setIsPopperOpen(false);
+            returnFocusToInput();
         } else {
             setInputValue("");
+        }
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Escape") {
+            setIsPopperOpen(false);
+            returnFocusToInput();
+            return;
+        }
+
+        if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown") {
+            event.preventDefault();
+            setIsPopperOpen(true);
         }
     };
 
@@ -52,6 +74,11 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                     value={inputValue}
                     readOnly
                     onClick={() => setIsPopperOpen(!isPopperOpen)}
+                    onKeyDown={handleKeyDown}
+                    aria-expanded={isPopperOpen}
+                    aria-haspopup="dialog"
+                    aria-controls={popoverId}
+                    ref={inputRef}
                     className="h-10 w-full rounded border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] shadow-sm transition-all outline-none cursor-pointer pr-10 placeholder:text-[var(--color-ink-muted)] hover:border-[var(--color-ink-faint)] focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-soft)]"
                     placeholder="Select a date..."
                     autoComplete="off"
@@ -62,8 +89,14 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
             </div>
 
             {isPopperOpen && (
-                <div className="absolute z-50 mt-2 bg-white rounded-lg border border-[var(--color-border)] shadow-lg p-2 animate-fade-in">
+                <div
+                    id={popoverId}
+                    role="dialog"
+                    aria-label="Choose date"
+                    className="absolute z-50 mt-2 bg-white rounded-lg border border-[var(--color-border)] shadow-lg p-2 animate-fade-in"
+                >
                     <DayPicker
+                        initialFocus
                         mode="single"
                         selected={selected}
                         onSelect={handleDaySelect}

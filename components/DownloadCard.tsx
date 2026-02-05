@@ -62,7 +62,7 @@ export function DownloadCard({
           <div>
             <h3 className="text-h3 mb-2">{title}</h3>
             {description ? (
-              <p className="text-body text-[var(--color-ink-muted)]">{description}</p>
+              <p className="text-body">{description}</p>
             ) : null}
           </div>
           {(typeLabel || sizeLabel) && (
