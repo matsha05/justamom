@@ -98,26 +98,28 @@ export async function sendAlert(
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3_000);
 
-    await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        event,
-        requestId: context.requestId,
-        route: context.route,
-        ip: context.ip,
-        fingerprint: context.fingerprint,
-        origin: context.origin,
-        timestamp: new Date().toISOString(),
-        details,
-      }),
-      cache: "no-store",
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeout);
+    try {
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event,
+          requestId: context.requestId,
+          route: context.route,
+          ip: context.ip,
+          fingerprint: context.fingerprint,
+          origin: context.origin,
+          timestamp: new Date().toISOString(),
+          details,
+        }),
+        cache: "no-store",
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
   } catch (error) {
     logError("alert.send_failed", context, error, { event });
   }
