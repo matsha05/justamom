@@ -32,9 +32,9 @@ const speakingHighlights = [
 export default function HomePage() {
   const notes = getAllNotes();
   const highlightSlugs = [
+    "dog-encounters",
     "the-better-thing",
     "a-different-kind-of-new-year",
-    "praise-is-the-work",
   ];
   const selectedNotes = highlightSlugs
     .map((slug) => notes.find((note) => note.slug === slug))
