@@ -6,30 +6,13 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
+import { newsletterCtaCopy, speakingTopics } from "@/lib/content";
 
 const currentWorkSummary =
   "A long-form project on motherhood, identity, and the steadier place where worth is received before it is performed.";
 
 const currentWorkExcerpt =
   "Just a mom. It’s wild how a three-word sentence can feel both true and entirely wrong at the same time. How it can shrink something as monumental as raising a human into something that feels small and slightly apologetic. As if caring for an image-bearer of God is somehow insignificant unless you add a title or a paycheck or something more \"productive\" to go with it.";
-
-const speakingHighlights = [
-  {
-    title: "Identity in the Noise",
-    description:
-      "A steadying look at the cultural pressure points shaping modern motherhood—and how to live from a secure identity instead of performance.",
-  },
-  {
-    title: "Finding God in the Ordinary",
-    description:
-      "A reflective message about the sacred weight of everyday motherhood and the quiet faithfulness that carries it.",
-  },
-  {
-    title: "A Calling, Not a Consequence",
-    description:
-      "A biblical reframe that restores dignity to motherhood without diminishing calling, gifts, or work outside the home.",
-  },
-];
 
 export default function HomePage() {
   const notes = getAllNotes();
@@ -46,34 +29,45 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="section">
+      <section className="section section-hero pt-[clamp(5.5rem,11vw,9rem)]">
         <div className="container">
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div className="space-y-6">
+          <div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div className="space-y-7">
               <p className="text-label">Speaker · Writer · Encourager</p>
-              <h1 className="text-display">A Note for Moms.</h1>
+              <h1 className="text-display max-w-[12ch]">A Note for Moms.</h1>
               <p className="text-body-lg text-[var(--color-ink-soft)]">
                 A small, steady reminder for mothers who feel the noise.
               </p>
-              <div className="flex flex-wrap gap-6 pt-2">
+              <div className="flex flex-wrap gap-4 pt-2">
                 <Button asChild>
                   <Link href="#newsletter">
                     Join A Note for Moms
                     <ArrowIcon />
                   </Link>
                 </Button>
+                <Button asChild variant="outline">
+                  <Link href="/notes">
+                    Read Recent Notes
+                    <ArrowIcon />
+                  </Link>
+                </Button>
               </div>
+              <p className="text-caption text-[var(--color-ink-faint)]">
+                Quiet encouragement twice a month. No noise, no fluff.
+              </p>
             </div>
             <div className="flex justify-center lg:justify-end">
-              <div className="image-editorial aspect-[3/4] relative w-[min(320px,80vw)] lg:w-[360px]">
-                <Image
-                  src="/images/aboutmepic.avif"
-                  alt="Lizi Shaw"
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(min-width: 1024px) 360px, 80vw"
-                />
+              <div className="hero-portrait-shell w-[min(340px,82vw)] lg:w-[390px]">
+                <div className="image-editorial aspect-[3/4] relative">
+                  <Image
+                    src="/images/aboutmepic.avif"
+                    alt="Lizi Shaw"
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(min-width: 1024px) 390px, 82vw"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -84,7 +78,7 @@ export default function HomePage() {
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
             <div className="space-y-4">
-              <p className="text-label">Notes for Moms</p>
+              <p className="text-label">Latest Notes</p>
               <h2 className="text-h1">A Note for Moms</h2>
               <p className="text-body text-[var(--color-ink-soft)]">
                 Short notes for mothers, sent twice a month.
@@ -97,14 +91,14 @@ export default function HomePage() {
                   "MMMM d, yyyy"
                 );
                 return (
-                  <article key={note.slug} className="py-10 first:pt-0">
-                    <div className="text-caption text-[var(--color-ink-faint)] mb-3">
+                  <article key={note.slug} className="group py-10 first:pt-0">
+                    <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
                       {formattedDate}
                     </div>
                     <h2 className="text-h3 mb-3">
                       <Link
                         href={`/notes/${note.slug}`}
-                        className="hover:text-[var(--color-accent)] transition-colors"
+                        className="transition-colors group-hover:text-[var(--color-accent)]"
                       >
                         {note.title}
                       </Link>
@@ -124,15 +118,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="newsletter" className="section">
-        <div className="container-prose text-center space-y-4">
-          <p className="text-label">Join the notes</p>
-          <h2 className="text-h2">A Note for Moms, twice a month.</h2>
-          <p className="text-body">
-            Twice a month. No spam. Just the note.
-          </p>
-          <div className="max-w-md mx-auto">
-            <NewsletterForm variant="compact" />
+      <section id="newsletter" className="section section-newsletter">
+        <div className="container-prose">
+          <div className="newsletter-panel text-center space-y-4">
+            <p className="text-label">Join the notes</p>
+            <h2 className="text-h2">{newsletterCtaCopy.heading}</h2>
+            <p className="text-body">{newsletterCtaCopy.description}</p>
+            <div className="max-w-md mx-auto">
+              <NewsletterForm variant="compact" />
+            </div>
+            <p className="text-caption text-[var(--color-ink-faint)]">
+              A thoughtful rhythm for busy moms.
+            </p>
           </div>
         </div>
       </section>
@@ -157,7 +154,7 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            <div className="border-l border-[var(--color-border-strong)] pl-6 lg:pl-10">
+            <div className="feature-quote">
               <p className="text-body-lg text-[var(--color-ink)] leading-relaxed">
                 {currentWorkExcerpt}
               </p>
@@ -185,10 +182,10 @@ export default function HomePage() {
               </p>
             </div>
             <div className="space-y-8">
-              {speakingHighlights.map((topic) => (
+              {speakingTopics.map((topic) => (
                 <div
                   key={topic.title}
-                  className="border-l border-[var(--color-border-strong)] pl-6"
+                  className="topic-card"
                 >
                   <h3 className="text-h3 mb-2">{topic.title}</h3>
                   <p className="text-body">
@@ -208,18 +205,23 @@ export default function HomePage() {
       <section id="contact" className="section section-soft">
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
-            <div className="space-y-4 lg:col-span-2 lg:max-w-2xl">
+            <div className="contact-panel space-y-4 lg:col-span-2 lg:max-w-2xl">
               <p className="text-label">Contact</p>
               <h2 className="text-h2">Inquiries</h2>
               <p className="text-body text-[var(--color-ink-soft)]">
                 For literary, editorial, or speaking inquiries, email directly:
               </p>
-              <a
-                href={`mailto:${siteConfig.contact.email}`}
-                className="text-body-lg text-[var(--color-ink)] underline underline-offset-4"
-              >
-                {siteConfig.contact.email}
-              </a>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="text-body-lg text-[var(--color-ink)] underline underline-offset-4"
+                >
+                  {siteConfig.contact.email}
+                </a>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/contact">Open Contact Form</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

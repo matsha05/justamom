@@ -7,14 +7,14 @@ import { personJsonLd, siteConfig } from "@/lib/config";
 import "./globals.css";
 
 const newsreader = Newsreader({
-  variable: "--font-lora",
+  variable: "--font-newsreader",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 const sourceSans = Source_Sans_3({
-  variable: "--font-inter",
+  variable: "--font-source-sans-3",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",

@@ -1,30 +1,13 @@
 import type { Metadata } from "next";
 import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
 import { siteConfig } from "@/lib/config";
+import { speakingTopics } from "@/lib/content";
 
 export const metadata: Metadata = {
     title: "Speaking Topics",
     description:
         `Book ${siteConfig.author.name} to speak at your moms' event, retreat, or group gathering. Topics include motherhood, faith, identity, and simplifying life.`,
 };
-
-const speakingTopics = [
-    {
-        title: "Identity in the Noise",
-        description:
-            "A steadying look at the cultural pressure points shaping modern motherhood and how to live from a secure identity instead of performance.",
-    },
-    {
-        title: "Finding God in the Ordinary",
-        description:
-            "A reflective message about the sacred weight of everyday motherhood and the quiet faithfulness that carries it.",
-    },
-    {
-        title: "A Calling, Not a Consequence",
-        description:
-            "A biblical reframe that restores dignity to motherhood without diminishing calling, gifts, or work outside the home.",
-    },
-];
 
 export default function SpeakingPage() {
     return (

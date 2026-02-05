@@ -11,10 +11,10 @@ export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-[var(--color-paper)] border-t border-[var(--color-border)]">
-            <div className="container py-10">
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                    <div className="space-y-4">
+        <footer className="border-t border-[var(--color-border)] bg-[linear-gradient(180deg,var(--color-paper)_0%,#f4efe9_100%)]">
+            <div className="container py-12">
+                <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
+                    <div className="space-y-5">
                         <nav className="flex flex-wrap gap-x-6 gap-y-2">
                             {footerLinks.map((link) => (
                                 <Link
@@ -30,13 +30,13 @@ export function Footer() {
                             © {currentYear} {siteConfig.author.name}. {siteConfig.author.location.city}, {siteConfig.author.location.region}.
                         </p>
                     </div>
-                    <div className="flex flex-col items-start md:items-end gap-2">
+                    <div className="flex flex-col items-start gap-2 md:items-end">
                         <Image
                             src="/images/signature.png"
                             alt="Lizi Shaw signature"
-                            width={70}
-                            height={64}
-                            className="opacity-75"
+                            width={76}
+                            height={69}
+                            className="opacity-85"
                         />
                         <span className="text-caption text-[var(--color-ink-faint)]">
                             A Note for Moms

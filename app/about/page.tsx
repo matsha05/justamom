@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { ArrowIcon } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
     title: "About Me",
@@ -26,7 +27,6 @@ export default function AboutPage() {
                                     fill
                                     className="object-cover"
                                     priority
-                                    quality={95}
                                     sizes="(min-width: 1024px) 40vw, 90vw"
                                 />
                             </div>
@@ -89,18 +89,21 @@ export default function AboutPage() {
                         I&apos;d love to encourage your group with biblical truth and a lighthearted perspective on real motherhood.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Link href="/speaking" className="btn btn-primary">
-                            View Speaking Topics
-                            <ArrowIcon />
-                        </Link>
-                        <a
-                            href={siteConfig.newsletter.shareUrl}
-                            className="btn btn-secondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Join A Note for Moms
-                        </a>
+                        <Button asChild>
+                            <Link href="/speaking">
+                                View Speaking Topics
+                                <ArrowIcon />
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline">
+                            <a
+                                href={siteConfig.newsletter.shareUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Join A Note for Moms
+                            </a>
+                        </Button>
                     </div>
                 </div>
             </section>

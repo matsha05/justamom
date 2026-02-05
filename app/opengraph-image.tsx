@@ -15,18 +15,18 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3001";
 
-const loraSemiBold = fetch(
-  new URL("/fonts/lora-latin-600-normal.woff", baseUrl)
+const newsreaderSemiBold = fetch(
+  new URL("/fonts/newsreader-latin-600-normal.woff", baseUrl)
 ).then((res) => res.arrayBuffer());
 
-const interRegular = fetch(
-  new URL("/fonts/inter-latin-400-normal.woff", baseUrl)
+const sourceSansRegular = fetch(
+  new URL("/fonts/source-sans-3-latin-400-normal.woff", baseUrl)
 ).then((res) => res.arrayBuffer());
 
 export default async function Image() {
-  const [loraData, interData] = await Promise.all([
-    loraSemiBold,
-    interRegular,
+  const [newsreaderData, sourceSansData] = await Promise.all([
+    newsreaderSemiBold,
+    sourceSansRegular,
   ]);
 
   return new ImageResponse(
@@ -81,7 +81,7 @@ export default async function Image() {
         <div
           style={{
             fontSize: 72,
-            fontFamily: "Lora",
+            fontFamily: "Newsreader",
             fontWeight: 600,
             color: "#1a1a1a",
             marginBottom: 18,
@@ -97,7 +97,7 @@ export default async function Image() {
             fontSize: 28,
             color: "#737373",
             textAlign: "center",
-            fontFamily: "Inter",
+            fontFamily: "Source Sans 3",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
           }}
@@ -110,14 +110,14 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "Lora",
-          data: loraData,
+          name: "Newsreader",
+          data: newsreaderData,
           weight: 600,
           style: "normal",
         },
         {
-          name: "Inter",
-          data: interData,
+          name: "Source Sans 3",
+          data: sourceSansData,
           weight: 400,
           style: "normal",
         },

@@ -2,6 +2,7 @@ import "server-only";
 import fs from "fs";
 import path from "path";
 import { ArrowIcon } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface DownloadCardProps {
@@ -74,16 +75,17 @@ export function DownloadCard({
           )}
         </div>
 
-        <a
-          href={href}
-          className="btn btn-primary whitespace-nowrap"
-          target={openInNewTab ? "_blank" : undefined}
-          rel={openInNewTab ? "noopener noreferrer" : undefined}
-          aria-label={`${ctaLabel}: ${title}`}
-        >
-          {ctaLabel}
-          <ArrowIcon />
-        </a>
+        <Button asChild className="whitespace-nowrap">
+          <a
+            href={href}
+            target={openInNewTab ? "_blank" : undefined}
+            rel={openInNewTab ? "noopener noreferrer" : undefined}
+            aria-label={`${ctaLabel}: ${title}`}
+          >
+            {ctaLabel}
+            <ArrowIcon />
+          </a>
+        </Button>
       </div>
     </div>
   );
