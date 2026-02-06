@@ -6,7 +6,7 @@ import { speakingTopics } from "@/lib/content";
 export const metadata: Metadata = {
     title: "Speaking Topics",
     description:
-        `Invite ${siteConfig.author.name} to encourage your women with biblical teaching on motherhood, identity, and everyday faithfulness.`,
+        `Speaking topics from ${siteConfig.author.name} on motherhood, identity, and everyday faithfulness, grounded in Scripture.`,
 };
 
 export default function SpeakingPage() {
@@ -18,7 +18,7 @@ export default function SpeakingPage() {
                     <p className="text-label">Speaking</p>
                     <h1 className="text-display">Speaking</h1>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
-                        I speak to women about the holy work of motherhood, the quiet
+                        I speak to moms about the holy work of motherhood, the quiet
                         places where God meets us, and the steadier identity we can
                         live from when the noise gets loud.
                     </p>

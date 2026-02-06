@@ -40,10 +40,20 @@ export default function HomePage() {
                 </Button>
                 <Button asChild variant="outline">
                   <Link href="/notes">
-                    Read the Latest Notes
+                    Read all notes
                     <ArrowIcon />
                   </Link>
                 </Button>
+              </div>
+              <div className="mt-1" aria-hidden="true">
+                <Image
+                  src="/images/signature.png"
+                  alt=""
+                  width={110}
+                  height={100}
+                  className="opacity-85"
+                  sizes="110px"
+                />
               </div>
             </div>
             <div className="flex justify-center lg:justify-end">
@@ -75,7 +85,7 @@ export default function HomePage() {
                 ordinary days.
               </p>
               <Link className="link-arrow" href="/notes">
-                See all notes
+                Read all notes
                 <ArrowIcon />
               </Link>
             </div>
@@ -100,7 +110,7 @@ export default function HomePage() {
                   </h3>
                   <p className="text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
                   <Link className="link-arrow" href={`/notes/${featuredNote.slug}`}>
-                    Read this note
+                    Read note
                     <ArrowIcon />
                   </Link>
                 </article>
@@ -124,7 +134,7 @@ export default function HomePage() {
                       </h3>
                       <p className="text-body mb-4">{note.excerpt}</p>
                       <Link className="link-arrow" href={`/notes/${note.slug}`}>
-                        Read
+                        Read note
                         <ArrowIcon />
                       </Link>
                     </article>
@@ -224,7 +234,7 @@ export default function HomePage() {
           <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
             <div className="contact-panel space-y-4 lg:col-span-2 lg:max-w-2xl">
               <p className="text-label">Contact</p>
-              <h2 className="text-h2">Inquiries</h2>
+              <h2 className="text-h2">Get in touch</h2>
               <p className="text-body text-[var(--color-ink-soft)]">
                 For literary, editorial, or speaking inquiries, email directly:
               </p>
@@ -236,7 +246,7 @@ export default function HomePage() {
                   {siteConfig.contact.email}
                 </a>
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/contact">Use Contact Form</Link>
+                  <Link href="/contact">Send a message</Link>
                 </Button>
               </div>
             </div>

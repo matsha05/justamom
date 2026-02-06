@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/config";
 export const metadata: Metadata = {
     title: "Contact",
     description:
-        `Get in touch with ${siteConfig.author.name} for speaking inquiries, collaborations, or personal notes.`,
+        `Contact ${siteConfig.author.name} for speaking, collaborations, or a personal note.`,
 };
 
 export default function ContactPage() {

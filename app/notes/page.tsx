@@ -32,7 +32,7 @@ export default function NotesPage() {
                             className="text-body-lg text-[var(--color-ink-soft)] animate-fade-in"
                             style={{ animationDelay: "150ms" }}
                         >
-                            Short notes for mothers, sent twice a month.
+                            Short notes for moms, sent twice a month.
                         </p>
                         <Image
                             src="/images/signature.png"
@@ -81,7 +81,7 @@ export default function NotesPage() {
                                                         {note.excerpt}
                                                     </p>
                                                     <span className="text-caption font-medium text-[var(--color-accent)] inline-flex items-center gap-2 group-hover:gap-3 transition-all">
-                                                        Read this note
+                                                        Read note
                                                         <ArrowIcon />
                                                     </span>
                                                 </div>

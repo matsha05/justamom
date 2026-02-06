@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
     title: "About Me",
     description:
-        `Learn about ${siteConfig.author.name}, a Christian writer and speaker helping moms live from identity received in Christ.`,
+        `About ${siteConfig.author.name}, Christian writer and speaker behind A Note for Moms.`,
 };
 
 export default function AboutPage() {
@@ -46,7 +46,7 @@ export default function AboutPage() {
                                 </p>
 
                                 <p>
-                                    My heart is to help women step out of that noise and back into
+                                    My heart is to help moms step out of that noise and back into
                                     God&apos;s story. Scripture gives us something steadier: identity
                                     received before performance, and purpose that does not depend on
                                     perfect kids, perfect homes, or perfect plans.
@@ -66,13 +66,18 @@ export default function AboutPage() {
             {/* Short Bio Section */}
             <section className="section">
                 <div className="container-prose space-y-4">
-                    <p className="text-label">Short bio</p>
+                    <p className="text-label">Short bio (third-person)</p>
+                    <p className="text-caption text-[var(--color-ink-muted)]">
+                        For host intros, event pages, or printed programs.
+                    </p>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
                         Lizi Shaw is a Christian writer and speaker who helps moms live from
-                        identity received in Christ, not performance. Her work invites women
-                        to notice God in ordinary days and recover a steady, biblical vision
-                        of motherhood. She lives in Niwot, Colorado with her husband, Matt,
-                        and their three children.
+                        identity received in Christ, not performance. Her teaching is grounded
+                        in Scripture and shaped by the holy, ordinary work of motherhood. With
+                        honest stories and practical encouragement, she helps moms find
+                        steadier footing in seasons that feel loud and overwhelming. Lizi lives
+                        in Niwot, Colorado, with her husband, Matt, and their three children.
+                        She loves skiing, running, and baking.
                     </p>
                 </div>
             </section>
@@ -82,7 +87,7 @@ export default function AboutPage() {
                 <div className="container text-center">
                     <h2 className="text-h2 mb-4">Need a speaker for your women&apos;s event?</h2>
                     <p className="text-body-lg max-w-lg mx-auto mb-8">
-                        I&apos;d love to serve your women with grounded biblical encouragement for real motherhood.
+                        I&apos;d love to serve your moms with grounded biblical encouragement for real motherhood.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         <Button asChild>
@@ -97,7 +102,7 @@ export default function AboutPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Join the Newsletter
+                                Join A Note for Moms
                             </a>
                         </Button>
                     </div>

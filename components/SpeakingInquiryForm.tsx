@@ -70,13 +70,13 @@ export function SpeakingInquiryForm() {
         <div className="w-16 h-16 bg-[var(--color-accent-soft)] rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="w-8 h-8 text-[var(--color-accent)]" />
         </div>
-        <h3 className="text-h3 mb-3">Inquiry Received!</h3>
+        <h3 className="text-h3 mb-3">Thanks for reaching out.</h3>
         <p className="text-body mb-6 max-w-md mx-auto">
           {successMessage ||
             "Thank you so much for considering me for your event. I've received your details and will get back to you shortly."}
         </p>
         <Button variant="outline" onClick={() => setStatus("idle")}>
-          Send Another Inquiry
+          Send another message
         </Button>
       </div>
     );
@@ -84,7 +84,7 @@ export function SpeakingInquiryForm() {
 
   return (
     <div className="bg-white p-6 md:p-8 rounded-xl border border-[var(--color-border)] animate-fade-in">
-      <h3 className="text-h3 mb-2">Check Availability</h3>
+      <h3 className="text-h3 mb-2">Tell me about your event</h3>
       <p className="text-body mb-8">
         Tell me a little about your event. I&apos;ll follow up with availability and next steps.
       </p>
@@ -158,7 +158,7 @@ export function SpeakingInquiryForm() {
             </>
           ) : (
             <>
-              Submit Inquiry
+              Send message
               <ArrowIcon />
             </>
           )}
