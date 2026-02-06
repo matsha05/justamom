@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { siteConfig } from "@/lib/config";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
     title: "About Me",
     description:
-        `About ${siteConfig.author.name}, Christian writer and speaker behind A Note for Moms.`,
+        "About Lizi Shaw, Christian writer and speaker behind A Note for Moms.",
 };
 
 export default function AboutPage() {
@@ -63,6 +62,24 @@ export default function AboutPage() {
                 </div>
             </section>
 
+            {/* CTA Section */}
+            <section className="section section-soft">
+                <div className="container text-center">
+                    <h2 className="text-h2 mb-4">Need a speaker for your women&apos;s event?</h2>
+                    <p className="text-body-lg max-w-lg mx-auto mb-8">
+                        I&apos;d love to serve your moms with grounded biblical encouragement for real motherhood.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <Button asChild>
+                            <Link href="/speaking">
+                                Invite me to speak
+                                <ArrowIcon />
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </section>
+
             {/* Short Bio Section */}
             <section className="section">
                 <div className="container-prose space-y-4">
@@ -79,33 +96,6 @@ export default function AboutPage() {
                         in Niwot, Colorado, with her husband, Matt, and their three children.
                         She loves skiing, running, and baking.
                     </p>
-                </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="section section-soft">
-                <div className="container text-center">
-                    <h2 className="text-h2 mb-4">Need a speaker for your women&apos;s event?</h2>
-                    <p className="text-body-lg max-w-lg mx-auto mb-8">
-                        I&apos;d love to serve your moms with grounded biblical encouragement for real motherhood.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <Button asChild>
-                            <Link href="/speaking">
-                                Invite me to speak
-                                <ArrowIcon />
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline">
-                            <a
-                                href={siteConfig.newsletter.shareUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Join A Note for Moms
-                            </a>
-                        </Button>
-                    </div>
                 </div>
             </section>
         </>

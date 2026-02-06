@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
@@ -66,12 +66,9 @@ export function SpeakingInquiryForm() {
 
   if (status === "success") {
     return (
-      <div className="bg-white p-8 rounded-xl border border-[var(--color-border)] text-center animate-fade-in">
-        <div className="w-16 h-16 bg-[var(--color-accent-soft)] rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-8 h-8 text-[var(--color-accent)]" />
-        </div>
-        <h3 className="text-h3 mb-3">Thanks for reaching out.</h3>
-        <p className="text-body mb-6 max-w-md mx-auto">
+      <div className="animate-fade-in border-l border-[var(--color-border-strong)] pl-5 space-y-4">
+        <h3 className="text-h4">Thanks for reaching out.</h3>
+        <p className="text-body max-w-[58ch]">
           {successMessage ||
             "Thank you so much for considering me for your event. I've received your details and will get back to you shortly."}
         </p>
@@ -83,87 +80,69 @@ export function SpeakingInquiryForm() {
   }
 
   return (
-    <div className="bg-white p-6 md:p-8 rounded-xl border border-[var(--color-border)] animate-fade-in">
-      <h3 className="text-h3 mb-2">Tell me about your event</h3>
-      <p className="text-body mb-8">
-        Tell me a little about your event. I&apos;ll follow up with availability and next steps.
-      </p>
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 animate-fade-in"
+      aria-busy={isSubmitting}
+    >
+      <HoneypotField />
 
-      <form onSubmit={handleSubmit} className="space-y-6" aria-busy={isSubmitting}>
-        <HoneypotField />
-
-        <div className="grid md:grid-cols-2 gap-5">
-          <div className="space-y-2">
-            <Label htmlFor="name">Your Name</Label>
-            <Input type="text" id="name" name="name" required placeholder="Jane Doe" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              required
-              placeholder="jane@example.com"
-            />
-          </div>
-        </div>
-
-        <SpeakingEventFields
-          required
-          eventType={eventType}
-          audienceSize={audienceSize}
-          onEventTypeChange={(value) => {
-            setEventType(value);
-            setSelectError(null);
-          }}
-          onAudienceSizeChange={(value) => {
-            setAudienceSize(value);
-            setSelectError(null);
-          }}
-          selectError={selectError}
-          selectErrorId={selectErrorId}
-        />
-
+      <div className="grid md:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <Label htmlFor="message">Tell me about your event theme or vision</Label>
-          <Textarea
-            id="message"
-            name="message"
-            rows={4}
-            placeholder="What is the heart behind this gathering?"
-          />
+          <Label htmlFor="name">Your Name</Label>
+          <Input type="text" id="name" name="name" required placeholder="Jane Doe" />
         </div>
-
         <div className="space-y-2">
-          <Label htmlFor="budget">
-            Speaking Budget{" "}
-            <span className="text-[var(--color-ink-faint)] lowercase font-normal">
-              (optional)
-            </span>
-          </Label>
+          <Label htmlFor="email">Email Address</Label>
           <Input
-            type="text"
-            id="budget"
-            name="budget"
-            placeholder="e.g. $1,500 + travel"
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="jane@example.com"
           />
         </div>
+      </div>
 
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Sending...
-            </>
-          ) : (
-            <>
-              Send message
-              <ArrowIcon />
-            </>
-          )}
-        </Button>
-      </form>
-    </div>
+      <SpeakingEventFields
+        required
+        eventType={eventType}
+        audienceSize={audienceSize}
+        onEventTypeChange={(value) => {
+          setEventType(value);
+          setSelectError(null);
+        }}
+        onAudienceSizeChange={(value) => {
+          setAudienceSize(value);
+          setSelectError(null);
+        }}
+        selectError={selectError}
+        selectErrorId={selectErrorId}
+      />
+
+      <div className="space-y-2">
+        <Label htmlFor="message">Tell me about your event theme or vision</Label>
+        <Textarea
+          id="message"
+          name="message"
+          rows={4}
+          placeholder="What is the heart behind this gathering?"
+        />
+      </div>
+
+      <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+        {isSubmitting ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Sending...
+          </>
+        ) : (
+          <>
+            Send message
+            <ArrowIcon />
+          </>
+        )}
+      </Button>
+    </form>
   );
 }

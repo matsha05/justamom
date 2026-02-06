@@ -23,17 +23,9 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* Contact Form */}
             <section className="section">
-                <div className="container-prose space-y-10">
-                    <div className="space-y-4">
-                        <p className="text-label">Message</p>
-                        <h2 className="text-h2">Send a message</h2>
-                        <p className="text-body">
-                            For speaking inquiries, collaborations, or anything else on your mind.
-                        </p>
-                        <ContactForm />
-                    </div>
+                <div className="container-prose">
+                    <ContactForm />
                 </div>
             </section>
         </>

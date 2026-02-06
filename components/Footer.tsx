@@ -7,6 +7,10 @@ const footerLinks = [
     ...siteConfig.navLinks,
 ];
 
+const legalLinks = [
+    { href: "/legal", label: "Privacy & Terms" },
+];
+
 export function Footer() {
     const currentYear = new Date().getFullYear();
 
@@ -29,6 +33,17 @@ export function Footer() {
                         <p className="text-caption text-[var(--color-ink-faint)]">
                             © {currentYear} {siteConfig.author.name}. {siteConfig.author.location.city}, {siteConfig.author.location.region}.
                         </p>
+                        <nav className="flex items-center gap-4">
+                            {legalLinks.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className="text-caption text-[var(--color-ink-faint)] hover:text-[var(--color-ink)] transition-colors"
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </nav>
                     </div>
                     <div className="flex flex-col items-start gap-2 md:items-end">
                         <Image

@@ -22,10 +22,6 @@ export default function SpeakingPage() {
                         places where God meets us, and the steadier identity we can
                         live from when the noise gets loud.
                     </p>
-                    <p className="text-body">
-                        Talks are grounded in Scripture and shaped by real life. I am
-                        happy to tailor a message for your group or event.
-                    </p>
                 </div>
             </section>
 
@@ -61,21 +57,25 @@ export default function SpeakingPage() {
             {/* Inquiry Form Section */}
             <section className="section section-soft" id="book">
                 <div className="container">
-                    <div className="max-w-3xl mx-auto space-y-6">
+                    <div className="max-w-3xl mx-auto space-y-10">
                         <p className="text-label">Inquiries</p>
                         <h2 className="text-h2">Invite me to speak</h2>
                         <p className="text-body text-[var(--color-ink-soft)]">
                             For availability, dates, and event details, share a few
-                            basics below, or email{" "}
-                            <a
-                                href={`mailto:${siteConfig.contact.email}`}
-                                className="underline underline-offset-4"
-                            >
-                                {siteConfig.contact.email}
-                            </a>
-                            . I&apos;ll follow up personally.
+                            basics below, or email.
                         </p>
-                        <SpeakingInquiryForm />
+                        <a
+                            href={`mailto:${siteConfig.contact.email}`}
+                            className="inline-block text-body-lg text-[var(--color-ink)] underline underline-offset-4"
+                        >
+                            {siteConfig.contact.email}
+                        </a>
+                        <p className="text-body text-[var(--color-ink-soft)]">
+                            I&apos;ll follow up personally.
+                        </p>
+                        <div className="pt-8 border-t border-[var(--color-border)]">
+                            <SpeakingInquiryForm />
+                        </div>
                     </div>
                 </div>
             </section>

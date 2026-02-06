@@ -8,9 +8,6 @@ import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
 import { newsletterCtaCopy, speakingTopics } from "@/lib/content";
 
-const currentWorkSummary =
-  "A long-form project on motherhood, identity, and the steadier place where worth is received before it is performed.";
-
 const currentWorkExcerpt =
   "Just a mom. It’s wild how a three-word sentence can feel both true and entirely wrong at the same time. How it can shrink something as monumental as raising a human into something that feels small and slightly apologetic. As if caring for an image-bearer of God is somehow insignificant unless you add a title or a paycheck or something more \"productive\" to go with it.";
 
@@ -74,16 +71,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section id="work" className="section section-soft">
+        <div className="container-prose space-y-8">
+          <p className="text-label">Current Work</p>
+          <h2 className="text-h1">Just a Mom</h2>
+          <div className="feature-quote">
+            <p className="text-body-lg text-[var(--color-ink)] leading-relaxed">
+              {currentWorkExcerpt}
+            </p>
+          </div>
+          <Link className="link-arrow" href="/work">
+            Read about the project
+            <ArrowIcon />
+          </Link>
+        </div>
+      </section>
+
       <section id="notes" className="section section-warm">
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
             <div className="space-y-4">
               <p className="text-label">Latest Notes</p>
               <h2 className="text-h1">For the mom in the thick of it</h2>
-              <p className="text-body max-w-[36ch] text-[var(--color-ink-soft)]">
-                A featured note and recent reflections for moms in the thick of
-                ordinary days.
-              </p>
               <Link className="link-arrow" href="/notes">
                 Read all notes
                 <ArrowIcon />
@@ -146,55 +155,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="newsletter" className="section section-newsletter">
-        <div className="container-prose">
-          <div className="newsletter-panel text-center space-y-4">
-            <p className="text-label">Newsletter</p>
-            <h2 className="text-h2">{newsletterCtaCopy.heading}</h2>
-            <p className="text-body mx-auto max-w-[34ch]">{newsletterCtaCopy.description}</p>
-            <div className="max-w-md mx-auto">
-              <NewsletterForm variant="compact" />
-            </div>
-            <p className="text-caption text-[var(--color-ink-faint)]">
-              A small, steady rhythm for busy moms.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section id="work" className="section section-soft">
-        <div className="container">
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-            <div className="space-y-6">
-              <p className="text-label">Current Work</p>
-              <h2 className="text-h1">Just a Mom</h2>
-              <p className="text-body-lg text-[var(--color-ink-soft)]">
-                {currentWorkSummary}
-              </p>
-              <div className="flex flex-wrap gap-6">
-                <Link className="link-arrow" href="/work">
-                  Read about the project
-                  <ArrowIcon />
-                </Link>
-                <Link className="link-arrow" href="/about">
-                  About Lizi
-                  <ArrowIcon />
-                </Link>
-              </div>
-            </div>
-            <div className="feature-quote">
-              <p className="text-body-lg text-[var(--color-ink)] leading-relaxed">
-                {currentWorkExcerpt}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="speaking"
-        className="section pt-[clamp(7rem,13vw,12rem)]"
-      >
+      <section id="speaking" className="section">
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
             <div className="space-y-4">
@@ -203,9 +164,6 @@ export default function HomePage() {
               <p className="text-body text-[var(--color-ink-soft)]">
                 For churches, retreats, and women&apos;s gatherings. Messages rooted
                 in Scripture and shaped by ordinary life.
-              </p>
-              <p className="text-body">
-                Simple, honest, practical. No hype.
               </p>
             </div>
             <div className="space-y-8">
@@ -229,27 +187,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="section section-soft">
-        <div className="container">
-          <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
-            <div className="contact-panel space-y-4 lg:col-span-2 lg:max-w-2xl">
-              <p className="text-label">Contact</p>
-              <h2 className="text-h2">Get in touch</h2>
-              <p className="text-body text-[var(--color-ink-soft)]">
-                For literary, editorial, or speaking inquiries, email directly:
-              </p>
-              <div className="flex flex-wrap gap-4 pt-2">
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="text-body-lg text-[var(--color-ink)] underline underline-offset-4"
-                >
-                  {siteConfig.contact.email}
-                </a>
-                <Button asChild variant="outline" size="sm">
-                  <Link href="/contact">Send a message</Link>
-                </Button>
-              </div>
+      <section id="newsletter" className="section section-newsletter">
+        <div className="container-prose">
+          <div className="newsletter-panel text-center space-y-4">
+            <p className="text-label">Newsletter</p>
+            <h2 className="text-h2">{newsletterCtaCopy.heading}</h2>
+            <p className="text-body mx-auto max-w-[34ch]">{newsletterCtaCopy.description}</p>
+            <div className="max-w-md mx-auto">
+              <NewsletterForm variant="compact" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="section section-soft">
+        <div className="container-prose space-y-4">
+          <p className="text-label">Contact</p>
+          <p className="text-body text-[var(--color-ink-soft)]">
+            For literary, editorial, or speaking inquiries, email directly:
+          </p>
+          <div className="flex flex-wrap gap-4 pt-2">
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              className="text-body-lg text-[var(--color-ink)] underline underline-offset-4"
+            >
+              {siteConfig.contact.email}
+            </a>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/contact">Send a message</Link>
+            </Button>
           </div>
         </div>
       </section>

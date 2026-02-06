@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
-import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { DownloadCard } from "@/components/DownloadCard";
 import { NoteSignOff } from "@/components/NoteSignOff";
 import { MDXImage } from "@/components/MDXImage";
@@ -48,10 +47,10 @@ const mdxComponents = {
     ),
     blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
         <blockquote
-            className="my-10 py-8 px-8 bg-[var(--color-paper-warm)] rounded-lg text-center [&_p]:text-[var(--color-accent)] [&_p]:mb-0"
+            className="my-10 pl-6 border-l-2 border-[var(--color-border-strong)] [&_p]:mb-0"
             {...props}
         >
-            <div className="text-h4 italic text-[var(--color-accent)] leading-relaxed">
+            <div className="text-body-lg italic text-[var(--color-ink-soft)] leading-relaxed">
                 {children}
             </div>
         </blockquote>
@@ -109,14 +108,13 @@ export default async function NotePage({ params }: PageProps) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
             />
 
-            {/* Hero */}
-            <section className="pt-12 pb-6 bg-[var(--color-paper-warm)]">
-                <div className="container">
-                    <div className="max-w-2xl mx-auto">
+            <section className="section section-warm pb-10">
+                <div className="container-prose">
+                    <div>
                         {/* Back link */}
                         <Link
                             href="/notes"
-                            className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-6 animate-fade-in"
+                            className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-6"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -124,8 +122,7 @@ export default async function NotePage({ params }: PageProps) {
                             All Notes
                         </Link>
 
-                        {/* Header */}
-                        <header className="animate-fade-in" style={{ animationDelay: "75ms" }}>
+                        <header>
                             <h1 className="text-display">{note.metadata.title}</h1>
                             <time className="text-caption text-[var(--color-ink-muted)] mt-4 block">
                                 {formattedDate}
@@ -135,23 +132,18 @@ export default async function NotePage({ params }: PageProps) {
                 </div>
             </section>
 
-            {/* Content */}
-            <section className="pt-10 pb-16">
-                <div className="container">
-                    <article className="max-w-2xl mx-auto">
-                        {/* Article body */}
-                        <div className="text-body-lg text-[var(--color-ink)] animate-fade-in" style={{ animationDelay: "150ms" }}>
+            <section className="section pt-12">
+                <div className="container-prose">
+                    <article>
+                        <div className="text-body-lg text-[var(--color-ink)]">
                             <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
-                        {/* Sign-off */}
                         <NoteSignOff />
 
-                        {/* Prev/Next Navigation */}
                         {(prev || next) && (
-                            <nav className="mt-12 pt-8 border-t border-[var(--color-border)] animate-fade-in" style={{ animationDelay: "300ms" }}>
+                            <nav className="mt-12 pt-8 border-t border-[var(--color-border)]">
                                 <div className="flex justify-between items-start gap-8">
-                                    {/* Previous (newer) */}
                                     <div className="flex-1">
                                         {prev && (
                                             <Link
@@ -169,7 +161,6 @@ export default async function NotePage({ params }: PageProps) {
                                         )}
                                     </div>
 
-                                    {/* Next (older) */}
                                     <div className="flex-1 text-right">
                                         {next && (
                                             <Link
@@ -192,9 +183,6 @@ export default async function NotePage({ params }: PageProps) {
                     </article>
                 </div>
             </section>
-
-            {/* Newsletter CTA */}
-            <NewsletterCTA />
         </>
     );
 }
