@@ -223,7 +223,7 @@ export function ContactForm() {
           </>
         ) : (
           <>
-            Send Message
+            Send message
             <ArrowIcon />
           </>
         )}

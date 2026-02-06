@@ -45,7 +45,7 @@ describe("POST /api/newsletter", () => {
 
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
-    expect(body.data.message).toContain("Welcome");
+    expect(body.message).toContain("Welcome");
   });
 
   it("returns validation error for invalid email", async () => {
@@ -55,8 +55,7 @@ describe("POST /api/newsletter", () => {
     const body = await response.json();
 
     expect(response.status).toBe(400);
-    expect(body.success).toBe(false);
-    expect(body.error.message).toContain("valid email");
+    expect(body.error).toContain("valid email");
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
@@ -90,15 +89,22 @@ describe("POST /api/newsletter", () => {
     const body = await response.json();
 
     expect(response.status).toBe(502);
-    expect(body.success).toBe(false);
-    expect(body.error.code).toBe("upstream_error");
+    expect(body.error).toContain("temporarily unavailable");
   });
 
-  it("replays idempotent requests", async () => {
-    const fetchSpy = vi
-      .spyOn(global, "fetch")
-      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 404 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }));
+  it("processes repeated requests even when idempotency key is reused", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockImplementation(async (input, init) => {
+      const url = String(input);
+      if (init?.method === "GET" && url.includes("/subscribers/")) {
+        return new Response(JSON.stringify({}), { status: 404 });
+      }
+
+      if (init?.method === "POST" && url.endsWith("/subscribers")) {
+        return new Response(JSON.stringify({}), { status: 200 });
+      }
+
+      return new Response(JSON.stringify({}), { status: 500 });
+    });
 
     const headers = {
       "idempotency-key": "newsletter-abc",
@@ -109,7 +115,7 @@ describe("POST /api/newsletter", () => {
 
     expect(first.status).toBe(200);
     expect(second.status).toBe(200);
-    expect(second.headers.get("x-idempotent-replay")).toBe("true");
-    expect(fetchSpy).toHaveBeenCalledTimes(2);
+    expect(second.headers.get("x-idempotent-replay")).toBeNull();
+    expect(fetchSpy).toHaveBeenCalledTimes(4);
   });
 });

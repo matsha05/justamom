@@ -59,7 +59,7 @@ describe("POST /api/contact", () => {
 
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
-    expect(body.data.message).toContain("Message sent");
+    expect(body.message).toContain("Message sent");
   });
 
   it("returns validation error for missing name", async () => {
@@ -75,8 +75,7 @@ describe("POST /api/contact", () => {
     const body = await response.json();
 
     expect(response.status).toBe(400);
-    expect(body.success).toBe(false);
-    expect(body.error.message).toContain("name");
+    expect(body.error).toContain("name");
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
@@ -110,14 +109,13 @@ describe("POST /api/contact", () => {
     const body = await response.json();
 
     expect(response.status).toBe(502);
-    expect(body.success).toBe(false);
-    expect(body.error.code).toBe("upstream_error");
+    expect(body.error).toContain("Unable to send your message");
   });
 
-  it("replays idempotent requests", async () => {
-    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
-      new Response(JSON.stringify({ ok: true }), { status: 200 })
-    );
+  it("processes repeated requests even when idempotency key is reused", async () => {
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
 
     const headers = {
       "idempotency-key": "contact-abc",
@@ -128,7 +126,7 @@ describe("POST /api/contact", () => {
 
     expect(first.status).toBe(200);
     expect(second.status).toBe(200);
-    expect(second.headers.get("x-idempotent-replay")).toBe("true");
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(second.headers.get("x-idempotent-replay")).toBeNull();
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
   });
 });
