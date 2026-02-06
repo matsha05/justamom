@@ -12,17 +12,69 @@ function normalizeOrigin(value: string): string {
   return value.trim().replace(/\/+$/, "");
 }
 
-function getAllowedOrigins(): Set<string> {
+function parseOrigin(value: string): URL | null {
+  try {
+    return new URL(value);
+  } catch {
+    return null;
+  }
+}
+
+function addOriginWithAliases(target: Set<string>, value: string): void {
+  const normalized = normalizeOrigin(value);
+  if (!normalized) {
+    return;
+  }
+
+  const parsed = parseOrigin(normalized);
+  if (!parsed) {
+    target.add(normalized);
+    return;
+  }
+
+  target.add(normalizeOrigin(parsed.origin));
+
+  const hostname = parsed.hostname.toLowerCase();
+  const isLocalhost =
+    hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+  const isIpv4 = /^\d{1,3}(?:\.\d{1,3}){3}$/.test(hostname);
+
+  // Accept both www/non-www variants for the same site host.
+  if (hostname.includes(".") && !isLocalhost && !isIpv4) {
+    const aliasHostname = hostname.startsWith("www.")
+      ? hostname.slice(4)
+      : `www.${hostname}`;
+    const aliasOrigin = `${parsed.protocol}//${aliasHostname}${parsed.port ? `:${parsed.port}` : ""}`;
+    target.add(normalizeOrigin(aliasOrigin));
+  }
+}
+
+function getAllowedOrigins(request?: NextRequest): Set<string> {
   const configuredOrigins = (process.env.ALLOWED_ORIGINS ?? "")
     .split(",")
     .map((value) => normalizeOrigin(value))
     .filter(Boolean);
+  const allowedOrigins = new Set<string>();
 
-  return new Set([
-    normalizeOrigin(siteConfig.site.url),
-    ...localOrigins.map((originValue) => normalizeOrigin(originValue)),
-    ...configuredOrigins,
-  ]);
+  addOriginWithAliases(allowedOrigins, siteConfig.site.url);
+  for (const localOrigin of localOrigins) {
+    addOriginWithAliases(allowedOrigins, localOrigin);
+  }
+  for (const configuredOrigin of configuredOrigins) {
+    addOriginWithAliases(allowedOrigins, configuredOrigin);
+  }
+
+  if (request) {
+    addOriginWithAliases(allowedOrigins, request.nextUrl.origin);
+
+    const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+    const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+    if (forwardedHost && forwardedProto) {
+      addOriginWithAliases(allowedOrigins, `${forwardedProto}://${forwardedHost}`);
+    }
+  }
+
+  return allowedOrigins;
 }
 
 function hashString(value: string): string {
@@ -105,6 +157,5 @@ export function isAllowedOrigin(
 
     return process.env.ALLOW_MISSING_ORIGIN === "true";
   }
-
-  return getAllowedOrigins().has(normalizeOrigin(origin));
+  return getAllowedOrigins(request).has(normalizeOrigin(origin));
 }
