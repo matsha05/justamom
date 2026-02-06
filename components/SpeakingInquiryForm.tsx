@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
@@ -19,19 +19,30 @@ export function SpeakingInquiryForm() {
   const [audienceSize, setAudienceSize] = useState("");
   const [selectError, setSelectError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const successBannerRef = useRef<HTMLDivElement>(null);
 
   const selectErrorId = "speaking-select-error";
+  const successMessageId = "speaking-success-message";
+
+  useEffect(() => {
+    if (status === "success") {
+      successBannerRef.current?.focus();
+    }
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!eventType || !audienceSize) {
       setSelectError("Please select an event type and group size.");
+      setFormError(null);
       return;
     }
 
     setStatus("submitting");
     setSelectError(null);
+    setFormError(null);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -57,22 +68,37 @@ export function SpeakingInquiryForm() {
         getStringFromRecord(data, "error") ??
         "Something went wrong. Please try again.";
       toast.error(message);
+      setFormError(message);
       setStatus("error");
     } catch {
-      toast.error("Network error. Please check your connection and try again.");
+      const message = "Network error. Please check your connection and try again.";
+      toast.error(message);
+      setFormError(message);
       setStatus("error");
     }
   };
 
   if (status === "success") {
     return (
-      <div className="animate-fade-in border-l border-[var(--color-border-strong)] pl-5 space-y-4">
-        <h3 className="text-h4">Thanks for reaching out.</h3>
-        <p className="text-body max-w-[58ch]">
-          {successMessage ||
-            "Thank you so much for considering me for your event. I've received your details and will get back to you shortly."}
-        </p>
-        <Button variant="outline" onClick={() => setStatus("idle")}>
+      <div
+        ref={successBannerRef}
+        id={successMessageId}
+        role="status"
+        aria-live="polite"
+        tabIndex={-1}
+        className="animate-fade-in border-l border-[var(--color-border-strong)] pl-5 space-y-4"
+      >
+        <div className="flex items-start gap-3">
+          <CheckCircle className="mt-1 h-5 w-5 text-[var(--color-success)]" />
+          <div className="space-y-1">
+            <h3 className="text-h4">Thanks for reaching out.</h3>
+            <p className="text-body max-w-[58ch]">
+              {successMessage ||
+                "Thank you so much for considering me for your event. I've received your details and will get back to you shortly."}
+            </p>
+          </div>
+        </div>
+        <Button type="button" variant="outline" onClick={() => setStatus("idle")}>
           Send another message
         </Button>
       </div>
@@ -87,10 +113,27 @@ export function SpeakingInquiryForm() {
     >
       <HoneypotField />
 
+      {formError ? (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="rounded-md border border-[var(--color-error)]/30 bg-[var(--color-paper-soft)] px-4 py-3 text-caption text-[var(--color-error)]"
+        >
+          {formError}
+        </div>
+      ) : null}
+
       <div className="grid md:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label htmlFor="name">Your Name</Label>
-          <Input type="text" id="name" name="name" required placeholder="Jane Doe" />
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            autoComplete="name"
+            required
+            placeholder="Jane Doe"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
@@ -98,6 +141,7 @@ export function SpeakingInquiryForm() {
             type="email"
             id="email"
             name="email"
+            autoComplete="email"
             required
             placeholder="jane@example.com"
           />

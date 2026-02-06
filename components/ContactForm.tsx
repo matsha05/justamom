@@ -29,6 +29,7 @@ export function ContactForm() {
   const [subjectError, setSubjectError] = useState<string | null>(null);
   const [selectError, setSelectError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const successBannerRef = useRef<HTMLDivElement>(null);
 
   const isSpeakingInquiry = selectedSubject === "Speaking Inquiry";
@@ -47,11 +48,13 @@ export function ContactForm() {
 
     if (!selectedSubject) {
       setSubjectError("Please select a topic.");
+      setFormError(null);
       return;
     }
 
     if (isSpeakingInquiry && (!eventType || !audienceSize)) {
       setSelectError("Please select an event type and group size.");
+      setFormError(null);
       return;
     }
 
@@ -59,6 +62,7 @@ export function ContactForm() {
     setSubjectError(null);
     setSelectError(null);
     setSuccessMessage(null);
+    setFormError(null);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -88,9 +92,12 @@ export function ContactForm() {
         getStringFromRecord(data, "error") ??
         "Something went wrong. Please try again.";
       toast.error(message);
+      setFormError(message);
       setStatus("error");
     } catch {
-      toast.error("Network error. Please check your connection and try again.");
+      const message = "Network error. Please check your connection and try again.";
+      toast.error(message);
+      setFormError(message);
       setStatus("error");
     }
   };
@@ -99,6 +106,9 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit}
       onChange={() => {
+        if (formError) {
+          setFormError(null);
+        }
         if (isSuccess) {
           setStatus("idle");
           setSuccessMessage(null);
@@ -108,6 +118,16 @@ export function ContactForm() {
       className="space-y-6 animate-fade-in"
     >
       <HoneypotField />
+
+      {formError ? (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="rounded-md border border-[var(--color-error)]/30 bg-[var(--color-paper-soft)] px-4 py-3 text-caption text-[var(--color-error)]"
+        >
+          {formError}
+        </div>
+      ) : null}
 
       {successMessage ? (
         <div
@@ -129,7 +149,14 @@ export function ContactForm() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
-          <Input type="text" id="name" name="name" required placeholder="Your name" />
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            autoComplete="name"
+            required
+            placeholder="Your name"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -137,6 +164,7 @@ export function ContactForm() {
             type="email"
             id="email"
             name="email"
+            autoComplete="email"
             required
             placeholder="you@example.com"
           />
@@ -154,6 +182,7 @@ export function ContactForm() {
           }}
         >
           <SelectTrigger
+            id="subject"
             aria-invalid={Boolean(subjectError)}
             aria-describedby={subjectError ? subjectErrorId : undefined}
           >
@@ -169,7 +198,12 @@ export function ContactForm() {
         </Select>
         <input type="hidden" name="subject" value={selectedSubject} required />
         {subjectError ? (
-          <p id={subjectErrorId} className="text-caption text-[var(--color-error)]">
+          <p
+            id={subjectErrorId}
+            role="alert"
+            aria-live="assertive"
+            className="text-caption text-[var(--color-error)]"
+          >
             {subjectError}
           </p>
         ) : null}

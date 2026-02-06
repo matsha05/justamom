@@ -20,14 +20,18 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Mobile navigation"
+      aria-labelledby="mobile-menu-title"
     >
       <nav
         ref={menuRef}
         id="mobile-menu"
+        aria-label="Primary"
         className="flex flex-col items-center gap-8 p-6"
         onClick={(event) => event.stopPropagation()}
       >
+        <h2 id="mobile-menu-title" className="sr-only">
+          Menu
+        </h2>
         {siteConfig.navLinks.map((link) => {
           const isActive = isNavLinkActive(pathname, link.href);
 
@@ -36,11 +40,7 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
               key={link.href}
               href={link.href}
               aria-current={isActive ? "page" : undefined}
-              className={`text-h3 font-medium uppercase tracking-[0.14em] transition-colors ${
-                isActive
-                  ? "text-[var(--color-ink)]"
-                  : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-              }`}
+              className="nav-mobile-link"
               onClick={onClose}
             >
               {link.label}

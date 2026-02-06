@@ -48,6 +48,9 @@ export const siteConfig = {
       "biblical parenting",
     ],
   },
+  legal: {
+    lastUpdated: "February 6, 2026",
+  },
   contact: {
     email: "hello@lizishaw.com",
     formspreeEndpoint: defaultFormspreeEndpoint,

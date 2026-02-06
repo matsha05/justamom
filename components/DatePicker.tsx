@@ -87,7 +87,7 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                     aria-controls={popoverId}
                     aria-expanded={isPopperOpen}
                     ref={inputRef}
-                    className="h-10 w-full rounded border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] shadow-sm transition-all outline-none cursor-pointer pr-10 placeholder:text-[var(--color-ink-muted)] hover:border-[var(--color-ink-faint)] focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-soft)]"
+                    className="h-10 w-full rounded-[var(--radius-md)] border border-[var(--color-border)] bg-white px-3 py-2 text-[0.9375rem] text-[var(--color-ink)] shadow-sm transition-all outline-none cursor-pointer pr-10 placeholder:text-[var(--color-ink-muted)] hover:border-[var(--color-ink-faint)] focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-soft)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-paper)]"
                     placeholder="Select a date..."
                     autoComplete="off"
                 />
@@ -102,7 +102,7 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
                     role="dialog"
                     aria-label="Choose date"
                     onKeyDown={handlePopoverKeyDown}
-                    className="absolute z-50 mt-2 bg-white rounded-lg border border-[var(--color-border)] shadow-lg p-2 animate-fade-in"
+                    className="absolute z-50 mt-2 bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-md p-2 animate-fade-in"
                 >
                     <DayPicker
                         initialFocus

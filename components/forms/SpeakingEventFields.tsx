@@ -47,6 +47,7 @@ export function SpeakingEventFields({
           type="text"
           id="org"
           name="organization"
+          autoComplete="organization"
           placeholder="e.g. Grace Community Church or Monday Night Mamas"
         />
       </div>
@@ -63,6 +64,7 @@ export function SpeakingEventFields({
             id="location"
             name="location"
             required={required}
+            autoComplete="address-level2"
             placeholder="e.g. Denver, CO"
           />
         </div>
@@ -73,6 +75,7 @@ export function SpeakingEventFields({
           <Label htmlFor="event_type">Event Type</Label>
           <Select value={eventType} onValueChange={onEventTypeChange}>
             <SelectTrigger
+              id="event_type"
               aria-invalid={Boolean(selectError)}
               aria-describedby={selectDescribedBy}
             >
@@ -92,6 +95,7 @@ export function SpeakingEventFields({
           <Label htmlFor="audience_size">Approx. Group Size</Label>
           <Select value={audienceSize} onValueChange={onAudienceSizeChange}>
             <SelectTrigger
+              id="audience_size"
               aria-invalid={Boolean(selectError)}
               aria-describedby={selectDescribedBy}
             >
@@ -110,7 +114,12 @@ export function SpeakingEventFields({
       </div>
 
       {selectError && selectErrorId ? (
-        <p id={selectErrorId} className="text-caption text-[var(--color-error)]">
+        <p
+          id={selectErrorId}
+          role="alert"
+          aria-live="assertive"
+          className="text-caption text-[var(--color-error)]"
+        >
           {selectError}
         </p>
       ) : null}

@@ -11,7 +11,7 @@ export function NoteSignOff() {
         alt="Lizi"
         width={120}
         height={111}
-        className="opacity-90"
+        className="w-[120px] h-[111px] opacity-90"
       />
     </footer>
   );

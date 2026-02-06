@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
     title: "About Me",
@@ -19,15 +18,17 @@ export default function AboutPage() {
                     <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
                         {/* Photo */}
                         <div className="lg:col-span-5">
-                            <div className="image-editorial aspect-[3/4] relative sticky top-32">
-                                <Image
-                                    src="/images/aboutmepic.avif"
-                                    alt="Lizi Shaw"
-                                    fill
-                                    className="object-cover"
-                                    priority
-                                    sizes="(min-width: 1024px) 40vw, 90vw"
-                                />
+                            <div className="sticky top-32">
+                                <div className="image-editorial aspect-[3/4] relative">
+                                    <Image
+                                        src="/images/aboutmepic.avif"
+                                        alt="Lizi Shaw standing outdoors with her husband"
+                                        fill
+                                        className="object-cover"
+                                        priority
+                                        sizes="(min-width: 1024px) 40vw, 90vw"
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -62,40 +63,19 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="section section-soft">
-                <div className="container text-center">
-                    <h2 className="text-h2 mb-4">Need a speaker for your women&apos;s event?</h2>
-                    <p className="text-body-lg max-w-lg mx-auto mb-8">
-                        I&apos;d love to serve your moms with grounded biblical encouragement for real motherhood.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <Button asChild>
-                            <Link href="/speaking">
-                                Invite me to speak
-                                <ArrowIcon />
-                            </Link>
-                        </Button>
+            {/* Invitation Section */}
+            <section className="section pt-10">
+                <div className="container-prose">
+                    <div className="border-t border-[var(--color-border)] pt-8 space-y-4">
+                        <h2 className="text-h3">Need a speaker for your women&apos;s event?</h2>
+                        <p className="text-body text-[var(--color-ink-soft)]">
+                            I&apos;d love to serve your moms with grounded biblical encouragement for real motherhood.
+                        </p>
+                        <Link className="link-arrow" href="/speaking">
+                            Invite me to speak
+                            <ArrowIcon />
+                        </Link>
                     </div>
-                </div>
-            </section>
-
-            {/* Short Bio Section */}
-            <section className="section">
-                <div className="container-prose space-y-4">
-                    <p className="text-label">Short bio (third-person)</p>
-                    <p className="text-caption text-[var(--color-ink-muted)]">
-                        For host intros, event pages, or printed programs.
-                    </p>
-                    <p className="text-body-lg text-[var(--color-ink-soft)]">
-                        Lizi Shaw is a Christian writer and speaker who helps moms live from
-                        identity received in Christ, not performance. Her teaching is grounded
-                        in Scripture and shaped by the holy, ordinary work of motherhood. With
-                        honest stories and practical encouragement, she helps moms find
-                        steadier footing in seasons that feel loud and overwhelming. Lizi lives
-                        in Niwot, Colorado, with her husband, Matt, and their three children.
-                        She loves skiing, running, and baking.
-                    </p>
                 </div>
             </section>
         </>

@@ -18,7 +18,7 @@ export default function LegalPage() {
             basic terms for using this website.
           </p>
           <p className="text-caption text-[var(--color-ink-muted)]">
-            Last updated: February 6, 2026
+            Last updated: {siteConfig.legal.lastUpdated}
           </p>
         </div>
       </section>

@@ -9,14 +9,16 @@ import "./globals.css";
 const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
+  preload: true,
   display: "swap",
 });
 
 const sourceSans = Source_Sans_3({
   variable: "--font-source-sans-3",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
+  preload: true,
   display: "swap",
 });
 
@@ -50,7 +52,7 @@ export const metadata: Metadata = {
   },
   other: {
     "theme-color": siteConfig.theme.color,
-    "apple-mobile-web-app-capable": "yes",
+    "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
   },
 };

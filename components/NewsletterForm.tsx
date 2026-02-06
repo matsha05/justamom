@@ -49,6 +49,7 @@ function EmailField({
         value={email}
         onChange={(e) => onChange(e.target.value)}
         id={inputId}
+        autoComplete="email"
         aria-describedby={errorMessage ? errorId : successMessage ? successId : undefined}
         aria-invalid={Boolean(errorMessage)}
         placeholder={placeholder}
@@ -57,12 +58,22 @@ function EmailField({
         className={className}
       />
       {renderMessages && errorMessage ? (
-        <p id={errorId} className="text-caption text-[var(--color-error)]">
+        <p
+          id={errorId}
+          role="alert"
+          aria-live="assertive"
+          className="text-caption text-[var(--color-error)]"
+        >
           {errorMessage}
         </p>
       ) : null}
       {renderMessages && successMessage ? (
-        <p id={successId} className="text-caption text-[var(--color-success)]">
+        <p
+          id={successId}
+          role="status"
+          aria-live="polite"
+          className="text-caption text-[var(--color-success)]"
+        >
           {successMessage}
         </p>
       ) : null}
@@ -159,12 +170,22 @@ export function NewsletterForm({
             </Button>
           </div>
           {errorMessage ? (
-            <p id={`${inputId}-error`} className="text-caption text-[var(--color-error)]">
+            <p
+              id={`${inputId}-error`}
+              role="alert"
+              aria-live="assertive"
+              className="text-caption text-[var(--color-error)]"
+            >
               {errorMessage}
             </p>
           ) : null}
           {successMessage ? (
-            <p id={`${inputId}-success`} className="text-caption text-[var(--color-success)]">
+            <p
+              id={`${inputId}-success`}
+              role="status"
+              aria-live="polite"
+              className="text-caption text-[var(--color-success)]"
+            >
               {successMessage}
             </p>
           ) : null}

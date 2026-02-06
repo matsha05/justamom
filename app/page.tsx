@@ -18,11 +18,10 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="section section-hero pt-[clamp(5.5rem,11vw,9rem)]">
+      <section className="section section-hero pt-[clamp(3.75rem,8vw,6.75rem)]">
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="space-y-7">
-              <p className="text-label">Speaker · Writer · Encourager</p>
               <h1 className="text-display max-w-[12ch]">A Note for Moms.</h1>
               <p className="text-body-lg max-w-[34ch] text-[var(--color-ink-soft)]">
                 A steady reminder for moms who feel stretched between
@@ -48,7 +47,7 @@ export default function HomePage() {
                   alt=""
                   width={110}
                   height={100}
-                  className="opacity-85"
+                  className="w-[110px] h-[100px] opacity-85"
                   sizes="110px"
                 />
               </div>
@@ -58,11 +57,11 @@ export default function HomePage() {
                 <div className="image-editorial aspect-[3/4] relative">
                   <Image
                     src="/images/aboutmepic.avif"
-                    alt="Lizi Shaw"
+                    alt="Lizi Shaw standing outdoors with her husband"
                     fill
                     className="object-cover"
                     priority
-                    sizes="(min-width: 1024px) 390px, 82vw"
+                    sizes="(min-width: 1280px) 390px, (min-width: 1024px) 34vw, (min-width: 640px) 44vw, 82vw"
                   />
                 </div>
               </div>
@@ -89,7 +88,7 @@ export default function HomePage() {
 
       <section id="notes" className="section section-warm">
         <div className="container">
-          <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
+          <div className="section-split">
             <div className="space-y-4">
               <p className="text-label">Latest Notes</p>
               <h2 className="text-h1">For the mom in the thick of it</h2>
@@ -157,7 +156,7 @@ export default function HomePage() {
 
       <section id="speaking" className="section">
         <div className="container">
-          <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
+          <div className="section-split">
             <div className="space-y-4">
               <p className="text-label">Speaking</p>
               <h2 className="text-h1">Topics I often share</h2>

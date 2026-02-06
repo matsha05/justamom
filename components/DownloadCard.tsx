@@ -54,8 +54,13 @@ export function DownloadCard({
   const typeLabel = fileType ?? (filePath?.toLowerCase().endsWith(".pdf") ? "PDF" : undefined);
 
   return (
-    <div className={cn("card my-10", className)}>
-      <div className="card-body flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+    <div
+      className={cn(
+        "my-12 border-y border-[var(--color-border)] py-8",
+        className,
+      )}
+    >
+      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div className="space-y-3">
           <p className="text-label text-[var(--color-ink-faint)] tracking-widest uppercase">
             Free Download
@@ -75,7 +80,7 @@ export function DownloadCard({
           )}
         </div>
 
-        <Button asChild className="whitespace-nowrap">
+        <Button asChild className="w-full sm:w-auto whitespace-nowrap">
           <a
             href={href}
             target={openInNewTab ? "_blank" : undefined}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config";
 import { DesktopNav } from "@/components/header/DesktopNav";
@@ -15,6 +15,8 @@ export function Header() {
   const scrolled = useScrollThreshold(20);
   const pathname = usePathname();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
 
   useBodyScrollLock(mobileMenuOpen);
   useFocusTrap({
@@ -23,12 +25,19 @@ export function Header() {
     onEscape: () => setMobileMenuOpen(false),
   });
 
+  useEffect(() => {
+    if (wasOpenRef.current && !mobileMenuOpen) {
+      menuToggleRef.current?.focus();
+    }
+    wasOpenRef.current = mobileMenuOpen;
+  }, [mobileMenuOpen]);
+
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 border-b border-transparent transition-[padding,background-color,border-color,backdrop-filter] duration-300 ${
         scrolled
-          ? "bg-[var(--color-paper)]/96 backdrop-blur-sm border-b border-[var(--color-border)] py-3"
-          : "bg-transparent py-5"
+          ? "bg-[var(--color-paper)]/96 backdrop-blur-sm border-[var(--color-border)] py-[0.95rem]"
+          : "bg-transparent backdrop-blur-0 py-[1.2rem]"
       }`}
     >
       <div className="container">
@@ -45,11 +54,14 @@ export function Header() {
           <DesktopNav pathname={pathname} />
 
           <button
+            type="button"
+            ref={menuToggleRef}
             className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-paper-soft)] rounded-full"
             onClick={() => setMobileMenuOpen((open) => !open)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
+            aria-haspopup="dialog"
           >
             {mobileMenuOpen ? (
               <svg

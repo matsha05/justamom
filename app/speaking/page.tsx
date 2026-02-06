@@ -28,7 +28,7 @@ export default function SpeakingPage() {
             {/* Topics Section */}
             <section className="section">
                 <div className="container">
-                    <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
+                    <div className="section-split">
                         <div className="space-y-4">
                             <p className="text-label">Topics I share</p>
                             <h2 className="text-h2">Messages I return to</h2>
@@ -51,6 +51,25 @@ export default function SpeakingPage() {
                             ))}
                         </div>
                     </div>
+                </div>
+            </section>
+
+            {/* Host Materials Section */}
+            <section className="section">
+                <div className="container-prose space-y-4">
+                    <p className="text-label">Short bio (third-person)</p>
+                    <p className="text-caption text-[var(--color-ink-muted)]">
+                        For host intros, event pages, or printed programs.
+                    </p>
+                    <p className="text-body-lg text-[var(--color-ink-soft)]">
+                        Lizi Shaw is a Christian writer and speaker who helps moms live from
+                        identity received in Christ, not performance. Her teaching is grounded
+                        in Scripture and shaped by the holy, ordinary work of motherhood. With
+                        honest stories and practical encouragement, she helps moms find
+                        steadier footing in seasons that feel loud and overwhelming. Lizi lives
+                        in Niwot, Colorado, with her husband, Matt, and their three children.
+                        She loves skiing, running, and baking.
+                    </p>
                 </div>
             </section>
 

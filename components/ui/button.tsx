@@ -5,14 +5,14 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] text-sm font-medium tracking-[0.01em] transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-soft)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-paper)]",
   {
     variants: {
       variant: {
         default:
           "border border-[var(--color-accent)] bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)]",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90",
+          "border border-[var(--color-error)] bg-[var(--color-error)] text-white hover:brightness-95",
         outline:
           "border-[1.5px] border-[var(--color-accent)] bg-transparent text-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]",
         secondary:
@@ -23,10 +23,10 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 px-5 py-2",
-        sm: "h-8 rounded px-3 text-xs",
-        lg: "h-12 rounded-md px-8 text-base",
+        sm: "h-9 px-3.5 text-xs",
+        lg: "h-12 px-8 text-base",
         icon: "size-10",
-        "icon-sm": "size-8",
+        "icon-sm": "size-9",
         "icon-lg": "size-12",
       },
     },
