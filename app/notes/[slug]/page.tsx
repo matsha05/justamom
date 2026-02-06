@@ -9,6 +9,7 @@ import { MDXImage } from "@/components/MDXImage";
 import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { absoluteUrl, siteConfig } from "@/lib/config";
+import { cn } from "@/lib/utils";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -108,13 +109,13 @@ export default async function NotePage({ params }: PageProps) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
             />
 
-            <section className="section section-warm pb-10">
-                <div className="container-prose">
+            <section className="section section-warm pb-10 note-detail-hero">
+                <div className="container-prose note-article-shell">
                     <div>
                         {/* Back link */}
                         <Link
                             href="/notes"
-                            className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-6"
+                            className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-6 note-back-link"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -123,8 +124,10 @@ export default async function NotePage({ params }: PageProps) {
                         </Link>
 
                         <header>
-                            <h1 className="text-display">{note.metadata.title}</h1>
-                            <time className="text-caption text-[var(--color-ink-muted)] mt-4 block">
+                            <h1 className="text-display note-article-title">
+                                {note.metadata.title}
+                            </h1>
+                            <time className="text-caption text-[var(--color-ink-muted)] mt-4 block note-article-date">
                                 {formattedDate}
                             </time>
                         </header>
@@ -132,51 +135,67 @@ export default async function NotePage({ params }: PageProps) {
                 </div>
             </section>
 
-            <section className="section pt-12">
-                <div className="container-prose">
+            <section className="section pt-12 note-detail-body">
+                <div className="container-prose note-article-shell">
                     <article>
-                        <div className="text-body-lg text-[var(--color-ink)]">
+                        <div className="text-body-lg note-article-content">
                             <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
-                        <NoteSignOff />
+                        <NoteSignOff className="note-signoff" />
 
                         {(prev || next) && (
-                            <nav className="mt-12 pt-8 border-t border-[var(--color-border)]">
-                                <div className="flex justify-between items-start gap-8">
-                                    <div className="flex-1">
-                                        {prev && (
-                                            <Link
-                                                href={`/notes/${prev.slug}`}
-                                                className="group block"
-                                            >
-                                                <span className="text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2">
-                                                    <ArrowIcon direction="left" />
-                                                    Previous
-                                                </span>
-                                                <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors">
-                                                    {prev.title}
-                                                </span>
-                                            </Link>
-                                        )}
-                                    </div>
+                            <nav className="mt-12 pt-8 border-t border-[var(--color-border)] note-adjacent-nav">
+                                <div
+                                    className={cn(
+                                        "flex justify-between items-start gap-8 note-adjacent-grid",
+                                        ((prev && !next) || (!prev && next)) && "note-adjacent-grid-single"
+                                    )}
+                                >
+                                    {prev && (
+                                        <Link
+                                            href={`/notes/${prev.slug}`}
+                                            className="group block flex-1 note-adjacent-card"
+                                        >
+                                            <span className="text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2 note-adjacent-label">
+                                                <ArrowIcon direction="left" />
+                                                Previous
+                                            </span>
+                                            <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors note-adjacent-title">
+                                                {prev.title}
+                                            </span>
+                                        </Link>
+                                    )}
 
-                                    <div className="flex-1 text-right">
-                                        {next && (
-                                            <Link
-                                                href={`/notes/${next.slug}`}
-                                                className="group block"
+                                    {next && (
+                                        <Link
+                                            href={`/notes/${next.slug}`}
+                                            className={cn(
+                                                "group block flex-1 note-adjacent-card",
+                                                prev ? "note-adjacent-card-end" : ""
+                                            )}
+                                        >
+                                            <span
+                                                className={cn(
+                                                    "text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2",
+                                                    prev ? "justify-end" : "",
+                                                    "note-adjacent-label"
+                                                )}
                                             >
-                                                <span className="text-caption text-[var(--color-ink-muted)] flex items-center justify-end gap-2 mb-2">
-                                                    Next
-                                                    <ArrowIcon />
-                                                </span>
-                                                <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors">
-                                                    {next.title}
-                                                </span>
-                                            </Link>
-                                        )}
-                                    </div>
+                                                Next
+                                                <ArrowIcon />
+                                            </span>
+                                            <span
+                                                className={cn(
+                                                    "text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors",
+                                                    prev ? "text-right" : "",
+                                                    "note-adjacent-title"
+                                                )}
+                                            >
+                                                {next.title}
+                                            </span>
+                                        </Link>
+                                    )}
                                 </div>
                             </nav>
                         )}

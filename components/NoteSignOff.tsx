@@ -1,8 +1,13 @@
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-export function NoteSignOff() {
+interface NoteSignOffProps {
+  className?: string;
+}
+
+export function NoteSignOff({ className }: NoteSignOffProps) {
   return (
-    <footer className="mt-16 pt-8 border-t border-[var(--color-border)]">
+    <footer className={cn("mt-16 pt-8 border-t border-[var(--color-border)]", className)}>
       <p className="text-h4 italic font-semibold text-[var(--color-ink-soft)] mb-3">
         In it with you,
       </p>
