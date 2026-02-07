@@ -1,18 +1,9 @@
+import { parseJsonSafely, type JsonRecord } from "@/lib/json";
+
 const DEFAULT_TIMEOUT_MS = 8_000;
 
-export type JsonRecord = Record<string, unknown>;
-
-export async function parseJsonSafely(response: Response): Promise<JsonRecord | null> {
-  try {
-    const value = await response.json();
-    if (value && typeof value === "object") {
-      return value as JsonRecord;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
+export { parseJsonSafely };
+export type { JsonRecord };
 
 export async function fetchWithTimeout(
   url: string,

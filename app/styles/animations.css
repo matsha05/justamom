@@ -1,0 +1,108 @@
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-slow) var(--ease-out) forwards;
+}
+
+/* Link arrow slide on hover */
+.link-arrow svg {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.link-arrow:hover svg {
+  transform: translateX(2px);
+}
+
+/* Prose Styling for MDX Content */
+.prose {
+  max-width: var(--container-prose);
+  font-size: var(--text-body);
+  line-height: 1.8;
+  color: var(--color-ink);
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose blockquote {
+  margin: var(--space-8) 0;
+  padding-left: var(--space-6);
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-ink-soft);
+}
+
+.prose blockquote p {
+  margin-bottom: var(--space-2);
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--color-accent-hover);
+}
+
+.prose h2 {
+  font-family: var(--font-heading), serif;
+  font-size: var(--text-h3);
+  font-weight: 500;
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-4);
+}
+
+.prose h3 {
+  font-family: var(--font-heading), serif;
+  font-size: var(--text-h4);
+  font-weight: 500;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-3);
+}
+
+.prose ul,
+.prose ol {
+  margin: var(--space-6) 0;
+  padding-left: var(--space-6);
+}
+
+.prose li {
+  margin-bottom: var(--space-2);
+}
+
+.prose p {
+  margin-bottom: var(--space-6) !important;
+}
+
+.prose p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* General body text paragraph spacing */
+.text-body+.text-body,
+.text-body-lg+.text-body-lg {
+  margin-top: var(--space-4);
+}
+

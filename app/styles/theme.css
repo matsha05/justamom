@@ -1,0 +1,103 @@
+/* ============================================
+   Lizi Shaw — Editorial Author Design System
+   Typography: Newsreader (serif) + Source Sans 3 (clean sans)
+   Aesthetic: Quiet, literary, publisher-ready
+   ============================================ */
+
+@theme inline {
+  /* ----------------------------------------
+     COLOR SYSTEM
+     ---------------------------------------- */
+
+  /* Ink Tones (Text) */
+  --color-ink: #1d1b19;
+  --color-ink-soft: #4a433c;
+  --color-ink-muted: #7a7269;
+  --color-ink-faint: #b1a79d;
+
+  /* Paper Tones (Backgrounds) */
+  --color-paper: #fbf9f6;
+  --color-paper-warm: #f6f2ed;
+  --color-paper-soft: #f0ebe5;
+
+  /* Signature Accent (Refined Teal) */
+  --color-accent: #3f6c67;
+  --color-accent-hover: #355a56;
+  --color-accent-light: #6e918c;
+  --color-accent-soft: #e4efed;
+
+  /* Semantic */
+  --color-success: #4a7c59;
+  --color-error: #9e4a4a;
+  --color-border: #e6dfd6;
+  --color-border-strong: #d3cac0;
+
+  /* ----------------------------------------
+     TYPOGRAPHY
+     ---------------------------------------- */
+  --font-heading: var(--font-newsreader);
+  --font-body: var(--font-source-sans-3);
+
+  /* Type Scale - Publisher-Grade (Refined) */
+  --text-display: clamp(2.75rem, 5vw, 4.1rem);
+  /* 48-68px */
+  --text-h1: clamp(2.25rem, 4vw, 3.25rem);
+  /* 36-52px */
+  --text-h2: clamp(1.65rem, 2.9vw, 2.15rem);
+  /* 28-36px */
+  --text-h3: clamp(1.25rem, 2vw, 1.5rem);
+  --text-h4: clamp(1.125rem, 1.5vw, 1.25rem);
+  --text-body-lg: clamp(1.12rem, 1.35vw, 1.22rem);
+  /* 18-19px */
+  --text-body: 1.03rem;
+  /* 17px */
+  --text-caption: 0.875rem;
+  --text-label: 0.84rem;
+
+  /* ----------------------------------------
+     SPACING
+     ---------------------------------------- */
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Section Rhythm */
+  --section-padding: clamp(5.5rem, 11vw, 10.5rem);
+
+  /* Layout */
+  --container-max: 1060px;
+  --container-prose: 620px;
+
+  /* ----------------------------------------
+     MOTION
+     ---------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 420ms;
+
+  /* ----------------------------------------
+     SHADOWS & RADII
+     ---------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(29, 27, 25, 0.05);
+  --shadow-md: 0 5px 14px rgba(29, 27, 25, 0.07);
+  --shadow-lg: 0 10px 24px rgba(29, 27, 25, 0.09);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  /* Compatibility tokens used by component primitives */
+  --color-popover-foreground: var(--color-ink);
+  --color-popover: #ffffff;
+}

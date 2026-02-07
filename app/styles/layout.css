@@ -1,0 +1,78 @@
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: clamp(1.5rem, 5vw, 4rem);
+  padding-right: clamp(1.5rem, 5vw, 4rem);
+}
+
+.container-prose {
+  max-width: var(--container-prose);
+  margin: 0 auto;
+  padding-left: clamp(1.5rem, 5vw, 4rem);
+  padding-right: clamp(1.5rem, 5vw, 4rem);
+}
+
+.section {
+  position: relative;
+  padding-top: var(--section-padding);
+  padding-bottom: var(--section-padding);
+}
+
+.section-warm {
+  background: var(--color-paper-warm);
+}
+
+.section-soft {
+  background: var(--color-paper-soft);
+}
+
+.section-hero {
+  overflow: hidden;
+}
+
+.section-newsletter {
+  background: var(--color-paper-warm);
+}
+
+.section-split {
+  display: grid;
+  gap: clamp(3rem, 6vw, 4rem);
+}
+
+@media (min-width: 1024px) {
+  .section-split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: start;
+    gap: clamp(3.5rem, 6vw, 4.5rem);
+  }
+}
+
+.newsletter-panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-paper);
+  box-shadow: none;
+  padding: clamp(2.4rem, 5vw, 3.6rem);
+}
+
+.hero-portrait-shell {
+  position: relative;
+  border-radius: calc(var(--radius-xl) + 2px);
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hero-portrait-shell::after {
+  content: none;
+}
+
+.hero-portrait-shell .image-editorial {
+  box-shadow: none;
+  border: 1px solid var(--color-border);
+}
+

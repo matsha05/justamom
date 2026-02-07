@@ -73,9 +73,6 @@ export const contactFormSchema = z
     }
   });
 
-export type NewsletterRequest = z.infer<typeof newsletterRequestSchema>;
-export type ContactFormRequest = z.infer<typeof contactFormSchema>;
-
 export function getValidationMessage(error: z.ZodError): string {
   const first = error.issues[0];
   return first?.message || "Invalid request.";

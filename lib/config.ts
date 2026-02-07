@@ -1,7 +1,4 @@
 const defaultSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lizishaw.com";
-const defaultNewsletterShareUrl =
-  process.env.NEXT_PUBLIC_NEWSLETTER_URL ??
-  "https://preview.mailerlite.io/forms/1931972/171530137383208676/share";
 const defaultFormspreeEndpoint =
   process.env.FORMSPREE_ENDPOINT ?? "https://formspree.io/f/mqezoggn";
 const defaultTwitterHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@lizishaw";
@@ -56,7 +53,6 @@ export const siteConfig = {
     formspreeEndpoint: defaultFormspreeEndpoint,
   },
   newsletter: {
-    shareUrl: defaultNewsletterShareUrl,
     welcomeMessage: "Welcome! Check your inbox for a confirmation.",
     alreadySubscribedMessage:
       "You're already on the list! Check your inbox for past notes.",

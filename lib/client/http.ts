@@ -1,16 +1,7 @@
-export type JsonRecord = Record<string, unknown>;
+import { parseJsonSafely, type JsonRecord } from "@/lib/json";
 
-export async function parseJsonSafely(response: Response): Promise<JsonRecord | null> {
-  try {
-    const value = await response.json();
-    if (value && typeof value === "object") {
-      return value as JsonRecord;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
+export { parseJsonSafely };
+export type { JsonRecord };
 
 export async function fetchJson(
   input: RequestInfo | URL,

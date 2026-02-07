@@ -36,7 +36,6 @@ MAILER_LITE_API_KEY=your_key_here
 MAILERLITE_GROUP_ID=your_group_id_here
 FORMSPREE_ENDPOINT=https://formspree.io/f/your_form_id
 NEXT_PUBLIC_SITE_URL=https://lizishaw.com
-NEXT_PUBLIC_NEWSLETTER_URL=https://your-mailerlite-share-url
 ALLOWED_ORIGINS=https://lizishaw.com
 ALLOW_MISSING_ORIGIN=false
 UPSTASH_REDIS_REST_URL=https://your-upstash-url

@@ -1,0 +1,117 @@
+/* ============================================
+   TYPOGRAPHY UTILITIES
+   ============================================ */
+
+/* Headings - Using Newsreader from Next.js font loading */
+.text-display {
+  font-family: var(--font-newsreader, "Newsreader"), Georgia, serif;
+  font-size: var(--text-display);
+  font-weight: 500;
+  /* Medium weight for stronger presence */
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  /* Slightly looser for friendlier feel */
+  color: var(--color-ink);
+  text-wrap: balance;
+  /* Prevents awkward line breaks */
+}
+
+/* Mobile typography scaling */
+@media (max-width: 640px) {
+  .text-display {
+    font-size: clamp(2.25rem, 8vw, 2.75rem);
+    /* 36-44px on mobile */
+  }
+}
+
+.text-h1 {
+  font-family: var(--font-newsreader, "Newsreader"), Georgia, serif;
+  font-size: var(--text-h1);
+  font-weight: 400;
+  /* Regular instead of Medium */
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.text-h2 {
+  font-family: var(--font-newsreader, "Newsreader"), Georgia, serif;
+  font-size: var(--text-h2);
+  font-weight: 400;
+  /* Regular for elegance */
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.text-h3 {
+  font-family: var(--font-newsreader, "Newsreader"), Georgia, serif;
+  font-size: var(--text-h3);
+  font-weight: 500;
+  line-height: 1.32;
+  color: var(--color-ink);
+}
+
+.text-h4 {
+  font-family: var(--font-newsreader, "Newsreader"), Georgia, serif;
+  font-size: var(--text-h4);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+
+/* Body */
+.text-body-lg {
+  font-size: var(--text-body-lg);
+  line-height: 1.84;
+  color: var(--color-ink-soft);
+}
+
+.text-body {
+  font-size: var(--text-body);
+  line-height: 1.82;
+  color: var(--color-ink-soft);
+}
+
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: 1.58;
+  color: var(--color-ink-muted);
+}
+
+.text-label {
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* Drop Cap - Premium editorial styling
+   The letter should occupy exactly 3 lines of paragraph text,
+   with proper baseline alignment and text wrapping. */
+
+.dropcap {
+  float: left;
+  font-family: var(--font-heading), serif;
+  font-size: 4.2em;
+  font-weight: 500;
+  line-height: 0.85;
+  margin-right: 0.22em;
+  margin-top: 0.05em;
+  color: var(--color-accent);
+}
+
+.dropcap-paragraph {
+  margin-bottom: 1.5em;
+}
+
+/* Responsive - smaller on mobile to prevent column wreck */
+@media (max-width: 480px) {
+  .dropcap {
+    font-size: 3.2em;
+    margin-right: 0.18em;
+    margin-top: 0.02em;
+  }
+}
+

@@ -1,0 +1,22 @@
+/* ----------------------------------------
+   React Day Picker Overrides
+   ---------------------------------------- */
+.rdp-button_previous,
+.rdp-button_next {
+  color: var(--color-ink) !important;
+}
+
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+  background-color: var(--color-paper-soft) !important;
+  color: var(--color-ink) !important;
+}
+
+.rdp-day_button:hover {
+  background-color: var(--color-paper-soft) !important;
+}
+
+.rdp-today {
+  color: var(--color-ink) !important;
+  font-weight: 600;
+}
