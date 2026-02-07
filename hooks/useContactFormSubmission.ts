@@ -89,7 +89,11 @@ export function useContactFormSubmission() {
     }
   }
 
-  function clearFeedbackOnInputChange() {
+  function clearFeedbackOnInputChange(event?: { isTrusted?: boolean }) {
+    if (event?.isTrusted === false) {
+      return;
+    }
+
     clearError();
 
     if (status !== "idle") {
