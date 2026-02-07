@@ -1,35 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/lib/config";
 import { checkRateLimit } from "@/lib/server/rate-limit";
-import {
-  exceedsContentLength,
-  getClientIp,
-  hasAllowedContentType,
-  isAllowedOrigin,
-} from "@/lib/server/request";
-import {
-  fetchWithTimeout,
-  getErrorMessage,
-  parseJsonSafely,
-} from "@/lib/server/http";
-import {
-  beginIdempotency,
-  commitIdempotency,
-  rollbackIdempotency,
-} from "@/lib/server/idempotency";
-import {
-  readIdempotencyKey,
-  replayCachedResponse,
-} from "@/lib/server/idempotency-request";
-import {
-  createRequestContext,
-  logError,
-  sendAlert,
-} from "@/lib/server/observability";
+import { getClientIp } from "@/lib/server/request";
+import { logError, sendAlert } from "@/lib/server/observability";
 import {
   getValidationMessage,
   newsletterRequestSchema,
 } from "@/lib/server/schemas";
+import {
+  prepareApiRouteRequest,
+  rollbackIdempotencyIfNeeded,
+} from "@/lib/server/api-route";
+import {
+  createMailerLiteSubscriber,
+  lookupMailerLiteSubscriber,
+} from "@/lib/server/integrations/mailerlite";
 
 const IP_RATE_LIMIT = { limit: 10, windowMs: 60_000 };
 const EMAIL_RATE_LIMIT = { limit: 4, windowMs: 60_000 };
@@ -47,66 +32,21 @@ interface NewsletterError {
 }
 
 type NewsletterRouteResponse = NewsletterSuccess | NewsletterError;
-type IdempotencyToken = Parameters<typeof commitIdempotency<NewsletterRouteResponse>>[0];
 
 export async function POST(request: NextRequest) {
-  const context = createRequestContext(request, "/api/newsletter");
+  const preparedResult = await prepareApiRouteRequest<NewsletterRouteResponse>({
+    request,
+    route: "/api/newsletter",
+    allowedContentTypes: ["application/json"],
+    maxBodyBytes: NEWSLETTER_MAX_BODY_BYTES,
+    idempotencyScope: NEWSLETTER_IDEMPOTENCY_SCOPE,
+  });
 
-  if (!isAllowedOrigin(request)) {
-    return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
+  if ("response" in preparedResult) {
+    return preparedResult.response;
   }
 
-  if (!hasAllowedContentType(request, ["application/json"])) {
-    return NextResponse.json({ error: "Invalid content type." }, { status: 415 });
-  }
-
-  if (exceedsContentLength(request, NEWSLETTER_MAX_BODY_BYTES)) {
-    return NextResponse.json({ error: "Request body is too large." }, { status: 413 });
-  }
-
-  const { key: idempotencyKey, error: idempotencyError } = readIdempotencyKey(request);
-  if (idempotencyError) {
-    return NextResponse.json({ error: idempotencyError }, { status: 400 });
-  }
-
-  let idempotencyToken: IdempotencyToken | null = null;
-
-  const respond = async (
-    status: number,
-    body: NewsletterRouteResponse,
-    headers?: HeadersInit
-  ) => {
-    if (idempotencyToken) {
-      const headerRecord = headers
-        ? Object.fromEntries(new Headers(headers).entries())
-        : undefined;
-      await commitIdempotency(idempotencyToken, status, body, headerRecord);
-    }
-
-    return NextResponse.json(body, { status, headers });
-  };
-
-  if (idempotencyKey) {
-    const idempotencyState = await beginIdempotency<NewsletterRouteResponse>({
-      scope: NEWSLETTER_IDEMPOTENCY_SCOPE,
-      key: idempotencyKey,
-    });
-
-    if (idempotencyState.state === "replay") {
-      return replayCachedResponse(idempotencyState.cached);
-    }
-
-    if (idempotencyState.state === "in_progress") {
-      return NextResponse.json(
-        {
-          error: "A matching request is already in progress. Please retry shortly.",
-        },
-        { status: 409 }
-      );
-    }
-
-    idempotencyToken = idempotencyState.token;
-  }
+  const { context, idempotencyToken, respond } = preparedResult.prepared;
 
   try {
     const ip = getClientIp(request);
@@ -163,20 +103,13 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const authorizationHeaders = {
-      Accept: "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    };
-
-    const lookupResponse = await fetchWithTimeout(
-      `${siteConfig.integrations.mailerLiteApiBaseUrl}/subscribers/${encodeURIComponent(email)}`,
-      {
-        method: "GET",
-        headers: authorizationHeaders,
-      }
+    const lookupResult = await lookupMailerLiteSubscriber(
+      siteConfig.integrations.mailerLiteApiBaseUrl,
+      email,
+      apiKey
     );
 
-    if (lookupResponse.status === 200) {
+    if (lookupResult.status === 200) {
       return respond(200, {
         success: true,
         alreadySubscribed: true,
@@ -184,43 +117,31 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    if (lookupResponse.status !== 404) {
-      const lookupPayload = await parseJsonSafely(lookupResponse);
-      const upstreamMessage = getErrorMessage(lookupPayload);
+    if (lookupResult.status !== 404) {
       logError("newsletter.lookup_failed", context, new Error("lookup_failed"), {
-        status: lookupResponse.status,
-        message: upstreamMessage,
+        status: lookupResult.status,
+        message: lookupResult.message,
       });
       await sendAlert("newsletter.lookup_failed", context, {
-        status: lookupResponse.status,
-        message: upstreamMessage,
+        status: lookupResult.status,
+        message: lookupResult.message,
       });
       return respond(502, {
         error: "Newsletter signup is temporarily unavailable.",
       });
     }
 
-    const createResponse = await fetchWithTimeout(
-      `${siteConfig.integrations.mailerLiteApiBaseUrl}/subscribers`,
-      {
-        method: "POST",
-        headers: {
-          ...authorizationHeaders,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          groups: [groupId],
-        }),
-      }
+    const createResult = await createMailerLiteSubscriber(
+      siteConfig.integrations.mailerLiteApiBaseUrl,
+      email,
+      groupId,
+      apiKey
     );
 
-    const createPayload = await parseJsonSafely(createResponse);
-
-    if (!createResponse.ok) {
-      const upstreamMessage = getErrorMessage(createPayload) ?? "";
+    if (!createResult.ok) {
+      const upstreamMessage = createResult.message ?? "";
       if (
-        createResponse.status === 422 &&
+        createResult.status === 422 &&
         upstreamMessage.toLowerCase().includes("already")
       ) {
         return respond(200, {
@@ -231,12 +152,12 @@ export async function POST(request: NextRequest) {
       }
 
       logError("newsletter.create_failed", context, new Error("create_failed"), {
-        status: createResponse.status,
-        message: upstreamMessage || null,
+        status: createResult.status,
+        message: createResult.message,
       });
       await sendAlert("newsletter.create_failed", context, {
-        status: createResponse.status,
-        message: upstreamMessage || null,
+        status: createResult.status,
+        message: createResult.message,
       });
       return respond(502, {
         error: "Newsletter signup is temporarily unavailable.",
@@ -248,9 +169,7 @@ export async function POST(request: NextRequest) {
       message: siteConfig.newsletter.welcomeMessage,
     });
   } catch (error) {
-    if (idempotencyToken) {
-      await rollbackIdempotency(idempotencyToken);
-    }
+    await rollbackIdempotencyIfNeeded(idempotencyToken);
 
     logError("newsletter.request_failed", context, error, {
       reason: "unexpected_error",

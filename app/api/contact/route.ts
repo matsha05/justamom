@@ -1,35 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/lib/config";
 import { checkRateLimit } from "@/lib/server/rate-limit";
-import {
-  exceedsContentLength,
-  getClientIp,
-  hasAllowedContentType,
-  isAllowedOrigin,
-} from "@/lib/server/request";
-import {
-  fetchWithTimeout,
-  getErrorMessage,
-  parseJsonSafely,
-} from "@/lib/server/http";
-import {
-  beginIdempotency,
-  commitIdempotency,
-  rollbackIdempotency,
-} from "@/lib/server/idempotency";
-import {
-  readIdempotencyKey,
-  replayCachedResponse,
-} from "@/lib/server/idempotency-request";
+import { getClientIp } from "@/lib/server/request";
 import {
   contactFormSchema,
   getValidationMessage,
 } from "@/lib/server/schemas";
 import {
-  createRequestContext,
   logError,
   sendAlert,
 } from "@/lib/server/observability";
+import {
+  prepareApiRouteRequest,
+  rollbackIdempotencyIfNeeded,
+} from "@/lib/server/api-route";
+import {
+  forwardFormspreeSubmission,
+  isValidFormspreeEndpoint,
+} from "@/lib/server/integrations/formspree";
 
 const CONTACT_RATE_LIMIT = { limit: 12, windowMs: 5 * 60_000 };
 const CONTACT_MAX_BODY_BYTES = 64 * 1024;
@@ -45,7 +33,6 @@ interface ContactError {
 }
 
 type ContactRouteResponse = ContactSuccess | ContactError;
-type IdempotencyToken = Parameters<typeof commitIdempotency<ContactRouteResponse>>[0];
 
 function toFormRecord(formData: FormData): Record<string, string> {
   const output: Record<string, string> = {};
@@ -94,68 +81,19 @@ function buildForwardedFormData(data: ReturnType<typeof contactFormSchema.parse>
 }
 
 export async function POST(request: NextRequest) {
-  const context = createRequestContext(request, "/api/contact");
+  const preparedResult = await prepareApiRouteRequest<ContactRouteResponse>({
+    request,
+    route: "/api/contact",
+    allowedContentTypes: ["multipart/form-data", "application/x-www-form-urlencoded"],
+    maxBodyBytes: CONTACT_MAX_BODY_BYTES,
+    idempotencyScope: CONTACT_IDEMPOTENCY_SCOPE,
+  });
 
-  if (!isAllowedOrigin(request)) {
-    return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
+  if ("response" in preparedResult) {
+    return preparedResult.response;
   }
 
-  if (
-    !hasAllowedContentType(request, [
-      "multipart/form-data",
-      "application/x-www-form-urlencoded",
-    ])
-  ) {
-    return NextResponse.json({ error: "Invalid content type." }, { status: 415 });
-  }
-
-  if (exceedsContentLength(request, CONTACT_MAX_BODY_BYTES)) {
-    return NextResponse.json({ error: "Request body is too large." }, { status: 413 });
-  }
-
-  const { key: idempotencyKey, error: idempotencyError } = readIdempotencyKey(request);
-  if (idempotencyError) {
-    return NextResponse.json({ error: idempotencyError }, { status: 400 });
-  }
-
-  let idempotencyToken: IdempotencyToken | null = null;
-
-  const respond = async (
-    status: number,
-    body: ContactRouteResponse,
-    headers?: HeadersInit
-  ) => {
-    if (idempotencyToken) {
-      const headerRecord = headers
-        ? Object.fromEntries(new Headers(headers).entries())
-        : undefined;
-      await commitIdempotency(idempotencyToken, status, body, headerRecord);
-    }
-
-    return NextResponse.json(body, { status, headers });
-  };
-
-  if (idempotencyKey) {
-    const idempotencyState = await beginIdempotency<ContactRouteResponse>({
-      scope: CONTACT_IDEMPOTENCY_SCOPE,
-      key: idempotencyKey,
-    });
-
-    if (idempotencyState.state === "replay") {
-      return replayCachedResponse(idempotencyState.cached);
-    }
-
-    if (idempotencyState.state === "in_progress") {
-      return NextResponse.json(
-        {
-          error: "A matching request is already in progress. Please retry shortly.",
-        },
-        { status: 409 }
-      );
-    }
-
-    idempotencyToken = idempotencyState.token;
-  }
+  const { context, idempotencyToken, respond } = preparedResult.prepared;
 
   try {
     const ip = getClientIp(request);
@@ -191,30 +129,24 @@ export async function POST(request: NextRequest) {
       return respond(200, { success: true, message: successMessage });
     }
 
-    if (!siteConfig.contact.formspreeEndpoint.startsWith("https://formspree.io/")) {
+    if (!isValidFormspreeEndpoint(siteConfig.contact.formspreeEndpoint)) {
       logError("contact.invalid_formspree_endpoint", context, new Error("invalid_endpoint"));
       return respond(500, { error: "Contact form is temporarily unavailable." });
     }
 
-    const upstreamResponse = await fetchWithTimeout(siteConfig.contact.formspreeEndpoint, {
-      method: "POST",
-      body: buildForwardedFormData(data),
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    const upstreamResult = await forwardFormspreeSubmission(
+      siteConfig.contact.formspreeEndpoint,
+      buildForwardedFormData(data)
+    );
 
-    if (!upstreamResponse.ok) {
-      const payload = await parseJsonSafely(upstreamResponse);
-      const upstreamMessage = getErrorMessage(payload);
-
+    if (!upstreamResult.ok) {
       logError("contact.formspree_failed", context, new Error("formspree_error"), {
-        status: upstreamResponse.status,
-        message: upstreamMessage,
+        status: upstreamResult.status,
+        message: upstreamResult.message,
       });
       await sendAlert("contact.formspree_failed", context, {
-        status: upstreamResponse.status,
-        message: upstreamMessage,
+        status: upstreamResult.status,
+        message: upstreamResult.message,
       });
 
       return respond(502, {
@@ -224,9 +156,7 @@ export async function POST(request: NextRequest) {
 
     return respond(200, { success: true, message: successMessage });
   } catch (error) {
-    if (idempotencyToken) {
-      await rollbackIdempotency(idempotencyToken);
-    }
+    await rollbackIdempotencyIfNeeded(idempotencyToken);
 
     logError("contact.request_failed", context, error);
     await sendAlert("contact.request_failed", context, {

@@ -3,8 +3,13 @@ export interface SelectOption {
   label: string;
 }
 
+export const CONTACT_SUBJECT_SPEAKING_INQUIRY = "Speaking Inquiry" as const;
+
 export const contactSubjectOptions: SelectOption[] = [
-  { value: "Speaking Inquiry", label: "Speaking Inquiry" },
+  {
+    value: CONTACT_SUBJECT_SPEAKING_INQUIRY,
+    label: CONTACT_SUBJECT_SPEAKING_INQUIRY,
+  },
   { value: "Collaboration", label: "Collaboration" },
   { value: "Just Saying Hello", label: "Just Saying Hello" },
   { value: "Something Else", label: "Something Else" },

@@ -17,7 +17,10 @@ import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
 import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
-import { contactSubjectOptions } from "@/lib/content";
+import {
+  CONTACT_SUBJECT_SPEAKING_INQUIRY,
+  contactSubjectOptions,
+} from "@/lib/content";
 
 export function ContactForm() {
   const {
@@ -37,7 +40,7 @@ export function ContactForm() {
   const [selectError, setSelectError] = useState<string | null>(null);
   const successBannerRef = useRef<HTMLDivElement>(null);
 
-  const isSpeakingInquiry = selectedSubject === "Speaking Inquiry";
+  const isSpeakingInquiry = selectedSubject === CONTACT_SUBJECT_SPEAKING_INQUIRY;
   const subjectErrorId = "subject-error";
   const selectErrorId = "contact-speaking-select-error";
   const successMessageId = "contact-success-message";

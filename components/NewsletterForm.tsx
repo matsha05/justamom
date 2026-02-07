@@ -25,7 +25,12 @@ interface EmailFieldProps {
   placeholder: string;
   className: string;
   onChange: (value: string) => void;
-  renderMessages?: boolean;
+}
+
+interface FeedbackMessagesProps {
+  inputId: string;
+  errorMessage: string | null;
+  successMessage: string | null;
 }
 
 function EmailField({
@@ -37,29 +42,41 @@ function EmailField({
   placeholder,
   className,
   onChange,
-  renderMessages = true,
 }: EmailFieldProps) {
   const errorId = `${inputId}-error`;
   const successId = `${inputId}-success`;
 
   return (
+    <Input
+      type="email"
+      value={email}
+      onChange={(e) => onChange(e.target.value)}
+      id={inputId}
+      autoComplete="email"
+      aria-describedby={errorMessage ? errorId : successMessage ? successId : undefined}
+      aria-invalid={Boolean(errorMessage)}
+      placeholder={placeholder}
+      required
+      disabled={isSubmitting}
+      className={className}
+    />
+  );
+}
+
+function FeedbackMessages({
+  inputId,
+  errorMessage,
+  successMessage,
+}: FeedbackMessagesProps) {
+  if (!errorMessage && !successMessage) {
+    return null;
+  }
+
+  return (
     <>
-      <Input
-        type="email"
-        value={email}
-        onChange={(e) => onChange(e.target.value)}
-        id={inputId}
-        autoComplete="email"
-        aria-describedby={errorMessage ? errorId : successMessage ? successId : undefined}
-        aria-invalid={Boolean(errorMessage)}
-        placeholder={placeholder}
-        required
-        disabled={isSubmitting}
-        className={className}
-      />
-      {renderMessages && errorMessage ? (
+      {errorMessage ? (
         <p
-          id={errorId}
+          id={`${inputId}-error`}
           role="alert"
           aria-live="assertive"
           className="text-caption text-[var(--color-error)]"
@@ -67,9 +84,9 @@ function EmailField({
           {errorMessage}
         </p>
       ) : null}
-      {renderMessages && successMessage ? (
+      {successMessage ? (
         <p
-          id={successId}
+          id={`${inputId}-success`}
           role="status"
           aria-live="polite"
           className="text-caption text-[var(--color-success)]"
@@ -92,6 +109,7 @@ export function NewsletterForm({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const buttonText = newsletterCtaCopy.button;
+  const isInlineVariant = variant === "compact" || variant === "hero";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,25 +154,25 @@ export function NewsletterForm({
     if (status !== "idle") setStatus("idle");
   };
 
-  if (variant === "compact" || variant === "hero") {
-    return (
-      <form onSubmit={handleSubmit} className={className} aria-busy={isSubmitting}>
-        <div className="space-y-2">
-          <Label htmlFor={inputId} className="text-caption text-[var(--color-ink-muted)]">
-            Email address
-          </Label>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <EmailField
-              inputId={inputId}
-              email={email}
-              isSubmitting={isSubmitting}
-              errorMessage={errorMessage}
-              successMessage={successMessage}
-              placeholder="Your email"
-              className="flex-1"
-              onChange={resetMessages}
-              renderMessages={false}
-            />
+  return (
+    <form onSubmit={handleSubmit} className={className} aria-busy={isSubmitting}>
+      <div className={isInlineVariant ? "space-y-2" : "space-y-4"}>
+        <Label htmlFor={inputId} className="text-caption text-[var(--color-ink-muted)]">
+          Email address
+        </Label>
+
+        <div className={isInlineVariant ? "flex flex-col sm:flex-row gap-3" : "space-y-2"}>
+          <EmailField
+            inputId={inputId}
+            email={email}
+            isSubmitting={isSubmitting}
+            errorMessage={errorMessage}
+            successMessage={successMessage}
+            placeholder={isInlineVariant ? "Your email" : "Enter your email"}
+            className={isInlineVariant ? "flex-1" : "w-full"}
+            onChange={resetMessages}
+          />
+          {isInlineVariant ? (
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
@@ -168,63 +186,30 @@ export function NewsletterForm({
                 </>
               )}
             </Button>
-          </div>
-          {errorMessage ? (
-            <p
-              id={`${inputId}-error`}
-              role="alert"
-              aria-live="assertive"
-              className="text-caption text-[var(--color-error)]"
-            >
-              {errorMessage}
-            </p>
-          ) : null}
-          {successMessage ? (
-            <p
-              id={`${inputId}-success`}
-              role="status"
-              aria-live="polite"
-              className="text-caption text-[var(--color-success)]"
-            >
-              {successMessage}
-            </p>
           ) : null}
         </div>
-      </form>
-    );
-  }
 
-  return (
-    <form onSubmit={handleSubmit} className={className} aria-busy={isSubmitting}>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor={inputId} className="text-caption text-[var(--color-ink-muted)]">
-            Email address
-          </Label>
-          <EmailField
-            inputId={inputId}
-            email={email}
-            isSubmitting={isSubmitting}
-            errorMessage={errorMessage}
-            successMessage={successMessage}
-            placeholder="Enter your email"
-            className="w-full"
-            onChange={resetMessages}
-          />
-        </div>
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Joining...
-            </>
-          ) : (
-            <>
-              {buttonText}
-              <ArrowIcon />
-            </>
-          )}
-        </Button>
+        <FeedbackMessages
+          inputId={inputId}
+          errorMessage={errorMessage}
+          successMessage={successMessage}
+        />
+
+        {!isInlineVariant ? (
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Joining...
+              </>
+            ) : (
+              <>
+                {buttonText}
+                <ArrowIcon />
+              </>
+            )}
+          </Button>
+        ) : null}
       </div>
     </form>
   );
