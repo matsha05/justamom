@@ -1,0 +1,235 @@
+{
+  "version": "1.0",
+  "project": "Just a Mom",
+  "updated": "2026-02-07",
+  "concepts": [
+    {
+      "id": "A",
+      "label": "Quiet Editorial",
+      "namespace": "A/Typography/*, A/Color/*, A/Space/*, A/Radius/*, A/Button/*",
+      "pairing": {
+        "heading": "Newsreader",
+        "body": "Source Sans 3"
+      },
+      "textStyles": [
+        {
+          "name": "A/Typography/Display/XL",
+          "fontFamily": "Newsreader",
+          "fontWeight": 500,
+          "sizeDesktop": 78,
+          "sizeMobile": 36,
+          "lineHeightPercent": 103,
+          "letterSpacingPercent": -2.5,
+          "usage": "Hero statement"
+        },
+        {
+          "name": "A/Typography/Heading/L",
+          "fontFamily": "Newsreader",
+          "fontWeight": 500,
+          "sizeDesktop": 28,
+          "sizeMobile": 20,
+          "lineHeightPercent": 122,
+          "letterSpacingPercent": -1,
+          "usage": "Section headings"
+        },
+        {
+          "name": "A/Typography/Body/M",
+          "fontFamily": "Source Sans 3",
+          "fontWeight": 400,
+          "sizeDesktop": 18,
+          "sizeMobile": 17,
+          "lineHeightPercent": 167,
+          "letterSpacingPercent": 0,
+          "usage": "Body paragraphs"
+        },
+        {
+          "name": "A/Typography/Label/S",
+          "fontFamily": "Source Sans 3",
+          "fontWeight": 700,
+          "sizeDesktop": 12,
+          "sizeMobile": 12,
+          "lineHeightPercent": 125,
+          "letterSpacingPercent": 18,
+          "usage": "Eyebrows and tags"
+        }
+      ],
+      "spacing": {
+        "A/Space/2": 8,
+        "A/Space/3": 12,
+        "A/Space/4": 16,
+        "A/Space/6": 24,
+        "A/Space/8": 32,
+        "A/Space/12": 48,
+        "A/Space/18": 72
+      },
+      "radius": {
+        "A/Radius/Sm": 8,
+        "A/Radius/Md": 12,
+        "A/Radius/Lg": 18,
+        "A/Radius/Pill": 999
+      },
+      "colors": {
+        "A/Color/Surface": "#F9F4ED",
+        "A/Color/Panel": "rgba(255,255,255,0.72)",
+        "A/Color/Ink": "#1F1A15",
+        "A/Color/Accent": "#2F6058"
+      },
+      "buttons": {
+        "A/Button/Primary": "height 48, horizontal 20, vertical 12, weight 650, fill A/Color/Accent",
+        "A/Button/Secondary": "height 48, horizontal 20, vertical 12, weight 650, border 1"
+      }
+    },
+    {
+      "id": "B",
+      "label": "High Contrast",
+      "namespace": "B/Typography/*, B/Color/*, B/Space/*, B/Radius/*, B/Button/*",
+      "pairing": {
+        "heading": "Fraunces",
+        "body": "Manrope"
+      },
+      "textStyles": [
+        {
+          "name": "B/Typography/Display/XL",
+          "fontFamily": "Fraunces",
+          "fontWeight": 600,
+          "sizeDesktop": 78,
+          "sizeMobile": 36,
+          "lineHeightPercent": 97,
+          "letterSpacingPercent": -3,
+          "usage": "Hero statement"
+        },
+        {
+          "name": "B/Typography/Heading/L",
+          "fontFamily": "Fraunces",
+          "fontWeight": 560,
+          "sizeDesktop": 28,
+          "sizeMobile": 20,
+          "lineHeightPercent": 122,
+          "letterSpacingPercent": -1,
+          "usage": "Section headings"
+        },
+        {
+          "name": "B/Typography/Body/M",
+          "fontFamily": "Manrope",
+          "fontWeight": 450,
+          "sizeDesktop": 17,
+          "sizeMobile": 16,
+          "lineHeightPercent": 165,
+          "letterSpacingPercent": 0,
+          "usage": "Body paragraphs"
+        },
+        {
+          "name": "B/Typography/Label/S",
+          "fontFamily": "Manrope",
+          "fontWeight": 700,
+          "sizeDesktop": 12,
+          "sizeMobile": 12,
+          "lineHeightPercent": 125,
+          "letterSpacingPercent": 20,
+          "usage": "Eyebrows and tags"
+        }
+      ],
+      "spacing": {
+        "B/Space/2": 8,
+        "B/Space/3": 12,
+        "B/Space/4": 16,
+        "B/Space/6": 24,
+        "B/Space/8": 32,
+        "B/Space/12": 48,
+        "B/Space/18": 72
+      },
+      "radius": {
+        "B/Radius/Sm": 8,
+        "B/Radius/Md": 12,
+        "B/Radius/Lg": 18,
+        "B/Radius/Button": 14
+      },
+      "colors": {
+        "B/Color/Surface": "#F3EEE6",
+        "B/Color/Panel": "rgba(255,255,255,0.70)",
+        "B/Color/Ink": "#181514",
+        "B/Color/Accent": "#114B46"
+      },
+      "buttons": {
+        "B/Button/Primary": "height 48, horizontal 20, vertical 12, weight 650, fill B/Color/Accent",
+        "B/Button/Secondary": "height 48, horizontal 20, vertical 12, weight 650, border 1"
+      }
+    },
+    {
+      "id": "C",
+      "label": "Literary Modern",
+      "namespace": "C/Typography/*, C/Color/*, C/Space/*, C/Radius/*, C/Button/*",
+      "pairing": {
+        "heading": "Literata",
+        "body": "Plus Jakarta Sans"
+      },
+      "textStyles": [
+        {
+          "name": "C/Typography/Display/XL",
+          "fontFamily": "Literata",
+          "fontWeight": 570,
+          "sizeDesktop": 78,
+          "sizeMobile": 36,
+          "lineHeightPercent": 101,
+          "letterSpacingPercent": -2,
+          "usage": "Hero statement"
+        },
+        {
+          "name": "C/Typography/Heading/L",
+          "fontFamily": "Literata",
+          "fontWeight": 550,
+          "sizeDesktop": 28,
+          "sizeMobile": 20,
+          "lineHeightPercent": 122,
+          "letterSpacingPercent": -1,
+          "usage": "Section headings"
+        },
+        {
+          "name": "C/Typography/Body/M",
+          "fontFamily": "Plus Jakarta Sans",
+          "fontWeight": 430,
+          "sizeDesktop": 18,
+          "sizeMobile": 17,
+          "lineHeightPercent": 172,
+          "letterSpacingPercent": 0,
+          "usage": "Body paragraphs"
+        },
+        {
+          "name": "C/Typography/Label/S",
+          "fontFamily": "Plus Jakarta Sans",
+          "fontWeight": 700,
+          "sizeDesktop": 12,
+          "sizeMobile": 12,
+          "lineHeightPercent": 125,
+          "letterSpacingPercent": 19,
+          "usage": "Eyebrows and tags"
+        }
+      ],
+      "spacing": {
+        "C/Space/2": 8,
+        "C/Space/3": 12,
+        "C/Space/4": 16,
+        "C/Space/6": 24,
+        "C/Space/8": 32,
+        "C/Space/12": 48,
+        "C/Space/18": 72
+      },
+      "radius": {
+        "C/Radius/Sm": 8,
+        "C/Radius/Md": 12,
+        "C/Radius/Lg": 18,
+        "C/Radius/Pill": 999
+      },
+      "colors": {
+        "C/Color/Surface": "#F4F0EA",
+        "C/Color/Panel": "rgba(255,255,255,0.74)",
+        "C/Color/Ink": "#1A1715",
+        "C/Color/Accent": "#5A6F45"
+      },
+      "buttons": {
+        "C/Button/Primary": "height 48, horizontal 20, vertical 12, weight 650, fill C/Color/Accent",
+        "C/Button/Secondary": "height 48, horizontal 20, vertical 12, weight 650, border 1"
+      }
+    }
+  ]
+}

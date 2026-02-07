@@ -25,6 +25,7 @@ npm run build
 npm run start
 npm run lint
 npm run test
+npm run test:design-system
 ```
 
 ## Environment variables
@@ -56,3 +57,16 @@ These power:
 - Note creation steps are documented in `.agent/workflows/add-note.md`.
 - Speaking topic illustration prompts live in `docs/speaking-image-prompts.md`.
 - Site images live in `public/images`.
+
+## Design system
+
+- Production spec: `docs/design-system-production.md`
+- Typography research + decision record: `docs/typography-system-research.md`
+- Visual comparison + handoff board: `/preview` route (`app/preview/page.tsx`)
+- Handoff exports:
+  - `public/preview/figma-typography-handoff.json`
+  - `public/preview/figma-typography-handoff.csv`
+  - `public/preview/justamom-design-system-v1.json`
+  - `public/preview/justamom-design-system-v1.csv`
+
+Run `npm run test:design-system` before merges that change typography, color, spacing, radius, or component states.

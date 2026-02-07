@@ -120,7 +120,7 @@
 
 .note-adjacent-title {
   display: block;
-  font-family: var(--font-newsreader, "Newsreader"), Georgia, serif;
+  font-family: var(--font-heading, "Literata"), Georgia, serif;
   font-size: clamp(1.13rem, 1.4vw, 1.3rem);
   line-height: 1.34;
   color: var(--color-ink);
@@ -158,4 +158,3 @@
     line-height: 1.86;
   }
 }
-

@@ -1,7 +1,7 @@
 /* ============================================
    Lizi Shaw — Editorial Author Design System
-   Typography: Newsreader (serif) + Source Sans 3 (clean sans)
-   Aesthetic: Quiet, literary, publisher-ready
+   Typography: Literata (serif) + Plus Jakarta Sans (clean sans)
+   Aesthetic: Warm editorial with clear conversion paths
    ============================================ */
 
 @theme inline {
@@ -10,49 +10,47 @@
      ---------------------------------------- */
 
   /* Ink Tones (Text) */
-  --color-ink: #1d1b19;
-  --color-ink-soft: #4a433c;
-  --color-ink-muted: #7a7269;
-  --color-ink-faint: #b1a79d;
+  --color-ink: #1a1715;
+  --color-ink-soft: #4e443f;
+  --color-ink-muted: #6f645c;
+  --color-ink-faint: #7a6e65;
 
   /* Paper Tones (Backgrounds) */
-  --color-paper: #fbf9f6;
-  --color-paper-warm: #f6f2ed;
-  --color-paper-soft: #f0ebe5;
+  --color-paper: #f8f4ed;
+  --color-paper-warm: #f2ece3;
+  --color-paper-soft: #ebe4d9;
 
   /* Signature Accent (Refined Teal) */
-  --color-accent: #3f6c67;
-  --color-accent-hover: #355a56;
-  --color-accent-light: #6e918c;
-  --color-accent-soft: #e4efed;
+  --color-accent: #2f6058;
+  --color-accent-hover: #274f48;
+  --color-accent-light: #5f867f;
+  --color-accent-soft: #e1ecea;
 
   /* Semantic */
-  --color-success: #4a7c59;
+  --color-success: #4f7456;
   --color-error: #9e4a4a;
-  --color-border: #e6dfd6;
-  --color-border-strong: #d3cac0;
+  --color-border: #ddd4c8;
+  --color-border-strong: #cbbfb1;
 
   /* ----------------------------------------
      TYPOGRAPHY
      ---------------------------------------- */
-  --font-heading: var(--font-newsreader);
-  --font-body: var(--font-source-sans-3);
+  --font-heading: var(--font-literata);
+  --font-body: var(--font-plus-jakarta-sans);
+  /* Backward-compatible aliases while migrating legacy token names */
+  --font-newsreader: var(--font-heading);
+  --font-source-sans-3: var(--font-body);
 
-  /* Type Scale - Publisher-Grade (Refined) */
-  --text-display: clamp(2.75rem, 5vw, 4.1rem);
-  /* 48-68px */
-  --text-h1: clamp(2.25rem, 4vw, 3.25rem);
-  /* 36-52px */
-  --text-h2: clamp(1.65rem, 2.9vw, 2.15rem);
-  /* 28-36px */
-  --text-h3: clamp(1.25rem, 2vw, 1.5rem);
-  --text-h4: clamp(1.125rem, 1.5vw, 1.25rem);
-  --text-body-lg: clamp(1.12rem, 1.35vw, 1.22rem);
-  /* 18-19px */
-  --text-body: 1.03rem;
-  /* 17px */
+  /* Type Scale - Long-form first, high-trust editorial */
+  --text-display: clamp(2.4rem, 5.8vw, 4.85rem);
+  --text-h1: clamp(2.05rem, 4.15vw, 3.35rem);
+  --text-h2: clamp(1.58rem, 2.75vw, 2.2rem);
+  --text-h3: clamp(1.2rem, 1.75vw, 1.46rem);
+  --text-h4: clamp(1.08rem, 1.3vw, 1.22rem);
+  --text-body-lg: clamp(1.08rem, 1.05rem + 0.45vw, 1.24rem);
+  --text-body: 1.04rem;
   --text-caption: 0.875rem;
-  --text-label: 0.84rem;
+  --text-label: 0.8rem;
 
   /* ----------------------------------------
      SPACING
@@ -69,11 +67,11 @@
   --space-24: 6rem;
 
   /* Section Rhythm */
-  --section-padding: clamp(5.5rem, 11vw, 10.5rem);
+  --section-padding: clamp(5rem, 10vw, 9.5rem);
 
   /* Layout */
-  --container-max: 1060px;
-  --container-prose: 620px;
+  --container-max: 1080px;
+  --container-prose: 640px;
 
   /* ----------------------------------------
      MOTION
@@ -97,6 +95,7 @@
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --radius-pill: 999px;
   /* Compatibility tokens used by component primitives */
   --color-popover-foreground: var(--color-ink);
   --color-popover: #ffffff;

@@ -16,14 +16,14 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="section section-hero pt-[clamp(3.75rem,8vw,6.75rem)]">
+      <section className="section section-hero pt-[clamp(3.9rem,8.4vw,7.1rem)]">
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="space-y-7">
-              <h1 className="text-display max-w-[12ch]">A Note for Moms.</h1>
+              <h1 className="text-display max-w-[11ch]">You are not just a mom.</h1>
               <p className="text-body-lg max-w-[34ch] text-[var(--color-ink-soft)]">
-                A steady reminder for moms who feel stretched between
-                &quot;just a mom&quot; and &quot;do it all.&quot;
+                A steady note for women carrying unseen weight, holy work, and
+                the tension between &quot;just a mom&quot; and &quot;do it all.&quot;
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Button asChild>
@@ -39,6 +39,9 @@ export default function HomePage() {
                   </Link>
                 </Button>
               </div>
+              <p className="text-caption text-[var(--color-ink-muted)]">
+                Twice a month. Quiet, biblical encouragement for the middle of real life.
+              </p>
               <div className="mt-1" aria-hidden="true">
                 <Image
                   src="/images/signature.png"

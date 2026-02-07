@@ -21,9 +21,9 @@ function toArrayBuffer(buffer: Buffer): ArrayBuffer {
 }
 
 export default async function Image() {
-  const [newsreaderBuffer, sourceSansBuffer, logoBuffer] = await Promise.all([
-    readFile(join(process.cwd(), "public/fonts/newsreader-latin-600-normal.woff")),
-    readFile(join(process.cwd(), "public/fonts/source-sans-3-latin-400-normal.woff")),
+  const [literataBuffer, plusJakartaBuffer, logoBuffer] = await Promise.all([
+    readFile(join(process.cwd(), "public/fonts/literata-latin-700-normal.ttf")),
+    readFile(join(process.cwd(), "public/fonts/plus-jakarta-sans-latin-500-normal.ttf")),
     readFile(join(process.cwd(), "public/images/peony-logo-v4.png")),
   ]);
 
@@ -33,7 +33,7 @@ export default async function Image() {
     (
       <div
         style={{
-          background: "#faf8f5",
+          background: "#f8f4ed",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -50,7 +50,7 @@ export default async function Image() {
             left: 24,
             right: 24,
             bottom: 24,
-            border: "2px solid #e5e2dd",
+            border: "2px solid #ddd4c8",
             borderRadius: 12,
           }}
         />
@@ -63,7 +63,7 @@ export default async function Image() {
             width: 140,
             height: 140,
             borderRadius: "50%",
-            background: "#4a7c7c",
+            background: "#2f6058",
             marginBottom: 40,
             overflow: "hidden",
           }}
@@ -80,9 +80,9 @@ export default async function Image() {
         <div
           style={{
             fontSize: 72,
-            fontFamily: "Newsreader",
-            fontWeight: 600,
-            color: "#1a1a1a",
+            fontFamily: "Literata",
+            fontWeight: 700,
+            color: "#1a1715",
             marginBottom: 18,
             textAlign: "center",
             letterSpacing: "-0.02em",
@@ -94,10 +94,11 @@ export default async function Image() {
         <div
           style={{
             fontSize: 28,
-            color: "#737373",
+            color: "#6f645c",
             textAlign: "center",
-            fontFamily: "Source Sans 3",
-            letterSpacing: "0.18em",
+            fontFamily: "Plus Jakarta Sans",
+            letterSpacing: "0.14em",
+            fontWeight: 500,
             textTransform: "uppercase",
           }}
         >
@@ -109,15 +110,15 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "Newsreader",
-          data: toArrayBuffer(newsreaderBuffer),
-          weight: 600,
+          name: "Literata",
+          data: toArrayBuffer(literataBuffer),
+          weight: 700,
           style: "normal",
         },
         {
-          name: "Source Sans 3",
-          data: toArrayBuffer(sourceSansBuffer),
-          weight: 400,
+          name: "Plus Jakarta Sans",
+          data: toArrayBuffer(plusJakartaBuffer),
+          weight: 500,
           style: "normal",
         },
       ],

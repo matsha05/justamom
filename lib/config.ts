@@ -61,7 +61,7 @@ export const siteConfig = {
     twitterHandle: defaultTwitterHandle,
   },
   theme: {
-    color: "#fbf9f6",
+    color: "#f8f4ed",
   },
   integrations: {
     mailerLiteApiBaseUrl: "https://connect.mailerlite.com/api",
