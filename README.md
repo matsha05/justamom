@@ -62,11 +62,6 @@ These power:
 
 - Production spec: `docs/design-system-production.md`
 - Typography research + decision record: `docs/typography-system-research.md`
-- Visual comparison + handoff board: `/preview` route (`app/preview/page.tsx`)
-- Handoff exports:
-  - `public/preview/figma-typography-handoff.json`
-  - `public/preview/figma-typography-handoff.csv`
-  - `public/preview/justamom-design-system-v1.json`
-  - `public/preview/justamom-design-system-v1.csv`
+- Source-of-truth tokens: `app/styles/theme.css` and `app/styles/typography.css`
 
 Run `npm run test:design-system` before merges that change typography, color, spacing, radius, or component states.

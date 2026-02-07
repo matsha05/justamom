@@ -1,6 +1,6 @@
 # Typography System Research (February 7, 2026)
 
-This document captures the source inputs and design decisions behind the `/preview` typography concepts for the Just a Mom landing experience.
+This document captures the source inputs and design decisions behind the typography direction for the Just a Mom landing experience.
 
 ## What We Optimized For
 
@@ -40,13 +40,13 @@ This document captures the source inputs and design decisions behind the `/previ
 - [Literata](https://github.com/googlefonts/literata)
 - [Plus Jakarta Sans](https://github.com/tokotype/PlusJakartaSans)
 
-## Chosen Preview Systems
+## Explored Systems
 
 - Concept A: Newsreader + Source Sans 3
 - Concept B: Fraunces + Manrope
 - Concept C: Literata + Plus Jakarta Sans
 
-Each concept is implemented with explicit display/body weights, line-height behavior, spacing rhythm, and CTA treatment to support direct visual comparison.
+Each concept was evaluated with explicit display/body weights, line-height behavior, spacing rhythm, and CTA treatment.
 
 ## Final Production Direction
 
@@ -59,10 +59,8 @@ Production source-of-truth now lives in:
 - `/app/styles/typography.css`
 - `/docs/design-system-production.md`
 
-## Figma Handoff Assets
+## Current Handoff Sources
 
-- JSON tokens: `/public/preview/figma-typography-handoff.json`
-- CSV text styles: `/public/preview/figma-typography-handoff.csv`
-- Production token JSON: `/public/preview/justamom-design-system-v1.json`
-- Production token CSV: `/public/preview/justamom-design-system-v1.csv`
-- On-page comparison and handoff spec: `/app/preview/page.tsx`
+- `/app/styles/theme.css`
+- `/app/styles/typography.css`
+- `/docs/design-system-production.md`
