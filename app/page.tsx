@@ -1,20 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
-import { format, parseISO } from "date-fns";
 import { getAllNotes } from "@/lib/notes";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
 import { newsletterCtaCopy, speakingTopics } from "@/lib/content";
+import { NotesFeed } from "@/components/notes/NotesFeed";
 
 const currentWorkExcerpt =
   "Just a mom. It’s wild how a three-word sentence can feel both true and entirely wrong at the same time. How it can shrink something as monumental as raising a human into something that feels small and slightly apologetic. As if caring for an image-bearer of God is somehow insignificant unless you add a title or a paycheck or something more \"productive\" to go with it.";
 
 export default function HomePage() {
   const notes = getAllNotes();
-  const featuredNote = notes[0] ?? null;
-  const supportingNotes = notes.slice(1, 3);
 
   return (
     <>
@@ -97,59 +95,7 @@ export default function HomePage() {
                 <ArrowIcon />
               </Link>
             </div>
-            <div className="space-y-9">
-              {!featuredNote && supportingNotes.length === 0 ? (
-                <p className="text-body text-[var(--color-ink-soft)]">
-                  Notes are on the way.
-                </p>
-              ) : null}
-              {featuredNote ? (
-                <article className="border-b border-[var(--color-border)] pb-9">
-                  <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
-                    {format(parseISO(featuredNote.date), "MMMM d, yyyy")}
-                  </div>
-                  <h3 className="text-h2 mb-4">
-                    <Link
-                      href={`/notes/${featuredNote.slug}`}
-                      className="transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {featuredNote.title}
-                    </Link>
-                  </h3>
-                  <p className="text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
-                  <Link className="link-arrow" href={`/notes/${featuredNote.slug}`}>
-                    Read note
-                    <ArrowIcon />
-                  </Link>
-                </article>
-              ) : null}
-
-              <div className="divide-y divide-[var(--color-border)]">
-                {supportingNotes.map((note) => {
-                  const formattedDate = format(parseISO(note.date), "MMMM d, yyyy");
-                  return (
-                    <article key={note.slug} className="group py-8 first:pt-0">
-                      <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
-                        {formattedDate}
-                      </div>
-                      <h3 className="text-h3 mb-3">
-                        <Link
-                          href={`/notes/${note.slug}`}
-                          className="transition-colors group-hover:text-[var(--color-accent)]"
-                        >
-                          {note.title}
-                        </Link>
-                      </h3>
-                      <p className="text-body mb-4">{note.excerpt}</p>
-                      <Link className="link-arrow" href={`/notes/${note.slug}`}>
-                        Read note
-                        <ArrowIcon />
-                      </Link>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
+            <NotesFeed notes={notes} maxSupportingNotes={2} />
           </div>
         </div>
       </section>

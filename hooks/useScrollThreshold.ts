@@ -6,13 +6,33 @@ export function useScrollThreshold(threshold: number) {
   const [pastThreshold, setPastThreshold] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setPastThreshold(window.scrollY > threshold);
+    let frame: number | null = null;
+
+    const updateThresholdState = () => {
+      const next = window.scrollY > threshold;
+      setPastThreshold((current) => (current === next ? current : next));
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      if (frame !== null) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(() => {
+        frame = null;
+        updateThresholdState();
+      });
+    };
+
+    updateThresholdState();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame);
+      }
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [threshold]);
 
   return pastThreshold;

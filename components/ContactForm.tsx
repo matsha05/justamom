@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -17,19 +16,25 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
-import { useSubmitState } from "@/hooks/useSubmitState";
-import { fetchJson, getStringFromRecord } from "@/lib/client/http";
+import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
 import { contactSubjectOptions } from "@/lib/content";
 
 export function ContactForm() {
-  const { status, setStatus, isSubmitting, isSuccess } = useSubmitState();
+  const {
+    status,
+    isSubmitting,
+    isSuccess,
+    successMessage,
+    formError,
+    submitContactForm,
+    clearError,
+    clearFeedbackOnInputChange,
+  } = useContactFormSubmission();
   const [selectedSubject, setSelectedSubject] = useState("");
   const [eventType, setEventType] = useState("");
   const [audienceSize, setAudienceSize] = useState("");
   const [subjectError, setSubjectError] = useState<string | null>(null);
   const [selectError, setSelectError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
   const successBannerRef = useRef<HTMLDivElement>(null);
 
   const isSpeakingInquiry = selectedSubject === "Speaking Inquiry";
@@ -45,75 +50,40 @@ export function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    clearError();
 
     if (!selectedSubject) {
       setSubjectError("Please select a topic.");
-      setFormError(null);
       return;
     }
 
     if (isSpeakingInquiry && (!eventType || !audienceSize)) {
       setSelectError("Please select an event type and group size.");
-      setFormError(null);
       return;
     }
 
-    setStatus("submitting");
     setSubjectError(null);
     setSelectError(null);
-    setSuccessMessage(null);
-    setFormError(null);
 
     const form = e.currentTarget;
-    const formData = new FormData(form);
-    formData.set("form_type", "contact");
+    const result = await submitContactForm({
+      form,
+      formType: "contact",
+      successFallbackMessage: "Message sent! I will get back to you as soon as I can.",
+    });
 
-    try {
-      const { response, data } = await fetchJson("/api/contact", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const message =
-          getStringFromRecord(data, "message") ??
-          "Message sent! I will get back to you as soon as I can.";
-
-        setStatus("success");
-        setSuccessMessage(message);
-        form.reset();
-        setSelectedSubject("");
-        setEventType("");
-        setAudienceSize("");
-        return;
-      }
-
-      const message =
-        getStringFromRecord(data, "error") ??
-        "Something went wrong. Please try again.";
-      toast.error(message);
-      setFormError(message);
-      setStatus("error");
-    } catch {
-      const message = "Network error. Please check your connection and try again.";
-      toast.error(message);
-      setFormError(message);
-      setStatus("error");
+    if (result.ok) {
+      form.reset();
+      setSelectedSubject("");
+      setEventType("");
+      setAudienceSize("");
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      onChange={() => {
-        if (formError) {
-          setFormError(null);
-        }
-        if (isSuccess) {
-          setStatus("idle");
-          setSuccessMessage(null);
-        }
-      }}
+      onChange={clearFeedbackOnInputChange}
       aria-busy={isSubmitting}
       className="space-y-6 animate-fade-in"
     >

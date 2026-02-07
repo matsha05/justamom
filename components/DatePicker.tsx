@@ -2,7 +2,7 @@
 
 import { useId, useState, useRef, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import "react-day-picker/dist/style.css";
 
@@ -13,9 +13,24 @@ interface DatePickerProps {
     defaultValue?: string;
 }
 
+function parseDisplayDate(value: string): Date | undefined {
+    const trimmed = value.trim();
+    if (!trimmed) {
+        return undefined;
+    }
+
+    const parsedByFormat = parse(trimmed, "MMM d, yyyy", new Date());
+    if (isValid(parsedByFormat)) {
+        return parsedByFormat;
+    }
+
+    const parsedByNative = new Date(trimmed);
+    return Number.isNaN(parsedByNative.getTime()) ? undefined : parsedByNative;
+}
+
 export function DatePicker({ id, name, required = false, defaultValue = "" }: DatePickerProps) {
     const popoverId = useId();
-    const [selected, setSelected] = useState<Date | undefined>();
+    const [selected, setSelected] = useState<Date | undefined>(() => parseDisplayDate(defaultValue));
     const [inputValue, setInputValue] = useState(defaultValue);
     const [isPopperOpen, setIsPopperOpen] = useState(false);
 
@@ -24,14 +39,23 @@ export function DatePicker({ id, name, required = false, defaultValue = "" }: Da
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        setInputValue(defaultValue);
+        setSelected(parseDisplayDate(defaultValue));
+    }, [defaultValue]);
+
+    useEffect(() => {
+        if (!isPopperOpen) {
+            return;
+        }
+
+        const handleClickOutside = (event: PointerEvent) => {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
                 setIsPopperOpen(false);
             }
         };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => document.removeEventListener("pointerdown", handleClickOutside);
+    }, [isPopperOpen]);
 
     const returnFocusToInput = () => {
         requestAnimationFrame(() => {

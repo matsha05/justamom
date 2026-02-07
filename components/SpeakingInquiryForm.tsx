@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -10,16 +9,22 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
-import { useSubmitState } from "@/hooks/useSubmitState";
-import { fetchJson, getStringFromRecord } from "@/lib/client/http";
+import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
 
 export function SpeakingInquiryForm() {
-  const { status, setStatus, isSubmitting } = useSubmitState();
+  const {
+    status,
+    isSubmitting,
+    successMessage,
+    formError,
+    submitContactForm,
+    clearError,
+    resetFeedback,
+    clearFeedbackOnInputChange,
+  } = useContactFormSubmission();
   const [eventType, setEventType] = useState("");
   const [audienceSize, setAudienceSize] = useState("");
   const [selectError, setSelectError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
   const successBannerRef = useRef<HTMLDivElement>(null);
 
   const selectErrorId = "speaking-select-error";
@@ -33,48 +38,27 @@ export function SpeakingInquiryForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    clearError();
 
     if (!eventType || !audienceSize) {
       setSelectError("Please select an event type and group size.");
-      setFormError(null);
       return;
     }
 
-    setStatus("submitting");
     setSelectError(null);
-    setFormError(null);
 
     const form = e.currentTarget;
-    const formData = new FormData(form);
-    formData.append("subject", "New Speaking Inquiry");
-    formData.set("form_type", "speaking");
+    const result = await submitContactForm({
+      form,
+      formType: "speaking",
+      subject: "New Speaking Inquiry",
+      successFallbackMessage: "Inquiry received! I will follow up soon.",
+    });
 
-    try {
-      const { response, data } = await fetchJson("/api/contact", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        setStatus("success");
-        setSuccessMessage(getStringFromRecord(data, "message"));
-        form.reset();
-        setEventType("");
-        setAudienceSize("");
-        return;
-      }
-
-      const message =
-        getStringFromRecord(data, "error") ??
-        "Something went wrong. Please try again.";
-      toast.error(message);
-      setFormError(message);
-      setStatus("error");
-    } catch {
-      const message = "Network error. Please check your connection and try again.";
-      toast.error(message);
-      setFormError(message);
-      setStatus("error");
+    if (result.ok) {
+      form.reset();
+      setEventType("");
+      setAudienceSize("");
     }
   };
 
@@ -98,7 +82,7 @@ export function SpeakingInquiryForm() {
             </p>
           </div>
         </div>
-        <Button type="button" variant="outline" onClick={() => setStatus("idle")}>
+        <Button type="button" variant="outline" onClick={resetFeedback}>
           Send another message
         </Button>
       </div>
@@ -108,6 +92,7 @@ export function SpeakingInquiryForm() {
   return (
     <form
       onSubmit={handleSubmit}
+      onChange={clearFeedbackOnInputChange}
       className="space-y-6 animate-fade-in"
       aria-busy={isSubmitting}
     >
