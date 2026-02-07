@@ -59,6 +59,21 @@ describe("POST /api/newsletter", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it("returns unsupported media type for non-JSON content", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch");
+
+    const response = await POST(
+      createNewsletterRequest("test@example.com", {
+        "content-type": "text/plain",
+      })
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(415);
+    expect(body.error).toContain("content type");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it("enforces fingerprint rate limiting", async () => {
     vi.spyOn(global, "fetch").mockImplementation(async (input, init) => {
       const url = String(input);
@@ -92,7 +107,7 @@ describe("POST /api/newsletter", () => {
     expect(body.error).toContain("temporarily unavailable");
   });
 
-  it("processes repeated requests even when idempotency key is reused", async () => {
+  it("replays cached response when idempotency key is reused", async () => {
     const fetchSpy = vi.spyOn(global, "fetch").mockImplementation(async (input, init) => {
       const url = String(input);
       if (init?.method === "GET" && url.includes("/subscribers/")) {
@@ -115,7 +130,7 @@ describe("POST /api/newsletter", () => {
 
     expect(first.status).toBe(200);
     expect(second.status).toBe(200);
-    expect(second.headers.get("x-idempotent-replay")).toBeNull();
-    expect(fetchSpy).toHaveBeenCalledTimes(4);
+    expect(second.headers.get("x-idempotent-replay")).toBe("true");
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
   });
 });

@@ -79,6 +79,29 @@ describe("POST /api/contact", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it("requires event date for speaking inquiries", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch");
+
+    const response = await POST(
+      createContactRequest(
+        contactPayload({
+          form_type: "speaking",
+          subject: "Speaking Inquiry",
+          message: "",
+          event_type: "Retreat",
+          audience_size: "20-50",
+          event_date: "",
+          location: "Denver, CO",
+        })
+      )
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body.error).toContain("event date");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it("enforces fingerprint rate limiting", async () => {
     vi.spyOn(global, "fetch").mockResolvedValue(
       new Response(JSON.stringify({ ok: true }), { status: 200 })
@@ -112,7 +135,7 @@ describe("POST /api/contact", () => {
     expect(body.error).toContain("Unable to send your message");
   });
 
-  it("processes repeated requests even when idempotency key is reused", async () => {
+  it("replays cached response when idempotency key is reused", async () => {
     const fetchSpy = vi
       .spyOn(global, "fetch")
       .mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
@@ -126,7 +149,7 @@ describe("POST /api/contact", () => {
 
     expect(first.status).toBe(200);
     expect(second.status).toBe(200);
-    expect(second.headers.get("x-idempotent-replay")).toBeNull();
-    expect(fetchSpy).toHaveBeenCalledTimes(2);
+    expect(second.headers.get("x-idempotent-replay")).toBe("true");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });

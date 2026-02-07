@@ -1,92 +1,173 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/lib/config";
-import { isValidEmail, normalizeEmail } from "@/lib/server/email";
 import { checkRateLimit } from "@/lib/server/rate-limit";
-import { getClientIp, isAllowedOrigin } from "@/lib/server/request";
+import {
+  exceedsContentLength,
+  getClientIp,
+  hasAllowedContentType,
+  isAllowedOrigin,
+} from "@/lib/server/request";
 import {
   fetchWithTimeout,
   getErrorMessage,
   parseJsonSafely,
 } from "@/lib/server/http";
-import { rateLimitResponse } from "@/lib/server/response";
+import {
+  beginIdempotency,
+  commitIdempotency,
+  rollbackIdempotency,
+} from "@/lib/server/idempotency";
+import {
+  readIdempotencyKey,
+  replayCachedResponse,
+} from "@/lib/server/idempotency-request";
+import {
+  createRequestContext,
+  logError,
+  sendAlert,
+} from "@/lib/server/observability";
+import {
+  getValidationMessage,
+  newsletterRequestSchema,
+} from "@/lib/server/schemas";
 
 const IP_RATE_LIMIT = { limit: 10, windowMs: 60_000 };
 const EMAIL_RATE_LIMIT = { limit: 4, windowMs: 60_000 };
+const NEWSLETTER_MAX_BODY_BYTES = 8 * 1024;
+const NEWSLETTER_IDEMPOTENCY_SCOPE = "newsletter";
+
+interface NewsletterSuccess {
+  success: true;
+  message: string;
+  alreadySubscribed?: true;
+}
+
+interface NewsletterError {
+  error: string;
+}
+
+type NewsletterRouteResponse = NewsletterSuccess | NewsletterError;
+type IdempotencyToken = Parameters<typeof commitIdempotency<NewsletterRouteResponse>>[0];
 
 export async function POST(request: NextRequest) {
+  const context = createRequestContext(request, "/api/newsletter");
+
   if (!isAllowedOrigin(request)) {
     return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
   }
 
-  const ip = getClientIp(request);
-  const ipLimit = await checkRateLimit({
-    key: `newsletter:ip:${ip}`,
-    ...IP_RATE_LIMIT,
-  });
-
-  if (ipLimit.limited) {
-    return rateLimitResponse(
-      "Too many requests. Please wait a minute and try again.",
-      ipLimit.retryAfterSeconds
-    );
+  if (!hasAllowedContentType(request, ["application/json"])) {
+    return NextResponse.json({ error: "Invalid content type." }, { status: 415 });
   }
 
-  let payload: unknown;
-  try {
-    payload = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  if (exceedsContentLength(request, NEWSLETTER_MAX_BODY_BYTES)) {
+    return NextResponse.json({ error: "Request body is too large." }, { status: 413 });
   }
 
-  const rawEmail =
-    payload && typeof payload === "object" && "email" in payload
-      ? (payload as { email?: unknown }).email
-      : undefined;
-
-  if (typeof rawEmail !== "string") {
-    return NextResponse.json(
-      { error: "Please provide a valid email address." },
-      { status: 400 }
-    );
+  const { key: idempotencyKey, error: idempotencyError } = readIdempotencyKey(request);
+  if (idempotencyError) {
+    return NextResponse.json({ error: idempotencyError }, { status: 400 });
   }
 
-  const email = normalizeEmail(rawEmail);
-  if (!isValidEmail(email)) {
-    return NextResponse.json(
-      { error: "Please provide a valid email address." },
-      { status: 400 }
-    );
-  }
+  let idempotencyToken: IdempotencyToken | null = null;
 
-  const emailLimit = await checkRateLimit({
-    key: `newsletter:email:${email}`,
-    ...EMAIL_RATE_LIMIT,
-  });
+  const respond = async (
+    status: number,
+    body: NewsletterRouteResponse,
+    headers?: HeadersInit
+  ) => {
+    if (idempotencyToken) {
+      const headerRecord = headers
+        ? Object.fromEntries(new Headers(headers).entries())
+        : undefined;
+      await commitIdempotency(idempotencyToken, status, body, headerRecord);
+    }
 
-  if (emailLimit.limited) {
-    return rateLimitResponse(
-      "Too many requests. Please wait a minute and try again.",
-      emailLimit.retryAfterSeconds
-    );
-  }
-
-  const apiKey = process.env.MAILER_LITE_API_KEY;
-  const groupId = process.env.MAILERLITE_GROUP_ID;
-
-  if (!apiKey || !groupId) {
-    console.error("MailerLite API key or group ID not configured");
-    return NextResponse.json(
-      { error: "Newsletter signup is temporarily unavailable." },
-      { status: 500 }
-    );
-  }
-
-  const authorizationHeaders = {
-    Accept: "application/json",
-    Authorization: `Bearer ${apiKey}`,
+    return NextResponse.json(body, { status, headers });
   };
 
+  if (idempotencyKey) {
+    const idempotencyState = await beginIdempotency<NewsletterRouteResponse>({
+      scope: NEWSLETTER_IDEMPOTENCY_SCOPE,
+      key: idempotencyKey,
+    });
+
+    if (idempotencyState.state === "replay") {
+      return replayCachedResponse(idempotencyState.cached);
+    }
+
+    if (idempotencyState.state === "in_progress") {
+      return NextResponse.json(
+        {
+          error: "A matching request is already in progress. Please retry shortly.",
+        },
+        { status: 409 }
+      );
+    }
+
+    idempotencyToken = idempotencyState.token;
+  }
+
   try {
+    const ip = getClientIp(request);
+    const ipLimit = await checkRateLimit({
+      key: `newsletter:ip:${ip}`,
+      ...IP_RATE_LIMIT,
+    });
+
+    if (ipLimit.limited) {
+      return respond(
+        429,
+        { error: "Too many requests. Please wait a minute and try again." },
+        { "Retry-After": String(ipLimit.retryAfterSeconds) }
+      );
+    }
+
+    let payload: unknown;
+    try {
+      payload = await request.json();
+    } catch {
+      return respond(400, { error: "Invalid request body." });
+    }
+
+    const parsed = newsletterRequestSchema.safeParse(payload);
+    if (!parsed.success) {
+      return respond(400, { error: getValidationMessage(parsed.error) });
+    }
+
+    const email = parsed.data.email;
+    const emailLimit = await checkRateLimit({
+      key: `newsletter:email:${email}`,
+      ...EMAIL_RATE_LIMIT,
+    });
+
+    if (emailLimit.limited) {
+      return respond(
+        429,
+        { error: "Too many requests. Please wait a minute and try again." },
+        { "Retry-After": String(emailLimit.retryAfterSeconds) }
+      );
+    }
+
+    const apiKey = process.env.MAILER_LITE_API_KEY;
+    const groupId = process.env.MAILERLITE_GROUP_ID;
+
+    if (!apiKey || !groupId) {
+      logError(
+        "newsletter.config_missing",
+        context,
+        new Error("missing_mailerlite_config")
+      );
+      return respond(500, {
+        error: "Newsletter signup is temporarily unavailable.",
+      });
+    }
+
+    const authorizationHeaders = {
+      Accept: "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    };
+
     const lookupResponse = await fetchWithTimeout(
       `${siteConfig.integrations.mailerLiteApiBaseUrl}/subscribers/${encodeURIComponent(email)}`,
       {
@@ -96,26 +177,27 @@ export async function POST(request: NextRequest) {
     );
 
     if (lookupResponse.status === 200) {
-      return NextResponse.json(
-        {
-          success: true,
-          alreadySubscribed: true,
-          message: siteConfig.newsletter.alreadySubscribedMessage,
-        },
-        { status: 200 }
-      );
+      return respond(200, {
+        success: true,
+        alreadySubscribed: true,
+        message: siteConfig.newsletter.alreadySubscribedMessage,
+      });
     }
 
     if (lookupResponse.status !== 404) {
       const lookupPayload = await parseJsonSafely(lookupResponse);
-      console.error("MailerLite lookup failed", {
+      const upstreamMessage = getErrorMessage(lookupPayload);
+      logError("newsletter.lookup_failed", context, new Error("lookup_failed"), {
         status: lookupResponse.status,
-        message: getErrorMessage(lookupPayload),
+        message: upstreamMessage,
       });
-      return NextResponse.json(
-        { error: "Newsletter signup is temporarily unavailable." },
-        { status: 502 }
-      );
+      await sendAlert("newsletter.lookup_failed", context, {
+        status: lookupResponse.status,
+        message: upstreamMessage,
+      });
+      return respond(502, {
+        error: "Newsletter signup is temporarily unavailable.",
+      });
     }
 
     const createResponse = await fetchWithTimeout(
@@ -141,38 +223,42 @@ export async function POST(request: NextRequest) {
         createResponse.status === 422 &&
         upstreamMessage.toLowerCase().includes("already")
       ) {
-        return NextResponse.json(
-          {
-            success: true,
-            alreadySubscribed: true,
-            message: siteConfig.newsletter.alreadySubscribedMessage,
-          },
-          { status: 200 }
-        );
+        return respond(200, {
+          success: true,
+          alreadySubscribed: true,
+          message: siteConfig.newsletter.alreadySubscribedMessage,
+        });
       }
 
-      console.error("MailerLite create subscriber failed", {
+      logError("newsletter.create_failed", context, new Error("create_failed"), {
         status: createResponse.status,
         message: upstreamMessage || null,
       });
-      return NextResponse.json(
-        { error: "Newsletter signup is temporarily unavailable." },
-        { status: 502 }
-      );
+      await sendAlert("newsletter.create_failed", context, {
+        status: createResponse.status,
+        message: upstreamMessage || null,
+      });
+      return respond(502, {
+        error: "Newsletter signup is temporarily unavailable.",
+      });
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: siteConfig.newsletter.welcomeMessage,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Newsletter subscription request failed", {
-      ip,
-      error,
+    return respond(200, {
+      success: true,
+      message: siteConfig.newsletter.welcomeMessage,
     });
+  } catch (error) {
+    if (idempotencyToken) {
+      await rollbackIdempotency(idempotencyToken);
+    }
+
+    logError("newsletter.request_failed", context, error, {
+      reason: "unexpected_error",
+    });
+    await sendAlert("newsletter.request_failed", context, {
+      reason: "unexpected_error",
+    });
+
     return NextResponse.json(
       { error: "Newsletter signup is temporarily unavailable." },
       { status: 502 }
