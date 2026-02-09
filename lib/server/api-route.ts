@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { beginIdempotency, commitIdempotency, rollbackIdempotency } from "@/lib/server/idempotency";
 import { readIdempotencyKey, replayCachedResponse } from "@/lib/server/idempotency-request";
-import { createRequestContext } from "@/lib/server/observability";
+import { createRequestContext, logWarn, sendAlert } from "@/lib/server/observability";
+import { getRedisClient } from "@/lib/server/kv-redis";
 import {
-  exceedsContentLength,
+  exceedsMaxBodyBytes,
   hasAllowedContentType,
   isAllowedOrigin,
 } from "@/lib/server/request";
@@ -34,6 +35,37 @@ type PrepareApiRouteRequestResult<TResponse> =
   | { response: NextResponse }
   | { prepared: PreparedApiRouteRequest<TResponse> };
 
+let hasWarnedMissingRedis = false;
+
+async function checkRedisAvailability(context: ReturnType<typeof createRequestContext>) {
+  const redis = getRedisClient();
+  if (redis) {
+    return { ok: true };
+  }
+
+  const requireRedis =
+    process.env.REQUIRE_REDIS === "true" ||
+    process.env.REQUIRE_REDIS_FOR_RATE_LIMITS === "true";
+
+  if (!hasWarnedMissingRedis) {
+    logWarn("redis.missing", context, { requireRedis });
+    await sendAlert("redis.missing", context, { requireRedis });
+    hasWarnedMissingRedis = true;
+  }
+
+  if (requireRedis) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: "Service temporarily unavailable." },
+        { status: 503 }
+      ),
+    };
+  }
+
+  return { ok: true };
+}
+
 export async function prepareApiRouteRequest<TResponse>(
   options: PrepareApiRouteRequestOptions
 ): Promise<PrepareApiRouteRequestResult<TResponse>> {
@@ -47,6 +79,11 @@ export async function prepareApiRouteRequest<TResponse>(
 
   const context = createRequestContext(request, route);
 
+  const redisStatus = await checkRedisAvailability(context);
+  if (!redisStatus.ok) {
+    return { response: redisStatus.response };
+  }
+
   if (!isAllowedOrigin(request)) {
     return {
       response: NextResponse.json({ error: "Invalid request origin." }, { status: 403 }),
@@ -59,9 +96,15 @@ export async function prepareApiRouteRequest<TResponse>(
     };
   }
 
-  if (exceedsContentLength(request, maxBodyBytes)) {
+  try {
+    if (await exceedsMaxBodyBytes(request, maxBodyBytes)) {
+      return {
+        response: NextResponse.json({ error: "Request body is too large." }, { status: 413 }),
+      };
+    }
+  } catch {
     return {
-      response: NextResponse.json({ error: "Request body is too large." }, { status: 413 }),
+      response: NextResponse.json({ error: "Invalid request body." }, { status: 400 }),
     };
   }
 
@@ -76,10 +119,14 @@ export async function prepareApiRouteRequest<TResponse>(
 
   const respond: RouteResponder<TResponse> = async (status, body, headers) => {
     if (idempotencyToken) {
-      const headerRecord = headers
-        ? Object.fromEntries(new Headers(headers).entries())
-        : undefined;
-      await commitIdempotency(idempotencyToken, status, body, headerRecord);
+      if (status === 429) {
+        await rollbackIdempotency(idempotencyToken);
+      } else {
+        const headerRecord = headers
+          ? Object.fromEntries(new Headers(headers).entries())
+          : undefined;
+        await commitIdempotency(idempotencyToken, status, body, headerRecord);
+      }
     }
 
     return NextResponse.json(body, { status, headers });

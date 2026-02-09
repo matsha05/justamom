@@ -39,8 +39,10 @@ FORMSPREE_ENDPOINT=https://formspree.io/f/your_form_id
 NEXT_PUBLIC_SITE_URL=https://lizishaw.com
 ALLOWED_ORIGINS=https://lizishaw.com
 ALLOW_MISSING_ORIGIN=false
+TRUST_PROXY=true
 UPSTASH_REDIS_REST_URL=https://your-upstash-url
 UPSTASH_REDIS_REST_TOKEN=your-upstash-token
+REQUIRE_REDIS=true
 ALERT_WEBHOOK_URL=https://hooks.slack.com/services/...
 ```
 
@@ -49,7 +51,12 @@ These power:
 - Contact + speaking inquiry forwarding in `app/api/contact/route.ts`
 - Canonical/metadata URL generation from `lib/config.ts`
 - Durable rate limiting + idempotency (`lib/server/kv.ts`)
+- Trusted proxy IP detection for rate limiting (`lib/server/request.ts`)
 - API alert notifications for upstream failures (`lib/server/observability.ts`)
+
+Notes:
+- Set `TRUST_PROXY=true` behind a trusted proxy/CDN (for correct client IPs and origin validation).
+- Set `REQUIRE_REDIS=true` to fail closed if Redis is missing (prevents silent in-memory rate limiting).
 
 ## Content workflows
 

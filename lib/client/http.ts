@@ -17,3 +17,26 @@ export function getStringFromRecord(data: JsonRecord | null, key: string): strin
   const value = data[key];
   return typeof value === "string" ? value : null;
 }
+
+export function getRetryAfterSeconds(response: Response): number | null {
+  const raw = response.headers.get("retry-after");
+  if (!raw) {
+    return null;
+  }
+
+  const seconds = Number(raw);
+  if (!Number.isFinite(seconds) || seconds <= 0) {
+    return null;
+  }
+
+  return Math.ceil(seconds);
+}
+
+export function formatRetryAfterMessage(seconds: number): string {
+  if (seconds < 60) {
+    return `Too many requests. Please wait ${seconds} seconds and try again.`;
+  }
+
+  const minutes = Math.ceil(seconds / 60);
+  return `Too many requests. Please wait about ${minutes} minute${minutes === 1 ? "" : "s"} and try again.`;
+}

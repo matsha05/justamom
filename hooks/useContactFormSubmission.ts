@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSubmitState } from "@/hooks/useSubmitState";
-import { fetchJson, getStringFromRecord } from "@/lib/client/http";
+import { useIdempotencyKey } from "@/hooks/useIdempotencyKey";
+import {
+  fetchJson,
+  formatRetryAfterMessage,
+  getRetryAfterSeconds,
+  getStringFromRecord,
+} from "@/lib/client/http";
 
 interface SubmitContactFormOptions {
   form: HTMLFormElement;
@@ -23,6 +29,7 @@ export function useContactFormSubmission() {
   const { status, setStatus, isSubmitting, isSuccess } = useSubmitState();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const { getKey, resetKey } = useIdempotencyKey();
 
   async function submitContactForm({
     form,
@@ -47,13 +54,28 @@ export function useContactFormSubmission() {
       const { response, data } = await fetchJson("/api/contact", {
         method: "POST",
         body: formData,
+        headers: {
+          "idempotency-key": getKey(),
+        },
       });
 
       if (response.ok) {
         const message = getStringFromRecord(data, "message") ?? successFallbackMessage;
         setStatus("success");
         setSuccessMessage(message);
+        resetKey();
         return { ok: true, message };
+      }
+
+      if (response.status === 429) {
+        const retryAfterSeconds = getRetryAfterSeconds(response);
+        if (retryAfterSeconds) {
+          const message = formatRetryAfterMessage(retryAfterSeconds);
+          toast.error(message);
+          setFormError(message);
+          setStatus("error");
+          return { ok: false, message };
+        }
       }
 
       const message = getStringFromRecord(data, "error") ?? errorFallbackMessage;
@@ -87,6 +109,8 @@ export function useContactFormSubmission() {
     if (formError) {
       setFormError(null);
     }
+
+    resetKey();
   }
 
   function clearFeedbackOnInputChange(event?: { isTrusted?: boolean }) {
@@ -94,6 +118,7 @@ export function useContactFormSubmission() {
       return;
     }
 
+    resetKey();
     clearError();
 
     if (status !== "idle") {

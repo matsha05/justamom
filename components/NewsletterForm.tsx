@@ -7,8 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { Label } from "@/components/ui/label";
+import { useIdempotencyKey } from "@/hooks/useIdempotencyKey";
 import { useSubmitState } from "@/hooks/useSubmitState";
-import { fetchJson, getStringFromRecord } from "@/lib/client/http";
+import {
+  fetchJson,
+  formatRetryAfterMessage,
+  getRetryAfterSeconds,
+  getStringFromRecord,
+} from "@/lib/client/http";
 import { newsletterCtaCopy } from "@/lib/content";
 
 interface NewsletterFormProps {
@@ -107,6 +113,7 @@ export function NewsletterForm({
   const { status, setStatus, isSubmitting } = useSubmitState();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { getKey, resetKey } = useIdempotencyKey();
 
   const buttonText = newsletterCtaCopy.button;
   const isInlineVariant = variant === "compact" || variant === "hero";
@@ -117,10 +124,15 @@ export function NewsletterForm({
     setErrorMessage(null);
     setSuccessMessage(null);
 
+    const idempotencyKey = getKey();
+
     try {
       const { response, data } = await fetchJson("/api/newsletter", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "idempotency-key": idempotencyKey,
+        },
         body: JSON.stringify({ email }),
       });
 
@@ -131,7 +143,19 @@ export function NewsletterForm({
         setEmail("");
         setSuccessMessage(message);
         toast.success(message);
+        resetKey();
         return;
+      }
+
+      if (response.status === 429) {
+        const retryAfterSeconds = getRetryAfterSeconds(response);
+        if (retryAfterSeconds) {
+          const message = formatRetryAfterMessage(retryAfterSeconds);
+          setStatus("error");
+          setErrorMessage(message);
+          toast.error(message);
+          return;
+        }
       }
 
       const message =
@@ -149,6 +173,7 @@ export function NewsletterForm({
 
   const resetMessages = (value: string) => {
     setEmail(value);
+    resetKey();
     if (errorMessage) setErrorMessage(null);
     if (successMessage) setSuccessMessage(null);
     if (status !== "idle") setStatus("idle");

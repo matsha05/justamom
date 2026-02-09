@@ -67,10 +67,12 @@ function getAllowedOrigins(request?: NextRequest): Set<string> {
   if (request) {
     addOriginWithAliases(allowedOrigins, request.nextUrl.origin);
 
-    const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
-    const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
-    if (forwardedHost && forwardedProto) {
-      addOriginWithAliases(allowedOrigins, `${forwardedProto}://${forwardedHost}`);
+    if (shouldTrustProxyHeaders()) {
+      const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+      const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+      if (forwardedHost && forwardedProto) {
+        addOriginWithAliases(allowedOrigins, `${forwardedProto}://${forwardedHost}`);
+      }
     }
   }
 
@@ -88,11 +90,23 @@ function hashString(value: string): string {
 }
 
 export function getClientIp(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    return forwarded.split(",")[0]?.trim() || "unknown";
+  if (request.ip) {
+    return request.ip;
   }
-  return request.headers.get("x-real-ip") || "unknown";
+
+  if (shouldTrustProxyHeaders()) {
+    const forwarded = request.headers.get("x-forwarded-for");
+    if (forwarded) {
+      return forwarded.split(",")[0]?.trim() || "unknown";
+    }
+
+    const realIp = request.headers.get("x-real-ip");
+    if (realIp) {
+      return realIp;
+    }
+  }
+
+  return "unknown";
 }
 
 export function getUserAgent(request: NextRequest): string {
@@ -143,6 +157,53 @@ export function exceedsContentLength(request: NextRequest, maxBytes: number): bo
   return contentLength !== null && contentLength > maxBytes;
 }
 
+async function exceedsBodySize(request: NextRequest, maxBytes: number): Promise<boolean> {
+  const body = request.clone().body;
+  if (!body) {
+    return false;
+  }
+
+  const reader = body.getReader();
+  let total = 0;
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) {
+      break;
+    }
+
+    if (value) {
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function shouldTrustProxyHeaders(): boolean {
+  if (process.env.TRUST_PROXY === "false") {
+    return false;
+  }
+
+  if (process.env.TRUST_PROXY === "true") {
+    return true;
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return true;
+  }
+
+  if (process.env.VERCEL === "1" || process.env.VERCEL === "true") {
+    return true;
+  }
+
+  return false;
+}
+
 export function isAllowedOrigin(
   request: NextRequest,
   options?: { requireOriginHeader?: boolean }
@@ -158,4 +219,20 @@ export function isAllowedOrigin(
     return process.env.ALLOW_MISSING_ORIGIN === "true";
   }
   return getAllowedOrigins(request).has(normalizeOrigin(origin));
+}
+
+export async function exceedsMaxBodyBytes(
+  request: NextRequest,
+  maxBytes: number
+): Promise<boolean> {
+  if (exceedsContentLength(request, maxBytes)) {
+    return true;
+  }
+
+  const contentLength = getContentLength(request);
+  if (contentLength !== null) {
+    return false;
+  }
+
+  return exceedsBodySize(request, maxBytes);
 }
