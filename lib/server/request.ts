@@ -90,8 +90,9 @@ function hashString(value: string): string {
 }
 
 export function getClientIp(request: NextRequest): string {
-  if (request.ip) {
-    return request.ip;
+  const directIp = (request as NextRequest & { ip?: string }).ip;
+  if (directIp) {
+    return directIp;
   }
 
   if (shouldTrustProxyHeaders()) {

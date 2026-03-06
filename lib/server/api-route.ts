@@ -35,9 +35,15 @@ type PrepareApiRouteRequestResult<TResponse> =
   | { response: NextResponse }
   | { prepared: PreparedApiRouteRequest<TResponse> };
 
+type RedisAvailabilityResult =
+  | { ok: true }
+  | { ok: false; response: NextResponse<{ error: string }> };
+
 let hasWarnedMissingRedis = false;
 
-async function checkRedisAvailability(context: ReturnType<typeof createRequestContext>) {
+async function checkRedisAvailability(
+  context: ReturnType<typeof createRequestContext>
+): Promise<RedisAvailabilityResult> {
   const redis = getRedisClient();
   if (redis) {
     return { ok: true };
