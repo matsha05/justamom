@@ -1,26 +1,25 @@
 import type { Metadata } from "next";
 import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
 import { siteConfig } from "@/lib/config";
-import { speakingTopics } from "@/lib/content";
+import { marketingContent } from "@/content/site";
 
 export const metadata: Metadata = {
     title: "Speaking Topics",
-    description:
-        `Speaking topics from ${siteConfig.author.name} on motherhood, identity, and everyday faithfulness, grounded in Scripture.`,
+    description: marketingContent.speaking.metadataDescription,
 };
 
 export default function SpeakingPage() {
+    const { speaking } = marketingContent;
+
     return (
         <>
             {/* Hero Section */}
             <section className="section section-warm">
                 <div className="container-prose space-y-6">
-                    <p className="text-label">Speaking</p>
-                    <h1 className="text-display">Speaking</h1>
+                    <p className="text-label">{speaking.hero.eyebrow}</p>
+                    <h1 className="text-display">{speaking.hero.heading}</h1>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
-                        I speak to moms about the holy work of motherhood, the quiet
-                        places where God meets us, and the steadier identity we can
-                        live from when the noise gets loud.
+                        {speaking.hero.description}
                     </p>
                 </div>
             </section>
@@ -30,15 +29,14 @@ export default function SpeakingPage() {
                 <div className="container">
                     <div className="section-split">
                         <div className="space-y-4">
-                            <p className="text-label">Topics I share</p>
-                            <h2 className="text-h2">Messages I return to</h2>
+                            <p className="text-label">{speaking.topics.eyebrow}</p>
+                            <h2 className="text-h2">{speaking.topics.heading}</h2>
                             <p className="text-body text-[var(--color-ink-soft)]">
-                                These are a few talks I come back to often. Each can be
-                                shaped for your church, retreat, or women&apos;s gathering.
+                                {speaking.topics.description}
                             </p>
                         </div>
                         <div className="space-y-8">
-                            {speakingTopics.map((topic) => (
+                            {speaking.topics.items.map((topic) => (
                                 <div
                                     key={topic.title}
                                     className="border-l border-[var(--color-border-strong)] pl-6"
@@ -57,18 +55,12 @@ export default function SpeakingPage() {
             {/* Host Materials Section */}
             <section className="section">
                 <div className="container-prose space-y-4">
-                    <p className="text-label">Short bio (third-person)</p>
+                    <p className="text-label">{speaking.bio.eyebrow}</p>
                     <p className="text-caption text-[var(--color-ink-muted)]">
-                        For host intros, event pages, or printed programs.
+                        {speaking.bio.description}
                     </p>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
-                        Lizi Shaw is a Christian writer and speaker who helps moms live from
-                        identity received in Christ, not performance. Her teaching is grounded
-                        in Scripture and shaped by the holy, ordinary work of motherhood. With
-                        honest stories and practical encouragement, she helps moms find
-                        steadier footing in seasons that feel loud and overwhelming. Lizi lives
-                        in Niwot, Colorado, with her husband, Matt, and their three children.
-                        She loves skiing, running, and baking.
+                        {speaking.bio.body}
                     </p>
                 </div>
             </section>
@@ -77,11 +69,10 @@ export default function SpeakingPage() {
             <section className="section section-soft" id="book">
                 <div className="container">
                     <div className="max-w-3xl mx-auto space-y-10">
-                        <p className="text-label">Inquiries</p>
-                        <h2 className="text-h2">Invite me to speak</h2>
+                        <p className="text-label">{speaking.inquiry.eyebrow}</p>
+                        <h2 className="text-h2">{speaking.inquiry.heading}</h2>
                         <p className="text-body text-[var(--color-ink-soft)]">
-                            For availability, dates, and event details, share a few
-                            basics below, or email.
+                            {speaking.inquiry.description}
                         </p>
                         <a
                             href={`mailto:${siteConfig.contact.email}`}
@@ -90,7 +81,7 @@ export default function SpeakingPage() {
                             {siteConfig.contact.email}
                         </a>
                         <p className="text-body text-[var(--color-ink-soft)]">
-                            I&apos;ll follow up personally.
+                            {speaking.inquiry.followUp}
                         </p>
                         <div className="pt-8 border-t border-[var(--color-border)]">
                             <SpeakingInquiryForm />

@@ -62,6 +62,7 @@ Notes:
 
 ## Content workflows
 
+- Core page copy lives in `content/site.ts`.
 - Notes live in `content/notes/*.mdx` with frontmatter `title`, `date`, and `excerpt`.
 - Note creation steps are documented in `.agent/workflows/add-note.md`.
 - Speaking topic illustration prompts live in `docs/speaking-image-prompts.md`.

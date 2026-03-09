@@ -1,18 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getAllNotes } from "@/lib/notes";
-import { NewsletterForm } from "@/components/NewsletterForm";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
-import { newsletterCtaCopy, speakingTopics } from "@/lib/content";
+import { marketingContent } from "@/content/site";
 import { NotesFeed } from "@/components/notes/NotesFeed";
-
-const currentWorkExcerpt =
-  "Just a mom. It’s wild how a three-word sentence can feel both true and entirely wrong at the same time. How it can shrink something as monumental as raising a human into something that feels small and slightly apologetic. As if caring for an image-bearer of God is somehow insignificant unless you add a title or a paycheck or something more \"productive\" to go with it.";
+import { TrackedLink } from "@/components/TrackedLink";
+import { NewsletterForm } from "@/components/NewsletterForm";
 
 export default function HomePage() {
   const notes = getAllNotes();
+  const { home, newsletter } = marketingContent;
 
   return (
     <>
@@ -20,27 +19,30 @@ export default function HomePage() {
         <div className="container">
           <div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="space-y-7">
-              <h1 className="text-display max-w-[11ch]">You are not just a mom.</h1>
+              <h1 className="text-display max-w-[11ch]">{home.hero.heading}</h1>
               <p className="text-body-lg max-w-[34ch] text-[var(--color-ink-soft)]">
-                A steady note for women carrying unseen weight, holy work, and
-                the tension between &quot;just a mom&quot; and &quot;do it all.&quot;
+                {home.hero.description}
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Button asChild>
-                  <Link href="#newsletter">
-                    Join A Note for Moms
+                  <TrackedLink
+                    href={home.hero.primaryCta.href}
+                    eventName={home.hero.primaryCta.eventName}
+                    eventProperties={home.hero.primaryCta.eventProperties}
+                  >
+                    {home.hero.primaryCta.label}
                     <ArrowIcon />
-                  </Link>
+                  </TrackedLink>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/notes">
-                    Read all notes
+                  <Link href={home.hero.secondaryCta.href}>
+                    {home.hero.secondaryCta.label}
                     <ArrowIcon />
                   </Link>
                 </Button>
               </div>
               <p className="text-caption text-[var(--color-ink-muted)]">
-                Twice a month. Quiet, biblical encouragement for the middle of real life.
+                {home.hero.trust}
               </p>
               <div className="mt-1" aria-hidden="true">
                 <Image
@@ -73,15 +75,15 @@ export default function HomePage() {
 
       <section id="work" className="section section-soft">
         <div className="container-prose space-y-8">
-          <p className="text-label">Current Work</p>
-          <h2 className="text-h1">Just a Mom</h2>
+          <p className="text-label">{home.work.eyebrow}</p>
+          <h2 className="text-h1">{home.work.heading}</h2>
           <div className="feature-quote">
             <p className="text-body-lg text-[var(--color-ink)] leading-relaxed">
-              {currentWorkExcerpt}
+              {home.work.excerpt}
             </p>
           </div>
-          <Link className="link-arrow" href="/work">
-            Read about the project
+          <Link className="link-arrow" href={home.work.cta.href}>
+            {home.work.cta.label}
             <ArrowIcon />
           </Link>
         </div>
@@ -91,10 +93,10 @@ export default function HomePage() {
         <div className="container">
           <div className="section-split">
             <div className="space-y-4">
-              <p className="text-label">Latest Notes</p>
-              <h2 className="text-h1">For the mom in the thick of it</h2>
-              <Link className="link-arrow" href="/notes">
-                Read all notes
+              <p className="text-label">{home.notes.eyebrow}</p>
+              <h2 className="text-h1">{home.notes.heading}</h2>
+              <Link className="link-arrow" href={home.notes.cta.href}>
+                {home.notes.cta.label}
                 <ArrowIcon />
               </Link>
             </div>
@@ -107,15 +109,14 @@ export default function HomePage() {
         <div className="container">
           <div className="section-split">
             <div className="space-y-4">
-              <p className="text-label">Speaking</p>
-              <h2 className="text-h1">Topics I often share</h2>
+              <p className="text-label">{home.speaking.eyebrow}</p>
+              <h2 className="text-h1">{home.speaking.heading}</h2>
               <p className="text-body text-[var(--color-ink-soft)]">
-                For churches, retreats, and women&apos;s gatherings. Messages rooted
-                in Scripture and shaped by ordinary life.
+                {home.speaking.description}
               </p>
             </div>
             <div className="space-y-8">
-              {speakingTopics.map((topic) => (
+              {marketingContent.speaking.topics.items.map((topic) => (
                 <div
                   key={topic.title}
                   className="topic-card"
@@ -126,10 +127,15 @@ export default function HomePage() {
                   </p>
                 </div>
               ))}
-              <Link className="link-arrow" href="/speaking">
-                Invite me to speak
+              <TrackedLink
+                className="link-arrow"
+                href={home.speaking.cta.href}
+                eventName={home.speaking.cta.eventName}
+                eventProperties={home.speaking.cta.eventProperties}
+              >
+                {home.speaking.cta.label}
                 <ArrowIcon />
-              </Link>
+              </TrackedLink>
             </div>
           </div>
         </div>
@@ -138,21 +144,26 @@ export default function HomePage() {
       <section id="newsletter" className="section section-newsletter">
         <div className="container-prose">
           <div className="newsletter-panel text-center space-y-4">
-            <p className="text-label">Newsletter</p>
-            <h2 className="text-h2">{newsletterCtaCopy.heading}</h2>
-            <p className="text-body mx-auto max-w-[34ch]">{newsletterCtaCopy.description}</p>
+            <p className="text-label">{newsletter.homePanel.eyebrow}</p>
+            <h2 className="text-h2">{newsletter.homePanel.heading}</h2>
+            <p className="text-body mx-auto max-w-[34ch]">
+              {newsletter.homePanel.description}
+            </p>
             <div className="max-w-md mx-auto">
-              <NewsletterForm variant="compact" />
+              <NewsletterForm variant="compact" source={newsletter.homePanel.source} />
             </div>
+            <p className="text-caption text-[var(--color-ink-muted)]">
+              {newsletter.homePanel.trust}
+            </p>
           </div>
         </div>
       </section>
 
       <section id="contact" className="section section-soft">
         <div className="container-prose space-y-4">
-          <p className="text-label">Contact</p>
+          <p className="text-label">{home.contact.eyebrow}</p>
           <p className="text-body text-[var(--color-ink-soft)]">
-            For literary, editorial, or speaking inquiries, email directly:
+            {home.contact.description}
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <a

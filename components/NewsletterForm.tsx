@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { toast } from "sonner";
+import { track } from "@vercel/analytics";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -15,11 +16,13 @@ import {
   getRetryAfterSeconds,
   getStringFromRecord,
 } from "@/lib/client/http";
-import { newsletterCtaCopy } from "@/lib/content";
+import { marketingContent } from "@/content/site";
+import { analyticsEvents } from "@/lib/analytics/events";
 
 interface NewsletterFormProps {
   variant?: "default" | "compact" | "hero";
   className?: string;
+  source?: string;
 }
 
 interface EmailFieldProps {
@@ -107,6 +110,7 @@ function FeedbackMessages({
 export function NewsletterForm({
   variant = "default",
   className = "",
+  source = "site",
 }: NewsletterFormProps) {
   const inputId = useId();
   const [email, setEmail] = useState("");
@@ -115,8 +119,12 @@ export function NewsletterForm({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { getKey, resetKey } = useIdempotencyKey();
 
-  const buttonText = newsletterCtaCopy.button;
+  const buttonText = marketingContent.newsletter.buttonLabel;
   const isInlineVariant = variant === "compact" || variant === "hero";
+  const trackingProps = {
+    source,
+    variant,
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,6 +133,7 @@ export function NewsletterForm({
     setSuccessMessage(null);
 
     const idempotencyKey = getKey();
+    track(analyticsEvents.newsletterSignupStart, trackingProps);
 
     try {
       const { response, data } = await fetchJson("/api/newsletter", {
@@ -142,6 +151,7 @@ export function NewsletterForm({
         setStatus("success");
         setEmail("");
         setSuccessMessage(message);
+        track(analyticsEvents.newsletterSignupSuccess, trackingProps);
         toast.success(message);
         resetKey();
         return;
