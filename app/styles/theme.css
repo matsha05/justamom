@@ -1,6 +1,6 @@
 /* ============================================
    Lizi Shaw — Editorial Author Design System
-   Typography: Literata (serif) + Plus Jakarta Sans (clean sans)
+   Typography: Newsreader (serif) + Source Sans 3 (clean sans)
    Aesthetic: Warm editorial with clear conversion paths
    ============================================ */
 
@@ -35,11 +35,8 @@
   /* ----------------------------------------
      TYPOGRAPHY
      ---------------------------------------- */
-  --font-heading: var(--font-literata);
-  --font-body: var(--font-plus-jakarta-sans);
-  /* Backward-compatible aliases while migrating legacy token names */
-  --font-newsreader: var(--font-heading);
-  --font-source-sans-3: var(--font-body);
+  --font-heading: var(--font-newsreader);
+  --font-body: var(--font-source-sans-3);
 
   /* Type Scale - Long-form first, high-trust editorial */
   --text-display: clamp(2.4rem, 5.8vw, 4.85rem);

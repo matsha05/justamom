@@ -69,7 +69,7 @@
 }
 
 .nav-mobile-link {
-  font-family: var(--font-heading, "Literata"), Georgia, serif;
+  font-family: var(--font-heading, "Newsreader"), Georgia, serif;
   font-size: var(--text-h3);
   font-weight: 560;
   letter-spacing: 0.06em;

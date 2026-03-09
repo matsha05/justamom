@@ -130,26 +130,26 @@ if (accent) {
 }
 
 assert(
-  layoutTsx.includes("Literata") && layoutTsx.includes("Plus_Jakarta_Sans"),
-  "Layout font imports are not the expected Literata + Plus Jakarta Sans",
+  layoutTsx.includes("Newsreader") && layoutTsx.includes("Source_Sans_3"),
+  "Layout font imports are not the expected Newsreader + Source Sans 3",
   failures,
 );
 
 assert(
-  layoutTsx.includes("--font-literata") && layoutTsx.includes("--font-plus-jakarta-sans"),
+  layoutTsx.includes("--font-newsreader") && layoutTsx.includes("--font-source-sans-3"),
   "Layout font variable names are not normalized",
   failures,
 );
 
 assert(
-  ogTsx.includes("literata-latin-700-normal.ttf") &&
-    ogTsx.includes("plus-jakarta-sans-latin-500-normal.ttf"),
+  ogTsx.includes("newsreader-latin-600-normal.woff") &&
+    ogTsx.includes("source-sans-3-latin-400-normal.woff"),
   "OpenGraph image font files are not aligned to the production type stack",
   failures,
 );
 
 assert(
-  ogTsx.includes("fontFamily: \"Literata\"") && ogTsx.includes("fontFamily: \"Plus Jakarta Sans\""),
+  ogTsx.includes("fontFamily: \"Newsreader\"") && ogTsx.includes("fontFamily: \"Source Sans 3\""),
   "OpenGraph text styles are not using the production font family names",
   failures,
 );

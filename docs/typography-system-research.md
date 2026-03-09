@@ -51,8 +51,9 @@ Each concept was evaluated with explicit display/body weights, line-height behav
 ## Final Production Direction
 
 Adopted direction:
-- Base: Concept C (Literata + Plus Jakarta Sans)
-- Trust refinement: Concept A tone for CTA calmness and pastoral clarity
+- Initial production launch: Concept C (Literata + Plus Jakarta Sans)
+- March 7, 2026 refinement: Literata + Source Sans 3 after live side-by-side comparison
+- March 9, 2026 production decision: Concept A (Newsreader + Source Sans 3)
 
 Production source-of-truth now lives in:
 - `/app/styles/theme.css`

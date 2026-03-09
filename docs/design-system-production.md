@@ -2,7 +2,7 @@
 
 Status: Active
 Version: 1.0.0
-Last updated: February 7, 2026
+Last updated: March 9, 2026
 
 ## 1. Product Intent
 
@@ -15,8 +15,8 @@ This system is built for:
 ## 2. Canonical Typeface Stack
 
 Primary families:
-- Heading serif: Literata
-- Body sans: Plus Jakarta Sans
+- Heading serif: Newsreader
+- Body sans: Source Sans 3
 
 Implementation source:
 - `/app/layout.tsx`
@@ -25,10 +25,6 @@ Implementation source:
 Token contract:
 - `--font-heading`
 - `--font-body`
-
-Compatibility aliases (for legacy styles during migration):
-- `--font-newsreader`
-- `--font-source-sans-3`
 
 ## 3. Core Tokens
 
@@ -139,8 +135,8 @@ Open Graph image stack is aligned to production fonts and palette.
 Source: `/app/opengraph-image.tsx`
 
 Local OG fonts:
-- `/public/fonts/literata-latin-700-normal.ttf`
-- `/public/fonts/plus-jakarta-sans-latin-500-normal.ttf`
+- `/public/fonts/newsreader-latin-600-normal.woff`
+- `/public/fonts/source-sans-3-latin-400-normal.woff`
 
 ## 7. QA Workflow (Required Before Merge)
 

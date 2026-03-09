@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
-import { Literata, Plus_Jakarta_Sans } from "next/font/google";
+import { Newsreader, Source_Sans_3 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { Chrome } from "@/components/Chrome";
 import { personJsonLd, siteConfig } from "@/lib/config";
 import "./globals.css";
 
-const literata = Literata({
-  variable: "--font-literata",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   preload: true,
   display: "swap",
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
+const sourceSans3 = Source_Sans_3({
+  variable: "--font-source-sans-3",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
   preload: true,
   display: "swap",
 });
@@ -70,7 +70,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>
-      <body className={`${literata.variable} ${plusJakartaSans.variable}`}>
+      <body className={`${newsreader.variable} ${sourceSans3.variable}`}>
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>

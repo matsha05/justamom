@@ -21,9 +21,9 @@ function toArrayBuffer(buffer: Buffer): ArrayBuffer {
 }
 
 export default async function Image() {
-  const [literataBuffer, plusJakartaBuffer, logoBuffer] = await Promise.all([
-    readFile(join(process.cwd(), "public/fonts/literata-latin-700-normal.ttf")),
-    readFile(join(process.cwd(), "public/fonts/plus-jakarta-sans-latin-500-normal.ttf")),
+  const [newsreaderBuffer, sourceSans3Buffer, logoBuffer] = await Promise.all([
+    readFile(join(process.cwd(), "public/fonts/newsreader-latin-600-normal.woff")),
+    readFile(join(process.cwd(), "public/fonts/source-sans-3-latin-400-normal.woff")),
     readFile(join(process.cwd(), "public/images/peony-logo-v4.png")),
   ]);
 
@@ -80,8 +80,8 @@ export default async function Image() {
         <div
           style={{
             fontSize: 72,
-            fontFamily: "Literata",
-            fontWeight: 700,
+            fontFamily: "Newsreader",
+            fontWeight: 600,
             color: "#1a1715",
             marginBottom: 18,
             textAlign: "center",
@@ -96,9 +96,9 @@ export default async function Image() {
             fontSize: 28,
             color: "#6f645c",
             textAlign: "center",
-            fontFamily: "Plus Jakarta Sans",
+            fontFamily: "Source Sans 3",
             letterSpacing: "0.14em",
-            fontWeight: 500,
+            fontWeight: 400,
             textTransform: "uppercase",
           }}
         >
@@ -110,15 +110,15 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "Literata",
-          data: toArrayBuffer(literataBuffer),
-          weight: 700,
+          name: "Newsreader",
+          data: toArrayBuffer(newsreaderBuffer),
+          weight: 600,
           style: "normal",
         },
         {
-          name: "Plus Jakarta Sans",
-          data: toArrayBuffer(plusJakartaBuffer),
-          weight: 500,
+          name: "Source Sans 3",
+          data: toArrayBuffer(sourceSans3Buffer),
+          weight: 400,
           style: "normal",
         },
       ],
