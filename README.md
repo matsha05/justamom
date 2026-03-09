@@ -25,6 +25,7 @@ npm run build
 npm run start
 npm run lint
 npm run test
+npm run test:smoke
 npm run test:design-system
 ```
 
@@ -57,6 +58,7 @@ These power:
 Notes:
 - Set `TRUST_PROXY=true` behind a trusted proxy/CDN (for correct client IPs and origin validation).
 - Set `REQUIRE_REDIS=true` to fail closed if Redis is missing (prevents silent in-memory rate limiting).
+- In production runtime, `NEXT_PUBLIC_SITE_URL`, `FORMSPREE_ENDPOINT`, `MAILER_LITE_API_KEY`, and `MAILERLITE_GROUP_ID` are validated at startup.
 
 ## Content workflows
 

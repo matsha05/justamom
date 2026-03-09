@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { getAllNoteSlugs, getNoteBySlug, getAdjacentNotes } from "@/lib/notes";
 import { DownloadCard } from "@/components/DownloadCard";
+import { NoteNewsletterCTA } from "@/components/NoteNewsletterCTA";
 import { NoteSignOff } from "@/components/NoteSignOff";
 import { MDXImage } from "@/components/MDXImage";
 import { ArrowIcon } from "@/components/icons";
@@ -143,6 +144,7 @@ export default async function NotePage({ params }: PageProps) {
                         </div>
 
                         <NoteSignOff className="note-signoff" />
+                        <NoteNewsletterCTA />
 
                         {(prev || next) && (
                             <nav className="mt-12 pt-8 border-t border-[var(--color-border)] note-adjacent-nav">

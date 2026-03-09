@@ -62,3 +62,10 @@ export const newsletterCtaCopy = {
     "Sent twice a month: honest stories and biblical reminders to keep moms grounded in truth over cultural noise.",
   button: "Join A Note for Moms",
 } as const;
+
+export const postNoteCtaCopy = {
+  heading: "Get A Note for Moms in your inbox",
+  description:
+    "If this note met you in a tender place, I send two quiet, biblical notes each month for the middle of real life.",
+  trust: "Twice a month. No noise, no pressure, just steady encouragement.",
+} as const;
