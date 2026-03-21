@@ -119,7 +119,8 @@ export function NewsletterForm({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { getKey, resetKey } = useIdempotencyKey();
 
-  const buttonText = marketingContent.newsletter.buttonLabel;
+  const buttonText =
+    variant === "compact" ? "Join the notes" : marketingContent.newsletter.buttonLabel;
   const isInlineVariant = variant === "compact" || variant === "hero";
   const trackingProps = {
     source,

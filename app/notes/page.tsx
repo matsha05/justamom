@@ -8,7 +8,7 @@ import { NotesFeed } from "@/components/notes/NotesFeed";
 export const metadata: Metadata = {
   title: "Notes for Moms",
   description:
-    "A Note for Moms—short reflections on faith, motherhood, and the quiet work of ordinary days.",
+    "Short notes for moms on faith, motherhood, and everyday life.",
 };
 
 export default function NotesPage() {

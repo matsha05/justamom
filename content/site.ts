@@ -27,51 +27,51 @@ export const marketingContent = {
     buttonLabel: "Join A Note for Moms",
     homePanel: {
       eyebrow: "Newsletter",
-      heading: "A Note for Moms, twice a month.",
+      heading: "A Note for Moms.",
       description:
-        "Sent twice a month: honest stories and biblical reminders to keep moms grounded in truth over cultural noise.",
-      trust:
-        "Twice a month. Quiet, biblical encouragement for the middle of real life.",
+        "Twice a month, I send honest stories and Scripture for moms.",
+      trust: "",
       source: "home_panel",
     } satisfies NewsletterPanelContent,
     aboutPanel: {
       eyebrow: "Newsletter",
-      heading: "Want the quiet notes, not just the highlights?",
+      heading: "Want the notes in your inbox?",
       description:
-        "Join the twice-monthly notes for biblical encouragement shaped by the holy, ordinary work of motherhood.",
-      trust: "Gentle cadence. Grounded in Scripture. Written for real life.",
+        "I send A Note for Moms twice a month with honest stories, Scripture, and encouragement for motherhood.",
+      trust: "Twice a month, and easy to keep up with.",
       source: "about_panel",
     } satisfies NewsletterPanelContent,
     workPanel: {
       eyebrow: "Newsletter",
-      heading: "Follow the writing as it takes shape",
+      heading: "Follow along as the writing takes shape",
       description:
-        "The newsletter is where new ideas, honest stories, and the heartbeat behind the project often show up first.",
-      trust: "Twice a month. No fluff. Just steady encouragement and occasional project updates.",
+        "The newsletter is where I often share new ideas, honest stories, and early glimpses of the project.",
+      trust: "Two notes a month, plus a look at the writing as it grows.",
       source: "work_panel",
     } satisfies NewsletterPanelContent,
     speakingPanel: {
       eyebrow: "Newsletter",
-      heading: "Not booking right now? Start with the notes.",
+      heading: "Want to get a feel for my voice first?",
       description:
-        "If you want to get a feel for Lizi's voice and message before inviting her, the newsletter is the best place to begin.",
-      trust: "A simple way to stay connected until the timing is right.",
+        "The newsletter is the easiest place to start.",
+      trust: "A simple way to read a few notes before reaching out.",
       source: "speaking_panel",
     } satisfies NewsletterPanelContent,
     notePanel: {
       eyebrow: "Stay Connected",
       heading: "Get A Note for Moms in your inbox",
       description:
-        "If this note met you in a tender place, I send two quiet, biblical notes each month for the middle of real life.",
-      trust: "Twice a month. No noise, no pressure, just steady encouragement.",
+        "If this note encouraged you, I send A Note for Moms twice a month.",
+      trust: "Twice a month. Honest, biblical, and easy to keep up with.",
       source: "note_panel",
     } satisfies NewsletterPanelContent,
   },
   home: {
     hero: {
+      eyebrow: "For the days that feel holy and hard",
       heading: "You are not just a mom.",
       description:
-        "A steady note for women carrying unseen weight, holy work, and the tension between 'just a mom' and 'do it all.'",
+        "Short notes for moms feeling pulled between 'just a mom' and 'do it all.' Honest stories, biblical truth, and encouragement for everyday motherhood.",
       primaryCta: {
         href: "#newsletter",
         label: "Join A Note for Moms",
@@ -82,13 +82,13 @@ export const marketingContent = {
       } satisfies ContentActionLink,
       secondaryCta: {
         href: "/notes",
-        label: "Read all notes",
+        label: "Read recent notes",
       } satisfies ContentActionLink,
-      trust: "Twice a month. Quiet, biblical encouragement for the middle of real life.",
+      trust: "Twice a month. Honest stories, Scripture, and encouragement for everyday life.",
     },
     work: {
-      eyebrow: "Current Work",
-      heading: "Just a Mom",
+      eyebrow: "Book Project",
+      heading: "The project taking shape behind the notes",
       excerpt:
         "Just a mom. It's wild how a three-word sentence can feel both true and entirely wrong at the same time. How it can shrink something as monumental as raising a human into something that feels small and slightly apologetic. As if caring for an image-bearer of God is somehow insignificant unless you add a title or a paycheck or something more 'productive' to go with it.",
       cta: {
@@ -98,7 +98,9 @@ export const marketingContent = {
     },
     notes: {
       eyebrow: "Latest Notes",
-      heading: "For the mom in the thick of it",
+      heading: "Start with a recent note",
+      description:
+        "If you're new here, start with a note or two.",
       cta: {
         href: "/notes",
         label: "Read all notes",
@@ -106,12 +108,12 @@ export const marketingContent = {
     },
     speaking: {
       eyebrow: "Speaking",
-      heading: "Topics I often share",
+      heading: "Need a speaker for your women's gathering?",
       description:
-        "For churches, retreats, and women's gatherings. Messages rooted in Scripture and shaped by ordinary life.",
+        "I speak to women's gatherings about identity, motherhood, and following Jesus in everyday life.",
       cta: {
         href: "/speaking",
-        label: "Invite me to speak",
+        label: "See speaking topics",
         eventName: analyticsEvents.speakingCtaClick,
         eventProperties: {
           location: "home_speaking_section",
@@ -139,7 +141,7 @@ export const marketingContent = {
     invitation: {
       heading: "Need a speaker for your women's event?",
       description:
-        "I'd love to serve your moms with grounded biblical encouragement for real motherhood.",
+        "I'd love to serve your moms with biblical encouragement that meets them where they are.",
       cta: {
         href: "/speaking",
         label: "Invite me to speak",
@@ -198,7 +200,7 @@ export const marketingContent = {
       eyebrow: "Speaking",
       heading: "Speaking",
       description:
-        "I speak to moms about the holy work of motherhood, the quiet places where God meets us, and the steadier identity we can live from when the noise gets loud.",
+        "I speak to moms about identity, motherhood, and following Jesus in everyday life.",
     },
     topics: {
       eyebrow: "Topics I share",
@@ -227,7 +229,7 @@ export const marketingContent = {
       eyebrow: "Short bio (third-person)",
       description: "For host intros, event pages, or printed programs.",
       body:
-        "Lizi Shaw is a Christian writer and speaker who helps moms live from identity received in Christ, not performance. Her teaching is grounded in Scripture and shaped by the holy, ordinary work of motherhood. With honest stories and practical encouragement, she helps moms find steadier footing in seasons that feel loud and overwhelming. Lizi lives in Niwot, Colorado, with her husband, Matt, and their three children. She loves skiing, running, and baking.",
+        "Lizi Shaw is a Christian writer and speaker who helps moms live from identity received in Christ, not performance. Her teaching is rooted in Scripture and shaped by the daily work of motherhood. With honest stories and practical encouragement, she helps moms remember who they are when life feels loud and overwhelming. Lizi lives in Niwot, Colorado, with her husband, Matt, and their three children. She loves skiing, running, and baking.",
     },
     inquiry: {
       eyebrow: "Inquiries",

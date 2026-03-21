@@ -73,6 +73,45 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section id="notes" className="section section-warm">
+        <div className="container">
+          <div className="section-split">
+            <div className="space-y-4">
+              <p className="text-label">{home.notes.eyebrow}</p>
+              <h2 className="text-h1">{home.notes.heading}</h2>
+              <p className="text-body text-[var(--color-ink-soft)] max-w-[28ch]">
+                {home.notes.description}
+              </p>
+              <Link className="link-arrow" href={home.notes.cta.href}>
+                {home.notes.cta.label}
+                <ArrowIcon />
+              </Link>
+            </div>
+            <NotesFeed notes={notes} maxSupportingNotes={2} />
+          </div>
+        </div>
+      </section>
+
+      <section id="newsletter" className="section section-newsletter">
+        <div className="container-prose">
+          <div className="newsletter-panel text-center space-y-4">
+            <p className="text-label">{newsletter.homePanel.eyebrow}</p>
+            <h2 className="text-h2">{newsletter.homePanel.heading}</h2>
+            <p className="text-body mx-auto max-w-[34ch]">
+              {newsletter.homePanel.description}
+            </p>
+            <div className="max-w-md mx-auto">
+              <NewsletterForm variant="compact" source={newsletter.homePanel.source} />
+            </div>
+            {newsletter.homePanel.trust ? (
+              <p className="text-caption text-[var(--color-ink-muted)]">
+                {newsletter.homePanel.trust}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
       <section id="work" className="section section-soft">
         <div className="container-prose space-y-8">
           <p className="text-label">{home.work.eyebrow}</p>
@@ -89,31 +128,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="notes" className="section section-warm">
-        <div className="container">
-          <div className="section-split">
-            <div className="space-y-4">
-              <p className="text-label">{home.notes.eyebrow}</p>
-              <h2 className="text-h1">{home.notes.heading}</h2>
-              <Link className="link-arrow" href={home.notes.cta.href}>
-                {home.notes.cta.label}
-                <ArrowIcon />
-              </Link>
-            </div>
-            <NotesFeed notes={notes} maxSupportingNotes={2} />
-          </div>
-        </div>
-      </section>
-
       <section id="speaking" className="section">
         <div className="container">
           <div className="section-split">
             <div className="space-y-4">
               <p className="text-label">{home.speaking.eyebrow}</p>
-              <h2 className="text-h1">{home.speaking.heading}</h2>
-              <p className="text-body text-[var(--color-ink-soft)]">
+              <h2 className="text-h1 max-w-[14ch]">{home.speaking.heading}</h2>
+              <p className="text-body text-[var(--color-ink-soft)] max-w-[30ch]">
                 {home.speaking.description}
               </p>
+              <TrackedLink
+                className="link-arrow"
+                href={home.speaking.cta.href}
+                eventName={home.speaking.cta.eventName}
+                eventProperties={home.speaking.cta.eventProperties}
+              >
+                {home.speaking.cta.label}
+                <ArrowIcon />
+              </TrackedLink>
             </div>
             <div className="space-y-8">
               {marketingContent.speaking.topics.items.map((topic) => (
@@ -127,34 +159,7 @@ export default function HomePage() {
                   </p>
                 </div>
               ))}
-              <TrackedLink
-                className="link-arrow"
-                href={home.speaking.cta.href}
-                eventName={home.speaking.cta.eventName}
-                eventProperties={home.speaking.cta.eventProperties}
-              >
-                {home.speaking.cta.label}
-                <ArrowIcon />
-              </TrackedLink>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="newsletter" className="section section-newsletter">
-        <div className="container-prose">
-          <div className="newsletter-panel text-center space-y-4">
-            <p className="text-label">{newsletter.homePanel.eyebrow}</p>
-            <h2 className="text-h2">{newsletter.homePanel.heading}</h2>
-            <p className="text-body mx-auto max-w-[34ch]">
-              {newsletter.homePanel.description}
-            </p>
-            <div className="max-w-md mx-auto">
-              <NewsletterForm variant="compact" source={newsletter.homePanel.source} />
-            </div>
-            <p className="text-caption text-[var(--color-ink-muted)]">
-              {newsletter.homePanel.trust}
-            </p>
           </div>
         </div>
       </section>

@@ -32,10 +32,11 @@ export const siteConfig = {
   },
   content: {
     seoDescription:
-      "A Note for Moms: quiet biblical encouragement for moms navigating the tension between 'just a mom' and 'do it all.'",
+      "Short notes for moms about faith, motherhood, and identity in Christ.",
     openGraphDescription:
-      "Short notes and biblical encouragement for moms who need a steadier place to stand.",
-    twitterDescription: "Biblical encouragement for moms in the thick of everyday life.",
+      "Short notes for moms feeling pulled between 'just a mom' and 'do it all.'",
+    twitterDescription:
+      "Short notes for moms about faith, motherhood, and identity in Christ.",
     keywords: [
       "a note for moms",
       "biblical motherhood",

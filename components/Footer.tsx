@@ -25,7 +25,7 @@ export function Footer() {
                             © {currentYear} {siteConfig.author.name}. {siteConfig.author.location.city}, {siteConfig.author.location.region}.
                         </p>
                     </div>
-                    <div>
+                    <div className="space-y-3">
                         <nav className="flex flex-wrap items-center gap-x-4 gap-y-2 md:justify-end">
                             {footerLinks.map((link) => (
                                 <Link
@@ -36,13 +36,12 @@ export function Footer() {
                                     {link.label}
                                 </Link>
                             ))}
-                            <span className="hidden text-[var(--color-ink-faint)] sm:inline" aria-hidden="true">
-                                /
-                            </span>
+                        </nav>
+                        <div className="md:flex md:justify-end">
                             <Link href={legalLink.href} className="nav-utility-link">
                                 {legalLink.label}
                             </Link>
-                        </nav>
+                        </div>
                     </div>
                 </div>
             </div>

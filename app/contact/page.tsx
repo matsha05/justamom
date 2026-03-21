@@ -15,7 +15,7 @@ export default function ContactPage() {
             <section className="section section-warm">
                 <div className="container-prose space-y-6">
                     <p className="text-label">Contact</p>
-                    <h1 className="text-display">Let&apos;s connect</h1>
+                    <h1 className="text-display">Send a note</h1>
                     <p className="text-body-lg text-[var(--color-ink-soft)]">
                         Whether you&apos;re planning an event, have a question, or just want
                         to say hello, I&apos;d love to hear from you.
