@@ -68,10 +68,10 @@ export const marketingContent = {
   },
   home: {
     hero: {
-      eyebrow: "For the days that feel holy and hard",
+      eyebrow: "",
       heading: "You are not just a mom.",
       description:
-        "Short notes for moms feeling pulled between 'just a mom' and 'do it all.' Honest stories, biblical truth, and encouragement for everyday motherhood.",
+        "Short notes for moms who feel pulled between 'just a mom' and 'do it all.'",
       primaryCta: {
         href: "#newsletter",
         label: "Join A Note for Moms",
@@ -84,13 +84,12 @@ export const marketingContent = {
         href: "/notes",
         label: "Read recent notes",
       } satisfies ContentActionLink,
-      trust: "Twice a month. Honest stories, Scripture, and encouragement for everyday life.",
+      trust: "Read a few notes, or get them in your inbox twice a month.",
     },
     work: {
-      eyebrow: "Book Project",
       heading: "The project taking shape behind the notes",
-      excerpt:
-        "Just a mom. It's wild how a three-word sentence can feel both true and entirely wrong at the same time. How it can shrink something as monumental as raising a human into something that feels small and slightly apologetic. As if caring for an image-bearer of God is somehow insignificant unless you add a title or a paycheck or something more 'productive' to go with it.",
+      description:
+        "A simple look at the manuscript and the ideas behind it.",
       cta: {
         href: "/work",
         label: "Read about the project",
@@ -107,10 +106,9 @@ export const marketingContent = {
       } satisfies ContentActionLink,
     },
     speaking: {
-      eyebrow: "Speaking",
-      heading: "Need a speaker for your women's gathering?",
+      heading: "Speaking for women's gatherings",
       description:
-        "I speak to women's gatherings about identity, motherhood, and following Jesus in everyday life.",
+        "Topics, host details, and a simple way to reach out.",
       cta: {
         href: "/speaking",
         label: "See speaking topics",
@@ -121,9 +119,12 @@ export const marketingContent = {
       } satisfies ContentActionLink,
     },
     contact: {
-      eyebrow: "Contact",
-      description:
-        "For literary, editorial, or speaking inquiries, email directly:",
+      heading: "Get in touch",
+      description: "For literary, editorial, or speaking inquiries.",
+    },
+    more: {
+      eyebrow: "A few other things",
+      heading: "If you want to keep looking around",
     },
   },
   about: {

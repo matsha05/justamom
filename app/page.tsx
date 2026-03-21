@@ -112,75 +112,71 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="work" className="section section-soft">
+      <section className="section section-soft">
         <div className="container-prose space-y-8">
-          <p className="text-label">{home.work.eyebrow}</p>
-          <h2 className="text-h1">{home.work.heading}</h2>
-          <div className="feature-quote">
-            <p className="text-body-lg text-[var(--color-ink)] leading-relaxed">
-              {home.work.excerpt}
-            </p>
+          <div className="space-y-3">
+            <p className="text-label">{home.more.eyebrow}</p>
+            <h2 className="text-h2">{home.more.heading}</h2>
           </div>
-          <Link className="link-arrow" href={home.work.cta.href}>
-            {home.work.cta.label}
-            <ArrowIcon />
-          </Link>
-        </div>
-      </section>
 
-      <section id="speaking" className="section">
-        <div className="container">
-          <div className="section-split">
-            <div className="space-y-4">
-              <p className="text-label">{home.speaking.eyebrow}</p>
-              <h2 className="text-h1 max-w-[14ch]">{home.speaking.heading}</h2>
-              <p className="text-body text-[var(--color-ink-soft)] max-w-[30ch]">
-                {home.speaking.description}
-              </p>
-              <TrackedLink
-                className="link-arrow"
-                href={home.speaking.cta.href}
-                eventName={home.speaking.cta.eventName}
-                eventProperties={home.speaking.cta.eventProperties}
-              >
+          <div className="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
+            <Link
+              href={home.work.cta.href}
+              className="group block py-6 md:flex md:items-start md:justify-between md:gap-8"
+            >
+              <div className="space-y-2">
+                <h3 className="text-h3">{home.work.heading}</h3>
+                <p className="text-body text-[var(--color-ink-soft)] max-w-[34ch]">
+                  {home.work.description}
+                </p>
+              </div>
+              <span className="link-arrow mt-3 md:mt-1">
+                {home.work.cta.label}
+                <ArrowIcon />
+              </span>
+            </Link>
+
+            <TrackedLink
+              href={home.speaking.cta.href}
+              eventName={home.speaking.cta.eventName}
+              eventProperties={home.speaking.cta.eventProperties}
+              className="group block py-6 md:flex md:items-start md:justify-between md:gap-8"
+            >
+              <div className="space-y-2">
+                <h3 className="text-h3">{home.speaking.heading}</h3>
+                <p className="text-body text-[var(--color-ink-soft)] max-w-[34ch]">
+                  {home.speaking.description}
+                </p>
+              </div>
+              <span className="link-arrow mt-3 md:mt-1">
                 {home.speaking.cta.label}
                 <ArrowIcon />
-              </TrackedLink>
-            </div>
-            <div className="space-y-8">
-              {marketingContent.speaking.topics.items.map((topic) => (
-                <div
-                  key={topic.title}
-                  className="topic-card"
-                >
-                  <h3 className="text-h3 mb-2">{topic.title}</h3>
-                  <p className="text-body">
-                    {topic.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+              </span>
+            </TrackedLink>
 
-      <section id="contact" className="section section-soft">
-        <div className="container-prose space-y-4">
-          <p className="text-label">{home.contact.eyebrow}</p>
-          <p className="text-body text-[var(--color-ink-soft)]">
-            {home.contact.description}
-          </p>
-          <div className="flex flex-wrap gap-4 pt-2">
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
-              className="text-body-lg text-[var(--color-ink)] underline underline-offset-4"
+            <Link
+              href="/contact"
+              className="group block py-6 md:flex md:items-start md:justify-between md:gap-8"
             >
-              {siteConfig.contact.email}
-            </a>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/contact">Send a message</Link>
-            </Button>
+              <div className="space-y-2">
+                <h3 className="text-h3">{home.contact.heading}</h3>
+                <p className="text-body text-[var(--color-ink-soft)] max-w-[34ch]">
+                  {home.contact.description}
+                </p>
+              </div>
+              <span className="link-arrow mt-3 md:mt-1">
+                Send a message
+                <ArrowIcon />
+              </span>
+            </Link>
           </div>
+
+          <a
+            href={`mailto:${siteConfig.contact.email}`}
+            className="inline-block text-body text-[var(--color-ink-soft)] underline underline-offset-4"
+          >
+            {siteConfig.contact.email}
+          </a>
         </div>
       </section>
     </>
