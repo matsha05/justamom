@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { track } from "@vercel/analytics";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { CircleAlert, CircleCheck, Loader2 } from "lucide-react";
 import { ArrowIcon } from "@/components/icons";
 import { Label } from "@/components/ui/label";
 import { useIdempotencyKey } from "@/hooks/useIdempotencyKey";
@@ -88,8 +88,9 @@ function FeedbackMessages({
           id={`${inputId}-error`}
           role="alert"
           aria-live="assertive"
-          className="text-caption text-[var(--color-error)]"
+          className="status-inline status-inline-error"
         >
+          <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" />
           {errorMessage}
         </p>
       ) : null}
@@ -98,8 +99,9 @@ function FeedbackMessages({
           id={`${inputId}-success`}
           role="status"
           aria-live="polite"
-          className="text-caption text-[var(--color-success)]"
+          className="status-inline status-inline-success"
         >
+          <CircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
           {successMessage}
         </p>
       ) : null}

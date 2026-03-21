@@ -96,7 +96,7 @@ export function ContactForm() {
         <div
           role="alert"
           aria-live="assertive"
-          className="rounded-md border border-[var(--color-error)]/30 bg-[var(--color-paper-soft)] px-4 py-3 text-caption text-[var(--color-error)]"
+          className="delight-panel delight-panel-error"
         >
           {formError}
         </div>
@@ -106,12 +106,12 @@ export function ContactForm() {
         <div
           ref={successBannerRef}
           id={successMessageId}
-          className="rounded-md border border-[var(--color-accent-soft)] bg-[var(--color-paper-soft)] px-4 py-3 text-[var(--color-ink)] flex items-start gap-3"
+          className="delight-panel delight-panel-success"
           role="status"
           aria-live="polite"
           tabIndex={-1}
         >
-          <CheckCircle className="w-5 h-5 text-[var(--color-success)] mt-0.5" />
+          <CheckCircle className="delight-panel-icon w-5 h-5 text-[var(--color-success)] mt-0.5" />
           <div className="space-y-1">
             <p className="text-body font-medium">Message sent.</p>
             <p className="text-caption text-[var(--color-ink-muted)]">{successMessage}</p>

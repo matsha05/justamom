@@ -70,10 +70,10 @@ export function SpeakingInquiryForm() {
         role="status"
         aria-live="polite"
         tabIndex={-1}
-        className="animate-fade-in border-l border-[var(--color-border-strong)] pl-5 space-y-4"
+        className="delight-panel delight-panel-success delight-panel-stack animate-fade-in space-y-4"
       >
         <div className="flex items-start gap-3">
-          <CheckCircle className="mt-1 h-5 w-5 text-[var(--color-success)]" />
+          <CheckCircle className="delight-panel-icon mt-1 h-5 w-5 text-[var(--color-success)]" />
           <div className="space-y-1">
             <h3 className="text-h4">Thanks for reaching out.</h3>
             <p className="text-body max-w-[58ch]">
@@ -102,7 +102,7 @@ export function SpeakingInquiryForm() {
         <div
           role="alert"
           aria-live="assertive"
-          className="rounded-md border border-[var(--color-error)]/30 bg-[var(--color-paper-soft)] px-4 py-3 text-caption text-[var(--color-error)]"
+          className="delight-panel delight-panel-error"
         >
           {formError}
         </div>
