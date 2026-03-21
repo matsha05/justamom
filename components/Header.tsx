@@ -42,11 +42,11 @@ export function Header() {
     >
       <div className="container">
         <div className="flex items-center justify-between">
-          <Link href="/" className="group flex flex-col">
-            <span className="text-h3 font-normal tracking-[-0.01em] text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-tight">
+          <Link href="/" className="header-brand group flex flex-col">
+            <span className="header-brand-name text-h3 font-normal tracking-[-0.01em] text-[var(--color-ink)] leading-tight">
               {siteConfig.site.name}
             </span>
-            <span className="text-caption font-medium text-[var(--color-ink-muted)] tracking-[0.08em]">
+            <span className="header-brand-tagline text-caption font-medium text-[var(--color-ink-muted)] tracking-[0.08em]">
               {siteConfig.site.tagline}
             </span>
           </Link>
@@ -56,7 +56,7 @@ export function Header() {
           <button
             type="button"
             ref={menuToggleRef}
-            className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-paper-soft)] rounded-full"
+            className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-[background-color,transform] hover:bg-[var(--color-paper-soft)] active:scale-95 rounded-full"
             onClick={() => setMobileMenuOpen((open) => !open)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}

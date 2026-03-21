@@ -15,7 +15,7 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
 
   return (
     <div
-      className="fixed inset-0 z-40 bg-[var(--color-paper)]/98 backdrop-blur-sm transition-all duration-300 md:hidden flex items-center justify-center"
+      className="fixed inset-0 z-40 bg-[var(--color-paper)]/98 backdrop-blur-sm transition-all duration-300 md:hidden flex items-center justify-center animate-fade-in"
       style={{ top: "0", minHeight: "100vh" }}
       onClick={onClose}
       role="dialog"
@@ -26,13 +26,13 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
         ref={menuRef}
         id="mobile-menu"
         aria-label="Primary"
-        className="flex flex-col items-center gap-8 p-6"
+        className="mobile-menu-panel flex flex-col items-center gap-8 p-6"
         onClick={(event) => event.stopPropagation()}
       >
         <h2 id="mobile-menu-title" className="sr-only">
           Menu
         </h2>
-        {siteConfig.navLinks.map((link) => {
+        {siteConfig.navLinks.map((link, index) => {
           const isActive = isNavLinkActive(pathname, link.href);
 
           return (
@@ -41,6 +41,7 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
               href={link.href}
               aria-current={isActive ? "page" : undefined}
               className="nav-mobile-link"
+              style={{ animationDelay: `${120 + index * 65}ms` }}
               onClick={onClose}
             >
               {link.label}

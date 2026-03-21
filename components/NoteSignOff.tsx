@@ -7,7 +7,7 @@ interface NoteSignOffProps {
 
 export function NoteSignOff({ className }: NoteSignOffProps) {
   return (
-    <footer className={cn("mt-16 pt-8 border-t border-[var(--color-border)]", className)}>
+    <footer className={cn("mt-16 pt-8 border-t border-[var(--color-border)] animate-fade-in", className)}>
       <p className="text-h4 italic font-semibold text-[var(--color-ink-soft)] mb-3">
         In it with you,
       </p>
@@ -16,7 +16,7 @@ export function NoteSignOff({ className }: NoteSignOffProps) {
         alt="Lizi"
         width={120}
         height={111}
-        className="w-[120px] h-[111px] opacity-90"
+        className="note-signoff-signature w-[120px] h-[111px] opacity-90"
       />
     </footer>
   );

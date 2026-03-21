@@ -18,6 +18,19 @@
   animation: fadeIn var(--duration-slow) var(--ease-out) forwards;
 }
 
+@keyframes softGlowPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.8;
+  }
+}
+
 /* Link arrow slide on hover */
 .link-arrow svg {
   transition: transform var(--duration-fast) var(--ease-out);
@@ -105,4 +118,3 @@
 .text-body-lg+.text-body-lg {
   margin-top: var(--space-4);
 }
-

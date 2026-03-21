@@ -39,7 +39,7 @@ export default function SpeakingPage() {
                             {speaking.topics.items.map((topic) => (
                                 <div
                                     key={topic.title}
-                                    className="border-l border-[var(--color-border-strong)] pl-6"
+                                    className="topic-card"
                                 >
                                     <h3 className="text-h3 mb-2">{topic.title}</h3>
                                     <p className="text-body">

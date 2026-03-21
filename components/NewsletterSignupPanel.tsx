@@ -20,13 +20,13 @@ export function NewsletterSignupPanel({
     <section
       aria-labelledby={`${panel.source}-newsletter-heading`}
       className={cn(
-        "rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-paper-soft)] px-6 py-8",
+        "newsletter-signup-panel rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-paper-soft)] px-6 py-8",
         className
       )}
     >
-      <div className={cn("space-y-4", isCentered && "text-center")}>
+      <div className={cn("space-y-5", isCentered && "text-center")}>
         <p className="text-label">{panel.eyebrow}</p>
-        <div className="space-y-2">
+        <div className="space-y-3">
           <h2 id={`${panel.source}-newsletter-heading`} className="text-h3">
             {panel.heading}
           </h2>

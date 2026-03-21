@@ -94,10 +94,10 @@ export default function HomePage() {
 
       <section id="newsletter" className="section section-newsletter">
         <div className="container-prose">
-          <div className="newsletter-panel text-center space-y-4">
+          <div className="newsletter-panel newsletter-panel-delight text-center space-y-5">
             <p className="text-label">{newsletter.homePanel.eyebrow}</p>
             <h2 className="text-h2">{newsletter.homePanel.heading}</h2>
-            <p className="text-body mx-auto max-w-[34ch]">
+            <p className="text-body mx-auto max-w-[32ch]">
               {newsletter.homePanel.description}
             </p>
             <div className="max-w-md mx-auto">

@@ -71,6 +71,29 @@
 .note-signoff {
   margin-top: clamp(2.8rem, 6.4vw, 4.2rem);
   padding-top: clamp(1.4rem, 3.2vw, 2rem);
+  position: relative;
+}
+
+.note-signoff::before {
+  content: "";
+  position: absolute;
+  left: -0.2rem;
+  top: 0.25rem;
+  width: clamp(3.6rem, 10vw, 4.6rem);
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-accent-light), transparent);
+  opacity: 0.65;
+}
+
+.note-signoff-signature {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
+}
+
+.note-signoff:hover .note-signoff-signature {
+  transform: translateX(2px);
+  opacity: 1;
 }
 
 .note-adjacent-nav {
@@ -99,12 +122,16 @@
   min-height: 6.8rem;
   align-content: center;
   transition: border-color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
 }
 
 .note-adjacent-card:hover {
   border-color: var(--color-accent-light);
   background: var(--color-paper);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(29, 27, 25, 0.06);
 }
 
 .note-adjacent-card-end {
@@ -124,6 +151,11 @@
   font-size: clamp(1.13rem, 1.4vw, 1.3rem);
   line-height: 1.34;
   color: var(--color-ink);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.note-adjacent-card:hover .note-adjacent-title {
+  color: var(--color-accent);
 }
 
 @media (max-width: 900px) {

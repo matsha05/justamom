@@ -32,19 +32,19 @@ export function NotesFeed({
       ) : null}
 
       {featuredNote ? (
-        <article className="border-b border-[var(--color-border)] pb-9">
+        <article className="note-feed-article note-feed-article-featured group border-b border-[var(--color-border)] pb-9">
           <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
             {format(parseISO(featuredNote.date), "MMMM d, yyyy")}
           </div>
           <h3 className="text-h2 mb-4">
             <Link
               href={`/notes/${featuredNote.slug}`}
-              className="transition-colors hover:text-[var(--color-accent)]"
+              className="note-feed-title-link"
             >
               {featuredNote.title}
             </Link>
           </h3>
-          <p className="text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
+          <p className="note-feed-excerpt text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
           <Link className="link-arrow" href={`/notes/${featuredNote.slug}`}>
             Read note
             <ArrowIcon />
@@ -59,7 +59,7 @@ export function NotesFeed({
             return (
               <article
                 key={note.slug}
-                className={cn("group py-8 first:pt-0", supportingItemClassName)}
+                className={cn("note-feed-article group py-8 first:pt-0", supportingItemClassName)}
               >
                 <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
                   {formattedDate}
@@ -67,12 +67,12 @@ export function NotesFeed({
                 <h3 className="text-h3 mb-3">
                   <Link
                     href={`/notes/${note.slug}`}
-                    className="transition-colors group-hover:text-[var(--color-accent)]"
+                    className="note-feed-title-link"
                   >
                     {note.title}
                   </Link>
                 </h3>
-                <p className="text-body mb-4">{note.excerpt}</p>
+                <p className="note-feed-excerpt text-body mb-4">{note.excerpt}</p>
                 <Link className="link-arrow" href={`/notes/${note.slug}`}>
                   Read note
                   <ArrowIcon />
