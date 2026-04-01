@@ -1,7 +1,6 @@
 "use client";
 
 import { useId, useState } from "react";
-import { toast } from "sonner";
 import { track } from "@vercel/analytics";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -155,7 +154,6 @@ export function NewsletterForm({
         setEmail("");
         setSuccessMessage(message);
         track(analyticsEvents.newsletterSignupSuccess, trackingProps);
-        toast.success(message);
         resetKey();
         return;
       }
@@ -166,7 +164,6 @@ export function NewsletterForm({
           const message = formatRetryAfterMessage(retryAfterSeconds);
           setStatus("error");
           setErrorMessage(message);
-          toast.error(message);
           return;
         }
       }
@@ -175,12 +172,10 @@ export function NewsletterForm({
         getStringFromRecord(data, "error") ?? "Something went wrong. Please try again.";
       setStatus("error");
       setErrorMessage(message);
-      toast.error(message);
     } catch {
       const message = "Network error. Please try again.";
       setStatus("error");
       setErrorMessage(message);
-      toast.error(message);
     }
   };
 

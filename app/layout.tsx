@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Newsreader, Source_Sans_3 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { Toaster } from "@/components/ui/sonner";
 import { Chrome } from "@/components/Chrome";
 import { personJsonLd, siteConfig } from "@/lib/config";
 import "./globals.css";
@@ -75,7 +74,6 @@ export default function RootLayout({
           Skip to content
         </a>
         <Chrome>{children}</Chrome>
-        <Toaster />
         <Analytics />
       </body>
     </html>
