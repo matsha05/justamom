@@ -140,10 +140,17 @@ export default async function NotePage({ params }: PageProps) {
                 <div className="container-prose note-article-shell">
                     <article>
                         <div className="text-body-lg note-article-content">
-                            <MDXRemote source={note.content} components={mdxComponents} />
+                            <MDXRemote source={note.body} components={mdxComponents} />
                         </div>
 
                         <NoteSignOff className="note-signoff" />
+
+                        {note.postscript ? (
+                            <div className="text-body-lg note-article-content mt-10">
+                                <MDXRemote source={note.postscript} components={mdxComponents} />
+                            </div>
+                        ) : null}
+
                         <NoteNewsletterCTA />
 
                         {(prev || next) && (
