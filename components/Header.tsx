@@ -34,7 +34,7 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-transparent transition-[padding,background-color,border-color,backdrop-filter] duration-300 ${
+      className={`sticky top-0 z-50 border-b border-transparent transition-[padding,background-color,border-color] duration-300 ${
         scrolled
           ? "bg-[var(--color-paper)]/96 backdrop-blur-sm border-[var(--color-border)] py-[0.95rem]"
           : "bg-transparent backdrop-blur-0 py-[1.2rem]"

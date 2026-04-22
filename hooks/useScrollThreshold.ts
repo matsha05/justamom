@@ -7,10 +7,18 @@ export function useScrollThreshold(threshold: number) {
 
   useEffect(() => {
     let frame: number | null = null;
+    const hysteresis = Math.max(6, Math.round(threshold * 0.35));
 
     const updateThresholdState = () => {
-      const next = window.scrollY > threshold;
-      setPastThreshold((current) => (current === next ? current : next));
+      setPastThreshold((current) => {
+        const enterThreshold = threshold + hysteresis;
+        const exitThreshold = Math.max(0, threshold - hysteresis);
+        const next = current
+          ? window.scrollY > exitThreshold
+          : window.scrollY > enterThreshold;
+
+        return current === next ? current : next;
+      });
     };
 
     const handleScroll = () => {
