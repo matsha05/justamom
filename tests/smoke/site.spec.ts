@@ -7,7 +7,7 @@ test("homepage highlights the primary newsletter CTA", async ({ page }) => {
     page.getByRole("heading", { name: "You are not just a mom." })
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Join A Note for Moms" })
+    page.getByRole("link", { name: "Join A Note for Moms" })
   ).toBeVisible();
 });
 
@@ -26,7 +26,7 @@ test("newsletter signup shows success state", async ({ page }) => {
   await page.goto("/");
   const newsletterSection = page.locator("#newsletter");
   await page.getByRole("textbox", { name: "Email address" }).fill("mom@example.com");
-  await page.getByRole("button", { name: "Join A Note for Moms" }).click();
+  await newsletterSection.getByRole("button", { name: "Join the notes" }).click();
 
   await expect(
     newsletterSection.getByText("Welcome! Check your inbox for a confirmation.")
@@ -50,7 +50,7 @@ test("newsletter signup shows retry-after errors", async ({ page }) => {
   await page.goto("/");
   const newsletterSection = page.locator("#newsletter");
   await page.getByRole("textbox", { name: "Email address" }).fill("mom@example.com");
-  await page.getByRole("button", { name: "Join A Note for Moms" }).click();
+  await newsletterSection.getByRole("button", { name: "Join the notes" }).click();
 
   await expect(
     newsletterSection.getByText("Too many requests. Please wait about 1 minute and try again.")
