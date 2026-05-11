@@ -36,8 +36,14 @@
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.link-arrow:hover svg {
+.link-arrow:focus-visible svg {
   transform: translateX(2px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-arrow:hover svg {
+    transform: translateX(2px);
+  }
 }
 
 /* Prose Styling for MDX Content */

@@ -16,9 +16,15 @@
   font-size: 0.85rem;
 }
 
-.link-arrow:hover {
-  gap: var(--space-3);
+.link-arrow:focus-visible {
   color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-arrow:hover {
+    gap: var(--space-3);
+    color: var(--color-accent);
+  }
 }
 
 .nav-link {
@@ -226,15 +232,11 @@
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
-.note-feed-article:hover {
-  transform: translateX(2px);
-}
-
 .note-feed-title-link {
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.note-feed-article:hover .note-feed-title-link {
+.note-feed-article:focus-within .note-feed-title-link {
   color: var(--color-accent);
 }
 
@@ -242,8 +244,22 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.note-feed-article:hover .note-feed-excerpt {
+.note-feed-article:focus-within .note-feed-excerpt {
   color: var(--color-ink);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .note-feed-article:hover {
+    transform: translateX(2px);
+  }
+
+  .note-feed-article:hover .note-feed-title-link {
+    color: var(--color-accent);
+  }
+
+  .note-feed-article:hover .note-feed-excerpt {
+    color: var(--color-ink);
+  }
 }
 
 .site-footer-signature {

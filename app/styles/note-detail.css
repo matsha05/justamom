@@ -91,11 +91,6 @@
     opacity var(--duration-normal) var(--ease-out);
 }
 
-.note-signoff:hover .note-signoff-signature {
-  transform: translateX(2px);
-  opacity: 1;
-}
-
 .note-adjacent-nav {
   margin-top: clamp(2.4rem, 5vw, 3.2rem);
   padding-top: clamp(1.3rem, 2.8vw, 1.8rem);
@@ -127,7 +122,7 @@
     box-shadow var(--duration-normal) var(--ease-out);
 }
 
-.note-adjacent-card:hover {
+.note-adjacent-card:focus-visible {
   border-color: var(--color-accent-light);
   background: var(--color-paper);
   transform: translateY(-2px);
@@ -154,8 +149,26 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.note-adjacent-card:hover .note-adjacent-title {
+.note-adjacent-card:focus-visible .note-adjacent-title {
   color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .note-signoff:hover .note-signoff-signature {
+    transform: translateX(2px);
+    opacity: 1;
+  }
+
+  .note-adjacent-card:hover {
+    border-color: var(--color-accent-light);
+    background: var(--color-paper);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(29, 27, 25, 0.06);
+  }
+
+  .note-adjacent-card:hover .note-adjacent-title {
+    color: var(--color-accent);
+  }
 }
 
 @media (max-width: 900px) {
