@@ -63,26 +63,18 @@
 
 .newsletter-panel-delight,
 .newsletter-signup-panel {
+  background: var(--color-paper);
+  border-color: color-mix(in srgb, var(--color-border) 84%, var(--color-border-strong) 16%);
+  box-shadow: none;
   isolation: isolate;
   overflow: hidden;
   position: relative;
-  transition:
-    border-color var(--duration-normal) var(--ease-out),
-    box-shadow var(--duration-normal) var(--ease-out),
-    transform var(--duration-normal) var(--ease-out);
+  transition: border-color var(--duration-normal) var(--ease-out);
 }
 
 .newsletter-panel-delight::before,
 .newsletter-signup-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at top center, color-mix(in srgb, var(--color-accent-soft) 55%, transparent) 0%, transparent 52%),
-    linear-gradient(180deg, color-mix(in srgb, var(--color-paper-warm) 65%, transparent) 0%, transparent 42%);
-  opacity: 0.8;
-  z-index: -1;
-  transition: opacity var(--duration-normal) var(--ease-out);
+  content: none;
 }
 
 .newsletter-panel-delight::after,
@@ -93,24 +85,22 @@
   right: clamp(1.5rem, 4vw, 2rem);
   top: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-accent-light) 75%, var(--color-border) 25%), transparent);
-  opacity: 0.8;
+  background: color-mix(in srgb, var(--color-border-strong) 68%, var(--color-paper) 32%);
+  opacity: 0.72;
 }
 
 .newsletter-panel-delight:hover,
 .newsletter-panel-delight:focus-within,
 .newsletter-signup-panel:hover,
 .newsletter-signup-panel:focus-within {
-  border-color: color-mix(in srgb, var(--color-accent-light) 42%, var(--color-border) 58%);
-  box-shadow: 0 18px 44px rgba(29, 27, 25, 0.09);
-  transform: translateY(-2px);
+  border-color: var(--color-border-strong);
 }
 
-.newsletter-panel-delight:hover::before,
-.newsletter-panel-delight:focus-within::before,
-.newsletter-signup-panel:hover::before,
-.newsletter-signup-panel:focus-within::before {
-  opacity: 1;
+.newsletter-panel-delight:hover::after,
+.newsletter-panel-delight:focus-within::after,
+.newsletter-signup-panel:hover::after,
+.newsletter-signup-panel:focus-within::after {
+  opacity: 0.9;
 }
 
 .hero-portrait-shell {
