@@ -157,20 +157,20 @@ export default async function NotePage({ params }: PageProps) {
                             <nav className="mt-12 pt-8 border-t border-[var(--color-border)] note-adjacent-nav">
                                 <div
                                     className={cn(
-                                        "flex justify-between items-start gap-8 note-adjacent-grid",
+                                        "note-adjacent-grid",
                                         ((prev && !next) || (!prev && next)) && "note-adjacent-grid-single"
                                     )}
                                 >
                                     {prev && (
                                         <Link
                                             href={`/notes/${prev.slug}`}
-                                            className="group block flex-1 note-adjacent-card"
+                                            className="group note-adjacent-link"
                                         >
-                                            <span className="text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2 note-adjacent-label">
+                                            <span className="note-adjacent-label">
                                                 <ArrowIcon direction="left" />
                                                 Previous
                                             </span>
-                                            <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors note-adjacent-title">
+                                            <span className="note-adjacent-title">
                                                 {prev.title}
                                             </span>
                                         </Link>
@@ -180,27 +180,15 @@ export default async function NotePage({ params }: PageProps) {
                                         <Link
                                             href={`/notes/${next.slug}`}
                                             className={cn(
-                                                "group block flex-1 note-adjacent-card",
-                                                prev ? "note-adjacent-card-end" : ""
+                                                "group note-adjacent-link",
+                                                prev ? "note-adjacent-link-end" : ""
                                             )}
                                         >
-                                            <span
-                                                className={cn(
-                                                    "text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2",
-                                                    prev ? "justify-end" : "",
-                                                    "note-adjacent-label"
-                                                )}
-                                            >
+                                            <span className="note-adjacent-label">
                                                 Next
                                                 <ArrowIcon />
                                             </span>
-                                            <span
-                                                className={cn(
-                                                    "text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors",
-                                                    prev ? "text-right" : "",
-                                                    "note-adjacent-title"
-                                                )}
-                                            >
+                                            <span className="note-adjacent-title">
                                                 {next.title}
                                             </span>
                                         </Link>
