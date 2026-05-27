@@ -11,6 +11,7 @@ import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { absoluteUrl, siteConfig } from "@/lib/config";
 import { serializeJsonLd } from "@/lib/json-ld";
+import { buildArticleMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
 interface PageProps {
@@ -26,10 +27,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { slug } = await params;
     try {
         const note = getNoteBySlug(slug);
-        return {
+        return buildArticleMetadata({
             title: note.metadata.title,
             description: note.metadata.excerpt,
-        };
+            pathname: `/notes/${slug}`,
+            publishedTime: note.metadata.date,
+        });
     } catch {
         return {
             title: "Note Not Found",
@@ -149,7 +152,9 @@ export default async function NotePage({ params }: PageProps) {
                             <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
-                        <NoteSignOff className="note-signoff" />
+                        {note.shouldRenderSignOff ? (
+                            <NoteSignOff className="note-signoff" />
+                        ) : null}
                         <NoteNewsletterCTA />
 
                         {(prev || next) && (
@@ -163,7 +168,7 @@ export default async function NotePage({ params }: PageProps) {
                                     {prev && (
                                         <Link
                                             href={`/notes/${prev.slug}`}
-                                            className="group block flex-1 note-adjacent-card"
+                                            className="group block flex-1 note-adjacent-link"
                                         >
                                             <span className="text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2 note-adjacent-label">
                                                 <ArrowIcon direction="left" />
@@ -179,8 +184,8 @@ export default async function NotePage({ params }: PageProps) {
                                         <Link
                                             href={`/notes/${next.slug}`}
                                             className={cn(
-                                                "group block flex-1 note-adjacent-card",
-                                                prev ? "note-adjacent-card-end" : ""
+                                                "group block flex-1 note-adjacent-link",
+                                                prev ? "note-adjacent-link-end" : ""
                                             )}
                                         >
                                             <span

@@ -139,15 +139,3 @@
 .site-footer-inner {
   position: relative;
 }
-
-.site-footer-inner::after {
-  content: "";
-  position: absolute;
-  right: clamp(1rem, 3vw, 2rem);
-  bottom: clamp(1.25rem, 2.5vw, 1.8rem);
-  width: clamp(7rem, 14vw, 10rem);
-  height: clamp(7rem, 14vw, 10rem);
-  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent-soft) 50%, transparent) 0%, transparent 68%);
-  opacity: 0.38;
-  pointer-events: none;
-}

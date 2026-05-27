@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/config";
+import { buildPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Privacy & Terms",
   description: `Plain-language privacy and terms for ${siteConfig.site.name}.`,
-};
+  pathname: "/legal",
+});
 
 export default function LegalPage() {
   return (

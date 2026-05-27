@@ -40,6 +40,8 @@ describe("POST /api/newsletter", () => {
     process.env.MAILERLITE_GROUP_ID = "test-group";
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    delete process.env.REQUIRE_REDIS;
+    delete process.env.REQUIRE_REDIS_FOR_RATE_LIMITS;
     delete process.env.ALERT_WEBHOOK_URL;
     delete process.env.MAILERLITE_SIGNUP_SOURCE_FIELD;
     process.env.ALLOW_MISSING_ORIGIN = "false";
@@ -165,5 +167,25 @@ describe("POST /api/newsletter", () => {
     expect(second.status).toBe(200);
     expect(second.headers.get("x-idempotent-replay")).toBe("true");
     expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not cache transient upstream failures for idempotent retries", async () => {
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce(new Response(JSON.stringify({ error: "timeout" }), { status: 503 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 404 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }));
+
+    const headers = {
+      "idempotency-key": "newsletter-retry",
+    };
+
+    const first = await POST(createNewsletterRequest("retry@example.com", headers));
+    const second = await POST(createNewsletterRequest("retry@example.com", headers));
+
+    expect(first.status).toBe(502);
+    expect(second.status).toBe(200);
+    expect(second.headers.get("x-idempotent-replay")).toBeNull();
+    expect(fetchSpy).toHaveBeenCalledTimes(3);
   });
 });

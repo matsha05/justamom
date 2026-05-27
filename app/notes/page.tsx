@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllNotes } from "@/lib/notes";
+import { buildPageMetadata } from "@/lib/metadata";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { NotesFeed } from "@/components/notes/NotesFeed";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Notes for Moms",
   description:
     "Short notes for moms on faith, motherhood, and everyday life.",
-};
+  pathname: "/notes",
+});
 
 export default function NotesPage() {
   const notes = getAllNotes();

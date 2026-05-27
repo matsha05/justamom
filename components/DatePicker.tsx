@@ -94,7 +94,7 @@ export function DatePicker({
             return;
         }
 
-        if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown") {
+        if (event.key === "Enter" || event.key === "ArrowDown") {
             event.preventDefault();
             setIsPopperOpen(true);
         }
@@ -109,7 +109,7 @@ export function DatePicker({
                     name={name}
                     required={required}
                     value={inputValue}
-                    readOnly
+                    onChange={(event) => setInputValue(event.target.value)}
                     onClick={() => setIsPopperOpen(!isPopperOpen)}
                     onKeyDown={handleKeyDown}
                     aria-label={ariaLabel}

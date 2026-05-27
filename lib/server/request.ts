@@ -49,7 +49,7 @@ function addOriginWithAliases(target: Set<string>, value: string): void {
   }
 }
 
-function getAllowedOrigins(request?: NextRequest): Set<string> {
+function getAllowedOrigins(): Set<string> {
   const configuredOrigins = (process.env.ALLOWED_ORIGINS ?? "")
     .split(",")
     .flatMap((value) => {
@@ -64,18 +64,6 @@ function getAllowedOrigins(request?: NextRequest): Set<string> {
   }
   for (const configuredOrigin of configuredOrigins) {
     addOriginWithAliases(allowedOrigins, configuredOrigin);
-  }
-
-  if (request) {
-    addOriginWithAliases(allowedOrigins, request.nextUrl.origin);
-
-    if (shouldTrustProxyHeaders()) {
-      const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
-      const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
-      if (forwardedHost && forwardedProto) {
-        addOriginWithAliases(allowedOrigins, `${forwardedProto}://${forwardedHost}`);
-      }
-    }
   }
 
   return allowedOrigins;
@@ -223,7 +211,7 @@ export function isAllowedOrigin(
 
     return process.env.ALLOW_MISSING_ORIGIN === "true";
   }
-  return getAllowedOrigins(request).has(normalizeOrigin(origin));
+  return getAllowedOrigins().has(normalizeOrigin(origin));
 }
 
 export async function exceedsMaxBodyBytes(

@@ -125,7 +125,7 @@ export async function prepareApiRouteRequest<TResponse>(
 
   const respond: RouteResponder<TResponse> = async (status, body, headers) => {
     if (idempotencyToken) {
-      if (status === 429) {
+      if (status === 429 || status >= 500) {
         await rollbackIdempotency(idempotencyToken);
       } else {
         const headerRecord = headers

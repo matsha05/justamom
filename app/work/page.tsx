@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
 import { siteConfig } from "@/lib/config";
+import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Current Work",
   description: marketingContent.work.metadataDescription,
-};
+  pathname: "/work",
+});
 
 export default function WorkPage() {
   const { work } = marketingContent;

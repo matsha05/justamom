@@ -46,6 +46,8 @@ describe("POST /api/contact", () => {
 
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    delete process.env.REQUIRE_REDIS;
+    delete process.env.REQUIRE_REDIS_FOR_RATE_LIMITS;
     delete process.env.ALERT_WEBHOOK_URL;
     process.env.ALLOW_MISSING_ORIGIN = "false";
   });
@@ -156,6 +158,18 @@ describe("POST /api/contact", () => {
     expect(body.error).toContain("Unable to send your message");
   });
 
+  it("fails closed when Redis is explicitly required but missing", async () => {
+    process.env.REQUIRE_REDIS = "true";
+    const fetchSpy = vi.spyOn(global, "fetch");
+
+    const response = await POST(createContactRequest(contactPayload()));
+    const body = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(body.error).toContain("temporarily unavailable");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it("replays cached response when idempotency key is reused", async () => {
     const fetchSpy = vi
       .spyOn(global, "fetch")
@@ -172,5 +186,24 @@ describe("POST /api/contact", () => {
     expect(second.status).toBe(200);
     expect(second.headers.get("x-idempotent-replay")).toBe("true");
     expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not cache transient upstream failures for idempotent retries", async () => {
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce(new Response(JSON.stringify({ error: "bad gateway" }), { status: 500 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+
+    const headers = {
+      "idempotency-key": "contact-retry",
+    };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+    const second = await POST(createContactRequest(contactPayload(), headers));
+
+    expect(first.status).toBe(502);
+    expect(second.status).toBe(200);
+    expect(second.headers.get("x-idempotent-replay")).toBeNull();
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
   });
 });

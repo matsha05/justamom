@@ -5,15 +5,17 @@ import { getAllNotes } from "@/lib/notes";
 import { ArrowIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
+import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
 import { NotesFeed } from "@/components/notes/NotesFeed";
 import { TrackedLink } from "@/components/TrackedLink";
 import { NewsletterForm } from "@/components/NewsletterForm";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: siteConfig.site.name,
   description: siteConfig.content.seoDescription,
-};
+  pathname: "/",
+});
 
 export default function HomePage() {
   const notes = getAllNotes();

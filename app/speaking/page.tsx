@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { SpeakingInquiryForm } from "@/components/SpeakingInquiryForm";
 import { siteConfig } from "@/lib/config";
+import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
     title: "Speaking Topics",
     description: marketingContent.speaking.metadataDescription,
-};
+    pathname: "/speaking",
+});
 
 export default function SpeakingPage() {
     const { speaking } = marketingContent;
