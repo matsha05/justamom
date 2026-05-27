@@ -49,7 +49,7 @@ export async function getValue(key: string): Promise<string | null> {
   return memoryGetValue(key);
 }
 
-export async function setValue(key: string, value: string, ttlMs: number): Promise<void> {
+async function setValue(key: string, value: string, ttlMs: number): Promise<void> {
   const redis = getRedisClient();
 
   if (redis) {

@@ -53,18 +53,22 @@ export async function createMailerLiteSubscriber(
   baseUrl: string,
   email: string,
   groupId: string,
-  apiKey: string
+  apiKey: string,
+  fields?: Record<string, string>
 ): Promise<MailerLiteCreateResult> {
+  const body = {
+    email,
+    groups: [groupId],
+    ...(fields && Object.keys(fields).length > 0 ? { fields } : {}),
+  };
+
   const response = await fetchWithTimeout(`${baseUrl}/subscribers`, {
     method: "POST",
     headers: {
       ...createAuthorizationHeaders(apiKey),
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email,
-      groups: [groupId],
-    }),
+    body: JSON.stringify(body),
   });
 
   if (response.ok) {

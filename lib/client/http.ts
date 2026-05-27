@@ -1,6 +1,5 @@
 import { parseJsonSafely, type JsonRecord } from "@/lib/json";
 
-export { parseJsonSafely };
 export type { JsonRecord };
 
 export async function fetchJson(

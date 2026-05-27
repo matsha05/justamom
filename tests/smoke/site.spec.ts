@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { conversionSources } from "@/lib/conversions";
 
 test("homepage highlights the primary newsletter CTA", async ({ page }) => {
   await page.goto("/");
@@ -12,7 +13,10 @@ test("homepage highlights the primary newsletter CTA", async ({ page }) => {
 });
 
 test("newsletter signup shows success state", async ({ page }) => {
+  let newsletterPayload: Record<string, unknown> | null = null;
+
   await page.route("**/api/newsletter", async (route) => {
+    newsletterPayload = JSON.parse(route.request().postData() ?? "{}");
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -31,6 +35,11 @@ test("newsletter signup shows success state", async ({ page }) => {
   await expect(
     newsletterSection.getByText("Welcome! Check your inbox for a confirmation.")
   ).toBeVisible();
+  expect(newsletterPayload).toMatchObject({
+    source: conversionSources.homePanel,
+    variant: "compact",
+    page_path: "/",
+  });
 });
 
 test("newsletter signup shows retry-after errors", async ({ page }) => {

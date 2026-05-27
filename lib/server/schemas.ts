@@ -1,4 +1,11 @@
 import { z } from "zod";
+import {
+  conversionSources,
+  conversionSourceValues,
+  newsletterVariantValues,
+} from "@/lib/conversions";
+
+const pagePathSchema = z.string().trim().max(200).optional().default("");
 
 export const newsletterRequestSchema = z.object({
   email: z
@@ -7,11 +14,19 @@ export const newsletterRequestSchema = z.object({
     .toLowerCase()
     .max(320, "Please provide a valid email address.")
     .email("Please provide a valid email address."),
+  source: z.enum(conversionSourceValues).optional().default(conversionSources.site),
+  variant: z.enum(newsletterVariantValues).optional().default("default"),
+  page_path: pagePathSchema,
 });
 
 export const contactFormSchema = z
   .object({
     form_type: z.enum(["contact", "speaking"]).default("contact"),
+    source: z
+      .enum(conversionSourceValues)
+      .optional()
+      .default(conversionSources.contactPage),
+    page_path: pagePathSchema,
     company: z.string().trim().max(120).optional().default(""),
     name: z.string().trim().min(1, "Please provide your name.").max(120),
     email: z

@@ -18,6 +18,7 @@ import {
   forwardFormspreeSubmission,
   isValidFormspreeEndpoint,
 } from "@/lib/server/integrations/formspree";
+import { conversionMessages } from "@/lib/conversions";
 
 const CONTACT_RATE_LIMIT = { limit: 12, windowMs: 5 * 60_000 };
 const CONTACT_MAX_BODY_BYTES = 64 * 1024;
@@ -45,8 +46,8 @@ function toFormRecord(formData: FormData): Record<string, string> {
 
 function successMessageFor(formType: "contact" | "speaking") {
   return formType === "speaking"
-    ? "Inquiry received! I will follow up soon."
-    : "Message sent! I will get back to you as soon as I can.";
+    ? conversionMessages.speakingSuccess
+    : conversionMessages.contactSuccess;
 }
 
 function buildForwardedFormData(data: ReturnType<typeof contactFormSchema.parse>): FormData {
@@ -55,6 +56,8 @@ function buildForwardedFormData(data: ReturnType<typeof contactFormSchema.parse>
     "name",
     "email",
     "form_type",
+    "source",
+    "page_path",
     "message",
     "organization",
     "event_date",
@@ -150,7 +153,7 @@ export async function POST(request: NextRequest) {
       });
 
       return respond(502, {
-        error: "Unable to send your message right now. Please try again.",
+        error: conversionMessages.contactError,
       });
     }
 
@@ -164,7 +167,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { error: "Unable to send your message right now. Please try again." },
+      { error: conversionMessages.contactError },
       { status: 502 }
     );
   }

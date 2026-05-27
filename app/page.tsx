@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllNotes } from "@/lib/notes";
@@ -8,6 +9,11 @@ import { marketingContent } from "@/content/site";
 import { NotesFeed } from "@/components/notes/NotesFeed";
 import { TrackedLink } from "@/components/TrackedLink";
 import { NewsletterForm } from "@/components/NewsletterForm";
+
+export const metadata: Metadata = {
+  title: siteConfig.site.name,
+  description: siteConfig.content.seoDescription,
+};
 
 export default function HomePage() {
   const notes = getAllNotes();

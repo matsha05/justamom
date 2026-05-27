@@ -55,7 +55,12 @@ export function SpeakingEventFields({
       <div className="grid md:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label htmlFor="event_date">Event Date(s)</Label>
-          <DatePicker id="event_date" name="event_date" required={required} />
+          <DatePicker
+            id="event_date"
+            name="event_date"
+            ariaLabel="Event Date(s)"
+            required={required}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="location">Location (City, State)</Label>
@@ -79,7 +84,7 @@ export function SpeakingEventFields({
               aria-invalid={Boolean(selectError)}
               aria-describedby={selectDescribedBy}
             >
-              <SelectValue placeholder="Select a type..." />
+              <SelectValue placeholder="Select a type…" />
             </SelectTrigger>
             <SelectContent>
               {speakingEventTypeOptions.map((option) => (
@@ -99,7 +104,7 @@ export function SpeakingEventFields({
               aria-invalid={Boolean(selectError)}
               aria-describedby={selectDescribedBy}
             >
-              <SelectValue placeholder="Select size..." />
+              <SelectValue placeholder="Select size…" />
             </SelectTrigger>
             <SelectContent>
               {speakingAudienceSizeOptions.map((option) => (

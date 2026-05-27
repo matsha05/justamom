@@ -10,6 +10,7 @@ import { ArrowIcon } from "@/components/icons";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
 import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
+import { conversionMessages, conversionSources } from "@/lib/conversions";
 
 export function SpeakingInquiryForm() {
   const {
@@ -51,8 +52,9 @@ export function SpeakingInquiryForm() {
     const result = await submitContactForm({
       form,
       formType: "speaking",
+      source: conversionSources.speakingPage,
       subject: "New Speaking Inquiry",
-      successFallbackMessage: "Inquiry received! I will follow up soon.",
+      successFallbackMessage: conversionMessages.speakingSuccess,
     });
 
     if (result.ok) {
@@ -67,18 +69,17 @@ export function SpeakingInquiryForm() {
       <div
         ref={successBannerRef}
         id={successMessageId}
-        role="status"
         aria-live="polite"
         tabIndex={-1}
         className="delight-panel delight-panel-success delight-panel-stack animate-fade-in space-y-4"
       >
         <div className="flex items-start gap-3">
-          <CheckCircle className="delight-panel-icon mt-1 h-5 w-5 text-[var(--color-success)]" />
+          <CheckCircle className="delight-panel-icon mt-1 size-5 text-[var(--color-success)]" />
           <div className="space-y-1">
             <h3 className="text-h4">Thanks for reaching out.</h3>
             <p className="text-body max-w-[58ch]">
               {successMessage ||
-                "Thank you so much for considering me for your event. I've received your details and will get back to you shortly."}
+                conversionMessages.speakingSuccess}
             </p>
           </div>
         </div>
@@ -162,8 +163,8 @@ export function SpeakingInquiryForm() {
       <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
         {isSubmitting ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Sending...
+            <Loader2 className="size-4 animate-spin" />
+            Sending…
           </>
         ) : (
           <>

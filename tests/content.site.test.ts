@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { marketingContent } from "@/content/site";
 import { analyticsEvents } from "@/lib/analytics/events";
+import { conversionSourceValues, conversionSources } from "@/lib/conversions";
 
 describe("marketing content", () => {
   it("keeps homepage newsletter CTA wired to the analytics contract", () => {
@@ -10,7 +11,9 @@ describe("marketing content", () => {
   });
 
   it("keeps a stable source for the homepage newsletter form", () => {
-    expect(marketingContent.newsletter.homePanel.source).toBe("home_panel");
+    expect(marketingContent.newsletter.homePanel.source).toBe(
+      conversionSources.homePanel
+    );
   });
 
   it("defines distinct newsletter form sources for reusable panels", () => {
@@ -23,5 +26,6 @@ describe("marketing content", () => {
     ];
 
     expect(new Set(sources).size).toBe(sources.length);
+    expect(sources.every((source) => conversionSourceValues.includes(source))).toBe(true);
   });
 });

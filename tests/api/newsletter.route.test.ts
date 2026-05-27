@@ -1,12 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/newsletter/route";
+import { conversionSources, type ConversionSource, type NewsletterVariant } from "@/lib/conversions";
 import { __resetMemoryStoreForTests } from "@/lib/server/kv";
 
+interface NewsletterRequestBody {
+  email: string;
+  source?: ConversionSource;
+  variant?: NewsletterVariant;
+  page_path?: string;
+}
+
 function createNewsletterRequest(
-  email: string,
+  input: string | NewsletterRequestBody,
   headers?: Record<string, string>
 ): NextRequest {
+  const body = typeof input === "string" ? { email: input } : input;
   const requestHeaders = new Headers({
     origin: "https://lizishaw.com",
     "content-type": "application/json",
@@ -18,7 +27,7 @@ function createNewsletterRequest(
   return new NextRequest("https://lizishaw.com/api/newsletter", {
     method: "POST",
     headers: requestHeaders,
-    body: JSON.stringify({ email }),
+    body: JSON.stringify(body),
   });
 }
 
@@ -32,6 +41,7 @@ describe("POST /api/newsletter", () => {
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
     delete process.env.ALERT_WEBHOOK_URL;
+    delete process.env.MAILERLITE_SIGNUP_SOURCE_FIELD;
     process.env.ALLOW_MISSING_ORIGIN = "false";
   });
 
@@ -57,6 +67,29 @@ describe("POST /api/newsletter", () => {
     expect(response.status).toBe(400);
     expect(body.error).toContain("valid email");
     expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it("forwards configured signup source fields to MailerLite", async () => {
+    process.env.MAILERLITE_SIGNUP_SOURCE_FIELD = "signup_source";
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 404 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }));
+
+    const response = await POST(
+      createNewsletterRequest({
+        email: "source@example.com",
+        source: conversionSources.notePanel,
+        variant: "compact",
+        page_path: "/notes/for-the-mom-who-feels-unqualified",
+      })
+    );
+    const createBody = JSON.parse(String(fetchSpy.mock.calls[1]?.[1]?.body));
+
+    expect(response.status).toBe(200);
+    expect(createBody.fields).toEqual({
+      signup_source: conversionSources.notePanel,
+    });
   });
 
   it("returns unsupported media type for non-JSON content", async () => {

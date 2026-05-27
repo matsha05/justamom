@@ -52,8 +52,10 @@ function addOriginWithAliases(target: Set<string>, value: string): void {
 function getAllowedOrigins(request?: NextRequest): Set<string> {
   const configuredOrigins = (process.env.ALLOWED_ORIGINS ?? "")
     .split(",")
-    .map((value) => normalizeOrigin(value))
-    .filter(Boolean);
+    .flatMap((value) => {
+      const origin = normalizeOrigin(value);
+      return origin ? [origin] : [];
+    });
   const allowedOrigins = new Set<string>();
 
   addOriginWithAliases(allowedOrigins, siteConfig.site.url);
@@ -139,7 +141,7 @@ export function hasAllowedContentType(request: NextRequest, allowed: string[]): 
   return allowed.some((candidate) => contentType.startsWith(candidate.toLowerCase()));
 }
 
-export function getContentLength(request: NextRequest): number | null {
+function getContentLength(request: NextRequest): number | null {
   const raw = request.headers.get("content-length");
   if (!raw) {
     return null;
@@ -153,7 +155,7 @@ export function getContentLength(request: NextRequest): number | null {
   return parsed;
 }
 
-export function exceedsContentLength(request: NextRequest, maxBytes: number): boolean {
+function exceedsContentLength(request: NextRequest, maxBytes: number): boolean {
   const contentLength = getContentLength(request);
   return contentLength !== null && contentLength > maxBytes;
 }
@@ -168,6 +170,8 @@ async function exceedsBodySize(request: NextRequest, maxBytes: number): Promise<
   let total = 0;
 
   while (true) {
+    // Stream readers are sequential; this await depends on the previous chunk.
+    // oxlint-disable-next-line react-doctor/async-await-in-loop
     const { value, done } = await reader.read();
     if (done) {
       break;

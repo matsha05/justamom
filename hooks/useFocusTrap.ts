@@ -14,7 +14,10 @@ function getFocusableNodes(container: HTMLElement): HTMLElement[] {
   );
 
   return Array.from(nodes).filter(
-    (node) => !node.hasAttribute("disabled") && node.getAttribute("aria-hidden") !== "true"
+    (node) =>
+      !node.hasAttribute("disabled") &&
+      node.getAttribute("aria-hidden") !== "true" &&
+      node.getAttribute("tabindex") !== "-1"
   );
 }
 

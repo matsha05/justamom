@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { Chrome } from "@/components/Chrome";
 import { personJsonLd, siteConfig } from "@/lib/config";
+import { serializeJsonLd } from "@/lib/json-ld";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -63,12 +64,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en">
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-        />
+        >
+          {serializeJsonLd(personJsonLd)}
+        </script>
       </head>
       <body className={`${newsreader.variable} ${sourceSans3.variable}`}>
         <a href="#main-content" className="skip-link">

@@ -14,7 +14,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrollThreshold(20);
   const pathname = usePathname();
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDialogElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
 
@@ -34,7 +34,7 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-transparent transition-[padding,background-color,border-color] duration-300 ${
+      className={`sticky top-0 z-50 border-b border-transparent transition-[padding,background-color,border-color,backdrop-filter] duration-300 ${
         scrolled
           ? "bg-[var(--color-paper)]/96 backdrop-blur-sm border-[var(--color-border)] py-[0.95rem]"
           : "bg-transparent backdrop-blur-0 py-[1.2rem]"
@@ -65,7 +65,7 @@ export function Header() {
           >
             {mobileMenuOpen ? (
               <svg
-                className="w-6 h-6"
+                className="size-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ export function Header() {
               </svg>
             ) : (
               <svg
-                className="w-6 h-6"
+                className="size-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

@@ -11,7 +11,7 @@ interface ArrowIconProps {
 
 export function ArrowIcon({
     direction = "right",
-    className = "w-4 h-4",
+    className = "size-4",
 }: ArrowIconProps) {
     const paths: Record<typeof direction, string> = {
         right: "M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3",

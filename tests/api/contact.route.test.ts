@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/contact/route";
+import { conversionSources } from "@/lib/conversions";
 import { __resetMemoryStoreForTests } from "@/lib/server/kv";
 
 function createContactRequest(
@@ -60,6 +61,26 @@ describe("POST /api/contact", () => {
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
     expect(body.message).toContain("Message sent");
+  });
+
+  it("forwards conversion attribution to Formspree", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
+
+    const response = await POST(
+      createContactRequest(
+        contactPayload({
+          source: conversionSources.workPanel,
+          page_path: "/work",
+        })
+      )
+    );
+    const forwardedBody = fetchSpy.mock.calls[0]?.[1]?.body as FormData;
+
+    expect(response.status).toBe(200);
+    expect(forwardedBody.get("source")).toBe(conversionSources.workPanel);
+    expect(forwardedBody.get("page_path")).toBe("/work");
   });
 
   it("returns validation error for missing name", async () => {

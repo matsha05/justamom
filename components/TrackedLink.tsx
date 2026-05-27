@@ -2,7 +2,7 @@
 
 import Link, { type LinkProps } from "next/link";
 import { track } from "@vercel/analytics";
-import { forwardRef, type AnchorHTMLAttributes, type MouseEvent } from "react";
+import type { AnchorHTMLAttributes, MouseEvent } from "react";
 import type {
   AnalyticsEventName,
   AnalyticsEventProperties,
@@ -14,18 +14,19 @@ type TrackedLinkProps = LinkProps &
     eventProperties?: AnalyticsEventProperties;
   };
 
-export const TrackedLink = forwardRef<HTMLAnchorElement, TrackedLinkProps>(
-  ({ eventName, eventProperties, onClick, ...props }, ref) => {
-    const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-      onClick?.(event);
+export function TrackedLink({
+  eventName,
+  eventProperties,
+  onClick,
+  ...props
+}: TrackedLinkProps) {
+  const trackLinkActivation = (event: MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(event);
 
-      if (!event.defaultPrevented && eventName) {
-        track(eventName, eventProperties);
-      }
-    };
+    if (!event.defaultPrevented && eventName) {
+      track(eventName, eventProperties);
+    }
+  };
 
-    return <Link ref={ref} onClick={handleClick} {...props} />;
-  }
-);
-
-TrackedLink.displayName = "TrackedLink";
+  return <Link onClick={trackLinkActivation} {...props} />;
+}

@@ -7,27 +7,32 @@ interface MobileMenuProps {
   isOpen: boolean;
   pathname: string | null;
   onClose: () => void;
-  menuRef: RefObject<HTMLDivElement | null>;
+  menuRef: RefObject<HTMLDialogElement | null>;
 }
 
 export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuProps) {
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-40 bg-[var(--color-paper)]/98 backdrop-blur-sm transition-all duration-300 md:hidden flex items-center justify-center animate-fade-in"
-      style={{ top: "0", minHeight: "100vh" }}
-      onClick={onClose}
-      role="dialog"
+    <dialog
+      ref={menuRef}
+      open
+      className="fixed inset-0 z-40 m-0 flex h-screen w-screen max-w-none items-center justify-center border-0 bg-[var(--color-paper)]/98 p-0 text-[var(--color-ink)] backdrop:bg-transparent backdrop-blur-sm transition-all duration-300 md:hidden animate-fade-in"
       aria-modal="true"
       aria-labelledby="mobile-menu-title"
     >
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-hidden="true"
+        aria-label="Close menu"
+        className="absolute inset-0 cursor-default bg-transparent"
+        onClick={onClose}
+      />
       <nav
-        ref={menuRef}
         id="mobile-menu"
         aria-label="Primary"
-        className="mobile-menu-panel flex flex-col items-center gap-8 p-6"
-        onClick={(event) => event.stopPropagation()}
+        className="mobile-menu-panel relative z-10 flex flex-col items-center gap-8 p-6"
       >
         <h2 id="mobile-menu-title" className="sr-only">
           Menu
@@ -49,6 +54,6 @@ export function MobileMenu({ isOpen, pathname, onClose, menuRef }: MobileMenuPro
           );
         })}
       </nav>
-    </div>
+    </dialog>
   );
 }

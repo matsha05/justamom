@@ -1,4 +1,5 @@
 import { analyticsEvents, type AnalyticsEventName, type AnalyticsEventProperties } from "@/lib/analytics/events";
+import { conversionSources, type ConversionSource } from "@/lib/conversions";
 
 export interface ContentActionLink {
   href: string;
@@ -12,7 +13,7 @@ export interface NewsletterPanelContent {
   heading: string;
   description: string;
   trust: string;
-  source: string;
+  source: ConversionSource;
   sampleDownload?: {
     title: string;
     description: string;
@@ -31,7 +32,7 @@ export const marketingContent = {
       description:
         "Twice a month, I send honest stories and Scripture for moms.",
       trust: "",
-      source: "home_panel",
+      source: conversionSources.homePanel,
     } satisfies NewsletterPanelContent,
     aboutPanel: {
       eyebrow: "Newsletter",
@@ -39,7 +40,7 @@ export const marketingContent = {
       description:
         "I send A Note for Moms twice a month with honest stories, Scripture, and encouragement for motherhood.",
       trust: "Twice a month, and easy to keep up with.",
-      source: "about_panel",
+      source: conversionSources.aboutPanel,
     } satisfies NewsletterPanelContent,
     workPanel: {
       eyebrow: "Newsletter",
@@ -47,7 +48,7 @@ export const marketingContent = {
       description:
         "The newsletter is where I often share new ideas, honest stories, and early glimpses of the project.",
       trust: "Two notes a month, plus a look at the writing as it grows.",
-      source: "work_panel",
+      source: conversionSources.workPanel,
     } satisfies NewsletterPanelContent,
     speakingPanel: {
       eyebrow: "Newsletter",
@@ -55,7 +56,7 @@ export const marketingContent = {
       description:
         "The newsletter is the easiest place to start.",
       trust: "A simple way to read a few notes before reaching out.",
-      source: "speaking_panel",
+      source: conversionSources.speakingPanel,
     } satisfies NewsletterPanelContent,
     notePanel: {
       eyebrow: "Stay Connected",
@@ -63,7 +64,7 @@ export const marketingContent = {
       description:
         "If this note encouraged you, I send A Note for Moms twice a month.",
       trust: "Twice a month. Honest, biblical, and easy to keep up with.",
-      source: "note_panel",
+      source: conversionSources.notePanel,
     } satisfies NewsletterPanelContent,
   },
   home: {
@@ -77,7 +78,7 @@ export const marketingContent = {
         label: "Join A Note for Moms",
         eventName: analyticsEvents.newsletterCtaClick,
         eventProperties: {
-          location: "home_hero",
+          location: conversionSources.homeHero,
         },
       } satisfies ContentActionLink,
       secondaryCta: {
@@ -114,7 +115,7 @@ export const marketingContent = {
         label: "See speaking topics",
         eventName: analyticsEvents.speakingCtaClick,
         eventProperties: {
-          location: "home_speaking_section",
+          location: conversionSources.homeSpeakingSection,
         },
       } satisfies ContentActionLink,
     },
@@ -134,9 +135,9 @@ export const marketingContent = {
       eyebrow: "About Me",
       heading: "Hi, I'm Lizi Shaw.",
       paragraphs: [
-        "I'm a wife and mom of three, and I know how motherhood can feel holy and disorienting in the same breath. The days are full and loud, and it's easy to feel pulled between two exhausting stories: that you're 'just a mom,' or that you have to do it all.",
-        "My heart is to help moms step out of that noise and back into God's story. Scripture gives us something steadier: identity received before performance, and purpose that does not depend on perfect kids, perfect homes, or perfect plans.",
-        "Through speaking and writing, I want moms to leave with clear truth, practical encouragement, and the quiet confidence that comes from belonging to Christ.",
+        "I'm a wife and mom of three, and I know motherhood can feel beautiful and disorienting at the same time. The days are full, and it is easy to feel pulled between feeling small and feeling like you should be able to do everything.",
+        "I want to help moms come back to what is true. Scripture reminds us who we are before it asks anything from us, and that changes how we live through the ordinary work of motherhood.",
+        "In my writing and speaking, I hope moms leave encouraged, grounded in truth, and reminded that they belong to Christ.",
       ],
     },
     invitation: {
@@ -148,24 +149,24 @@ export const marketingContent = {
         label: "Invite me to speak",
         eventName: analyticsEvents.speakingCtaClick,
         eventProperties: {
-          location: "about_invitation",
+          location: conversionSources.aboutInvitation,
         },
       } satisfies ContentActionLink,
     },
   },
   work: {
     metadataDescription:
-      "A long-form project on motherhood, identity, and the steadier place where worth is received before it is performed.",
+      "I'm working on a book about motherhood, identity, and what it means to know your worth is not something you have to prove.",
     hero: {
       eyebrow: "Current Work",
       heading: "Just a Mom",
       description:
-        "A long-form project on motherhood, identity, and the steadier place where worth is received before it is performed.",
+        "I'm working on a book about motherhood, identity, and what it means to know your worth is not something you have to prove.",
     },
     thesis: {
       eyebrow: "Project thesis",
       body:
-        "Motherhood today is shaped by cultural lies that distort a woman's identity, whether by shrinking it to 'just a mom' or inflating it into 'do it all.' Both extremes steal joy and create pressure because they hinge identity on performance. But God tells a better story. From the very beginning, He defined women as image bearers first, and only then gave them purpose. By returning to the creation story, exposing the lies that echo from the garden into modern motherhood, and rediscovering God's pursuit and redemption, mothers can finally live from a secure identity rather than striving to earn one.",
+        "The heart of this project is simple: many moms feel stuck between feeling like they are 'just a mom' and feeling like they have to do everything well. Both are heavy. I want to write toward a better story from Scripture, one that reminds women who they are before what they do.",
     },
     excerpt: {
       eyebrow: "Selected excerpt",
@@ -178,10 +179,10 @@ export const marketingContent = {
     themes: {
       eyebrow: "Themes",
       items: [
-        "Identity received before performance",
-        "The cultural pressure to shrink or over-extend motherhood",
-        "The creation story as a steadier center for modern moms",
-        "Redemption from striving into quiet, durable confidence",
+        "Who you are before what you do",
+        "The pressure moms feel to disappear or do everything",
+        "What the creation story says about women and worth",
+        "How the gospel frees us from constant striving",
       ],
     },
     contact: {
@@ -207,22 +208,22 @@ export const marketingContent = {
       eyebrow: "Topics I share",
       heading: "Messages I return to",
       description:
-        "These are a few talks I come back to often. Each can be shaped for your church, retreat, or women's gathering.",
+        "These are a few messages I often share. I'm always happy to shape them for your church, retreat, or gathering.",
       items: [
         {
           title: "Identity in the Noise",
           description:
-            "A steadying look at the cultural pressure points shaping modern motherhood and how to live from a secure identity instead of performance.",
+            "A talk about the noise and pressure around modern motherhood, and the steadier identity Scripture offers.",
         },
         {
           title: "Finding God in the Ordinary",
           description:
-            "A reflective message about the sacred weight of everyday motherhood and the quiet faithfulness that carries it.",
+            "A message about meeting God in ordinary motherhood and the quiet faithfulness of everyday life.",
         },
         {
           title: "A Calling, Not a Consequence",
           description:
-            "A biblical reframe that restores dignity to motherhood without diminishing calling, gifts, or work outside the home.",
+            "A talk about the dignity of motherhood and the freedom to honor it without shrinking the rest of a woman's calling.",
         },
       ],
     },
@@ -230,7 +231,7 @@ export const marketingContent = {
       eyebrow: "Short bio (third-person)",
       description: "For host intros, event pages, or printed programs.",
       body:
-        "Lizi Shaw is a Christian writer and speaker who helps moms live from identity received in Christ, not performance. Her teaching is rooted in Scripture and shaped by the daily work of motherhood. With honest stories and practical encouragement, she helps moms remember who they are when life feels loud and overwhelming. Lizi lives in Niwot, Colorado, with her husband, Matt, and their three children. She loves skiing, running, and baking.",
+        "Lizi Shaw is a writer and speaker based in Niwot, Colorado. She writes and speaks to moms about motherhood, identity, and everyday faithfulness. Her work is rooted in Scripture and shaped by her own life as a wife and mother of three.",
     },
     inquiry: {
       eyebrow: "Inquiries",

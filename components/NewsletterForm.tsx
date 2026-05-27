@@ -18,11 +18,17 @@ import {
 } from "@/lib/client/http";
 import { marketingContent } from "@/content/site";
 import { analyticsEvents } from "@/lib/analytics/events";
+import {
+  conversionSources,
+  getCurrentPagePath,
+  type ConversionSource,
+  type NewsletterVariant,
+} from "@/lib/conversions";
 
 interface NewsletterFormProps {
-  variant?: "default" | "compact" | "hero";
+  variant?: NewsletterVariant;
   className?: string;
-  source?: string;
+  source?: ConversionSource;
 }
 
 interface EmailFieldProps {
@@ -90,7 +96,7 @@ function FeedbackMessages({
           aria-live="assertive"
           className="status-inline status-inline-error"
         >
-          <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" />
+          <CircleAlert className="mt-0.5 size-4 shrink-0" />
           {errorMessage}
         </p>
       ) : null}
@@ -101,7 +107,7 @@ function FeedbackMessages({
           aria-live="polite"
           className="status-inline status-inline-success"
         >
-          <CircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+          <CircleCheck className="mt-0.5 size-4 shrink-0" />
           {successMessage}
         </p>
       ) : null}
@@ -112,7 +118,7 @@ function FeedbackMessages({
 export function NewsletterForm({
   variant = "default",
   className = "",
-  source = "site",
+  source = conversionSources.site,
 }: NewsletterFormProps) {
   const inputId = useId();
   const [email, setEmail] = useState("");
@@ -124,11 +130,6 @@ export function NewsletterForm({
   const buttonText =
     variant === "compact" ? "Join the notes" : marketingContent.newsletter.buttonLabel;
   const isInlineVariant = variant === "compact" || variant === "hero";
-  const trackingProps = {
-    source,
-    variant,
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
@@ -136,6 +137,12 @@ export function NewsletterForm({
     setSuccessMessage(null);
 
     const idempotencyKey = getKey();
+    const pagePath = getCurrentPagePath();
+    const trackingProps = {
+      source,
+      variant,
+      page_path: pagePath,
+    };
     track(analyticsEvents.newsletterSignupStart, trackingProps);
 
     try {
@@ -145,7 +152,12 @@ export function NewsletterForm({
           "Content-Type": "application/json",
           "idempotency-key": idempotencyKey,
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          source,
+          variant,
+          page_path: pagePath,
+        }),
       });
 
       if (response.ok) {
@@ -214,8 +226,8 @@ export function NewsletterForm({
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Joining...
+                  <Loader2 className="size-4 animate-spin" />
+                  Joining…
                 </>
               ) : (
                 <>
@@ -237,8 +249,8 @@ export function NewsletterForm({
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Joining...
+                <Loader2 className="size-4 animate-spin" />
+                Joining…
               </>
             ) : (
               <>

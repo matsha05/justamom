@@ -64,10 +64,6 @@ function log(level: LogLevel, event: string, context: RequestContext, data?: Rec
   console.info("[api]", JSON.stringify(payload));
 }
 
-export function logInfo(event: string, context: RequestContext, data?: Record<string, unknown>) {
-  log("info", event, context, data);
-}
-
 export function logWarn(event: string, context: RequestContext, data?: Record<string, unknown>) {
   log("warn", event, context, data);
 }

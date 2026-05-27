@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -21,6 +21,54 @@ import {
   CONTACT_SUBJECT_SPEAKING_INQUIRY,
   contactSubjectOptions,
 } from "@/lib/content";
+import { conversionMessages, conversionSources } from "@/lib/conversions";
+
+interface ContactFormState {
+  selectedSubject: string;
+  eventType: string;
+  audienceSize: string;
+  subjectError: string | null;
+  selectError: string | null;
+}
+
+type ContactFormAction =
+  | { type: "subjectChanged"; value: string }
+  | { type: "eventTypeChanged"; value: string }
+  | { type: "audienceSizeChanged"; value: string }
+  | { type: "subjectError"; message: string | null }
+  | { type: "selectError"; message: string | null }
+  | { type: "clearErrors" }
+  | { type: "reset" };
+
+const initialContactFormState: ContactFormState = {
+  selectedSubject: "",
+  eventType: "",
+  audienceSize: "",
+  subjectError: null,
+  selectError: null,
+};
+
+function contactFormReducer(
+  state: ContactFormState,
+  action: ContactFormAction
+): ContactFormState {
+  switch (action.type) {
+    case "subjectChanged":
+      return { ...state, selectedSubject: action.value, subjectError: null };
+    case "eventTypeChanged":
+      return { ...state, eventType: action.value, selectError: null };
+    case "audienceSizeChanged":
+      return { ...state, audienceSize: action.value, selectError: null };
+    case "subjectError":
+      return { ...state, subjectError: action.message };
+    case "selectError":
+      return { ...state, selectError: action.message };
+    case "clearErrors":
+      return { ...state, subjectError: null, selectError: null };
+    case "reset":
+      return initialContactFormState;
+  }
+}
 
 export function ContactForm() {
   const {
@@ -33,11 +81,10 @@ export function ContactForm() {
     clearError,
     clearFeedbackOnInputChange,
   } = useContactFormSubmission();
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [eventType, setEventType] = useState("");
-  const [audienceSize, setAudienceSize] = useState("");
-  const [subjectError, setSubjectError] = useState<string | null>(null);
-  const [selectError, setSelectError] = useState<string | null>(null);
+  const [
+    { selectedSubject, eventType, audienceSize, subjectError, selectError },
+    dispatch,
+  ] = useReducer(contactFormReducer, initialContactFormState);
   const successBannerRef = useRef<HTMLDivElement>(null);
 
   const isSpeakingInquiry = selectedSubject === CONTACT_SUBJECT_SPEAKING_INQUIRY;
@@ -56,30 +103,36 @@ export function ContactForm() {
     clearError();
 
     if (!selectedSubject) {
-      setSubjectError("Please select a topic.");
+      dispatch({ type: "subjectError", message: "Please select a topic." });
       return;
     }
 
     if (isSpeakingInquiry && (!eventType || !audienceSize)) {
-      setSelectError("Please select an event type and group size.");
+      dispatch({
+        type: "selectError",
+        message: "Please select an event type and group size.",
+      });
       return;
     }
 
-    setSubjectError(null);
-    setSelectError(null);
+    dispatch({ type: "clearErrors" });
 
     const form = e.currentTarget;
+    const formType = isSpeakingInquiry ? "speaking" : "contact";
     const result = await submitContactForm({
       form,
-      formType: "contact",
-      successFallbackMessage: "Message sent! I will get back to you as soon as I can.",
+      formType,
+      source: conversionSources.contactPage,
+      subject: selectedSubject,
+      successFallbackMessage:
+        formType === "speaking"
+          ? conversionMessages.speakingSuccess
+          : conversionMessages.contactSuccess,
     });
 
     if (result.ok) {
       form.reset();
-      setSelectedSubject("");
-      setEventType("");
-      setAudienceSize("");
+      dispatch({ type: "reset" });
     }
   };
 
@@ -107,11 +160,10 @@ export function ContactForm() {
           ref={successBannerRef}
           id={successMessageId}
           className="delight-panel delight-panel-success"
-          role="status"
           aria-live="polite"
           tabIndex={-1}
         >
-          <CheckCircle className="delight-panel-icon w-5 h-5 text-[var(--color-success)] mt-0.5" />
+          <CheckCircle className="delight-panel-icon size-5 text-[var(--color-success)] mt-0.5" />
           <div className="space-y-1">
             <p className="text-body font-medium">Message sent.</p>
             <p className="text-caption text-[var(--color-ink-muted)]">{successMessage}</p>
@@ -150,8 +202,7 @@ export function ContactForm() {
           required
           value={selectedSubject}
           onValueChange={(value) => {
-            setSelectedSubject(value);
-            setSubjectError(null);
+            dispatch({ type: "subjectChanged", value });
           }}
         >
           <SelectTrigger
@@ -159,7 +210,7 @@ export function ContactForm() {
             aria-invalid={Boolean(subjectError)}
             aria-describedby={subjectError ? subjectErrorId : undefined}
           >
-            <SelectValue placeholder="Select a topic..." />
+            <SelectValue placeholder="Select a topic…" />
           </SelectTrigger>
           <SelectContent>
             {contactSubjectOptions.map((option) => (
@@ -194,12 +245,10 @@ export function ContactForm() {
             eventType={eventType}
             audienceSize={audienceSize}
             onEventTypeChange={(value) => {
-              setEventType(value);
-              setSelectError(null);
+              dispatch({ type: "eventTypeChanged", value });
             }}
             onAudienceSizeChange={(value) => {
-              setAudienceSize(value);
-              setSelectError(null);
+              dispatch({ type: "audienceSizeChanged", value });
             }}
             selectError={selectError}
             selectErrorId={selectErrorId}
@@ -216,7 +265,7 @@ export function ContactForm() {
           rows={5}
           placeholder={
             isSpeakingInquiry
-              ? "Tell me about your event theme or vision..."
+              ? "Tell me about your event theme or vision…"
               : "How can I help you?"
           }
         />
@@ -225,8 +274,8 @@ export function ContactForm() {
       <Button type="submit" disabled={isSubmitting || isSuccess} className="w-full md:w-auto">
         {isSubmitting ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Sending...
+            <Loader2 className="size-4 animate-spin" />
+            Sending…
           </>
         ) : (
           <>

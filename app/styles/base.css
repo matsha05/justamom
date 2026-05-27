@@ -3,6 +3,8 @@
    ============================================ */
 
 body {
+  --font-heading: var(--font-newsreader);
+  --font-body: var(--font-source-sans-3);
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: var(--text-body);
   line-height: 1.75;

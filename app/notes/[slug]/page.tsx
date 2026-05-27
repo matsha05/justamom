@@ -10,6 +10,7 @@ import { MDXImage } from "@/components/MDXImage";
 import { ArrowIcon } from "@/components/icons";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { absoluteUrl, siteConfig } from "@/lib/config";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { cn } from "@/lib/utils";
 
 interface PageProps {
@@ -64,10 +65,14 @@ const mdxComponents = {
 export default async function NotePage({ params }: PageProps) {
     const { slug } = await params;
 
-    let note;
+    let note: ReturnType<typeof getNoteBySlug> | null = null;
     try {
         note = getNoteBySlug(slug);
     } catch {
+        note = null;
+    }
+
+    if (!note) {
         notFound();
     }
 
@@ -107,8 +112,9 @@ export default async function NotePage({ params }: PageProps) {
             {/* Article Schema */}
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-            />
+            >
+                {serializeJsonLd(articleJsonLd)}
+            </script>
 
             <section className="section section-warm pb-10 note-detail-hero">
                 <div className="container-prose note-article-shell">
@@ -118,7 +124,7 @@ export default async function NotePage({ params }: PageProps) {
                             href="/notes"
                             className="text-caption text-[var(--color-ink-muted)] hover:text-[var(--color-accent)] transition-colors inline-flex items-center gap-2 mb-6 note-back-link"
                         >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                             </svg>
                             All Notes
@@ -140,37 +146,30 @@ export default async function NotePage({ params }: PageProps) {
                 <div className="container-prose note-article-shell">
                     <article>
                         <div className="text-body-lg note-article-content">
-                            <MDXRemote source={note.body} components={mdxComponents} />
+                            <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
                         <NoteSignOff className="note-signoff" />
-
-                        {note.postscript ? (
-                            <div className="text-body-lg note-article-content mt-10">
-                                <MDXRemote source={note.postscript} components={mdxComponents} />
-                            </div>
-                        ) : null}
-
                         <NoteNewsletterCTA />
 
                         {(prev || next) && (
                             <nav className="mt-12 pt-8 border-t border-[var(--color-border)] note-adjacent-nav">
                                 <div
                                     className={cn(
-                                        "note-adjacent-grid",
+                                        "flex justify-between items-start gap-8 note-adjacent-grid",
                                         ((prev && !next) || (!prev && next)) && "note-adjacent-grid-single"
                                     )}
                                 >
                                     {prev && (
                                         <Link
                                             href={`/notes/${prev.slug}`}
-                                            className="group note-adjacent-link"
+                                            className="group block flex-1 note-adjacent-card"
                                         >
-                                            <span className="note-adjacent-label">
+                                            <span className="text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2 note-adjacent-label">
                                                 <ArrowIcon direction="left" />
                                                 Previous
                                             </span>
-                                            <span className="note-adjacent-title">
+                                            <span className="text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors note-adjacent-title">
                                                 {prev.title}
                                             </span>
                                         </Link>
@@ -180,15 +179,27 @@ export default async function NotePage({ params }: PageProps) {
                                         <Link
                                             href={`/notes/${next.slug}`}
                                             className={cn(
-                                                "group note-adjacent-link",
-                                                prev ? "note-adjacent-link-end" : ""
+                                                "group block flex-1 note-adjacent-card",
+                                                prev ? "note-adjacent-card-end" : ""
                                             )}
                                         >
-                                            <span className="note-adjacent-label">
+                                            <span
+                                                className={cn(
+                                                    "text-caption text-[var(--color-ink-muted)] flex items-center gap-2 mb-2",
+                                                    prev ? "justify-end" : "",
+                                                    "note-adjacent-label"
+                                                )}
+                                            >
                                                 Next
                                                 <ArrowIcon />
                                             </span>
-                                            <span className="note-adjacent-title">
+                                            <span
+                                                className={cn(
+                                                    "text-body font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors",
+                                                    prev ? "text-right" : "",
+                                                    "note-adjacent-title"
+                                                )}
+                                            >
                                                 {next.title}
                                             </span>
                                         </Link>

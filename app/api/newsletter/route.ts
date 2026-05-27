@@ -33,6 +33,19 @@ interface NewsletterError {
 
 type NewsletterRouteResponse = NewsletterSuccess | NewsletterError;
 
+function buildSubscriberFields(data: {
+  source: string;
+}): Record<string, string> | undefined {
+  const sourceField = process.env.MAILERLITE_SIGNUP_SOURCE_FIELD?.trim();
+  if (!sourceField) {
+    return undefined;
+  }
+
+  return {
+    [sourceField]: data.source,
+  };
+}
+
 export async function POST(request: NextRequest) {
   const preparedResult = await prepareApiRouteRequest<NewsletterRouteResponse>({
     request,
@@ -76,6 +89,7 @@ export async function POST(request: NextRequest) {
     }
 
     const email = parsed.data.email;
+    const subscriberFields = buildSubscriberFields(parsed.data);
     const emailLimit = await checkRateLimit({
       key: `newsletter:email:${email}`,
       ...EMAIL_RATE_LIMIT,
@@ -135,7 +149,8 @@ export async function POST(request: NextRequest) {
       siteConfig.integrations.mailerLiteApiBaseUrl,
       email,
       groupId,
-      apiKey
+      apiKey,
+      subscriberFields
     );
 
     if (!createResult.ok) {
