@@ -2,7 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 
-const footerLinks = [...siteConfig.navLinks];
+const newsletterLink = { href: "/#newsletter", label: "Newsletter" };
+const footerLinks = [
+    ...siteConfig.navLinks.slice(0, 1),
+    newsletterLink,
+    ...siteConfig.navLinks.slice(1),
+];
 const legalLink = { href: "/legal", label: "Privacy & Terms" };
 
 export function Footer() {
