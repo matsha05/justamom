@@ -67,10 +67,10 @@ export default function HomePage() {
               <div className="hero-portrait-shell w-[min(340px,82vw)] lg:w-[390px]">
                 <div className="image-editorial aspect-[3/4] relative">
                   <Image
-                    src="/images/aboutmepic.avif"
-                    alt="Lizi Shaw standing outdoors with her husband"
+                    src="/images/home-family-hero.avif"
+                    alt="Lizi Shaw with her family sitting outdoors"
                     fill
-                    className="object-cover"
+                    className="object-cover object-[center_58%]"
                     priority
                     sizes="(min-width: 1280px) 390px, (min-width: 1024px) 34vw, (min-width: 640px) 44vw, 82vw"
                   />
