@@ -23,10 +23,10 @@ export default function AboutPage() {
                         {/* Photo */}
                         <div className="lg:col-span-5">
                             <div className="sticky top-32">
-                                <div className="image-editorial aspect-[3/4] relative">
+                                <div className="image-editorial aspect-[4/5] relative">
                                     <Image
-                                        src="/images/aboutmepic.avif"
-                                        alt="Lizi Shaw standing outdoors with her husband"
+                                        src="/images/lizi-solo-portrait.avif"
+                                        alt="Lizi Shaw smiling in a cream sweater"
                                         fill
                                         className="object-cover"
                                         priority

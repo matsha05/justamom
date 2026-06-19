@@ -28,7 +28,7 @@ export const siteConfig = {
       "Mom encouragement",
       "Finding God in everyday life",
     ],
-    imagePath: "/images/aboutmepic.avif",
+    imagePath: "/images/lizi-solo-portrait.avif",
   },
   content: {
     seoDescription:
