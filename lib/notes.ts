@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { cache } from "react";
+import { splitNoteContent } from "@/lib/note-content";
 
 export interface NoteMetadata {
   slug: string;
@@ -63,26 +64,6 @@ const readNotes = cache((): NoteRecord[] => {
     .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 });
 
-function stripTrailingSignOff(content: string): string {
-  const trimmed = content.trimEnd();
-  const signOffPattern = /(?:^|\n)\s*In it with you,\s*\n\s*Lizi\s*$/i;
-  if (!signOffPattern.test(trimmed)) {
-    return content;
-  }
-  const withoutSignOff = trimmed.replace(signOffPattern, "");
-  return `${withoutSignOff.trimEnd()}\n`;
-}
-
-function shouldRenderSignOff(content: string): boolean {
-  const strippedContent = stripTrailingSignOff(content);
-  if (strippedContent !== content) {
-    return true;
-  }
-
-  const inlineSignOffPattern = /(?:^|\n)\s*In it with you,\s*\n\s*Lizi(?:\s|\n|$)/i;
-  return !inlineSignOffPattern.test(content);
-}
-
 export function getAllNotes(): NoteMetadata[] {
   return readNotes().map((note) => ({
     slug: note.slug,
@@ -97,6 +78,7 @@ export function getNoteBySlug(slug: string) {
   if (!note) {
     throw new Error(`Note not found: '${slug}'.`);
   }
+  const contentSections = splitNoteContent(note.content);
 
   return {
     slug: note.slug,
@@ -105,8 +87,8 @@ export function getNoteBySlug(slug: string) {
       date: note.date,
       excerpt: note.excerpt,
     },
-    content: stripTrailingSignOff(note.content),
-    shouldRenderSignOff: shouldRenderSignOff(note.content),
+    content: contentSections.body,
+    postscript: contentSections.postscript,
   };
 }
 

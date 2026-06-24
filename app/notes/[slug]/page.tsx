@@ -152,8 +152,11 @@ export default async function NotePage({ params }: PageProps) {
                             <MDXRemote source={note.content} components={mdxComponents} />
                         </div>
 
-                        {note.shouldRenderSignOff ? (
-                            <NoteSignOff className="note-signoff" />
+                        <NoteSignOff className="note-signoff" />
+                        {note.postscript ? (
+                            <div className="text-body-lg note-article-content mt-8">
+                                <MDXRemote source={note.postscript} components={mdxComponents} />
+                            </div>
                         ) : null}
                         <NoteNewsletterCTA />
 
