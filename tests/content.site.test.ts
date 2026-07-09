@@ -23,6 +23,7 @@ describe("marketing content", () => {
       marketingContent.newsletter.workPanel.source,
       marketingContent.newsletter.speakingPanel.source,
       marketingContent.newsletter.notePanel.source,
+      marketingContent.newsletter.notesArchivePanel.source,
     ];
 
     expect(new Set(sources).size).toBe(sources.length);

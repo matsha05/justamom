@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PageHero } from "@/components/layout/PageHero";
 import { siteConfig } from "@/lib/config";
 import { buildPageMetadata } from "@/lib/metadata";
 
@@ -11,21 +12,17 @@ export const metadata: Metadata = buildPageMetadata({
 export default function LegalPage() {
   return (
     <>
-      <section className="section section-warm">
-        <div className="container-prose space-y-6">
-          <p className="text-label">Legal</p>
-          <h1 className="text-display">Privacy &amp; Terms</h1>
-          <p className="text-body-lg text-[var(--color-ink-soft)]">
-            A plain-language note on how information is handled here and the
-            basic terms for using this website.
-          </p>
-          <p className="text-caption text-[var(--color-ink-muted)]">
-            Last updated: {siteConfig.legal.lastUpdated}
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Legal"
+        title="Privacy & Terms"
+        description="A plain-language note on how information is handled here and the basic terms for using this website."
+      >
+        <p className="text-caption text-[var(--color-ink-muted)]">
+          Last updated: {siteConfig.legal.lastUpdated}
+        </p>
+      </PageHero>
 
-      <section className="section">
+      <section className="section section-content">
         <div className="container-prose">
           <div className="prose text-body text-[var(--color-ink-soft)]">
             <h2 id="privacy">Privacy</h2>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { format, parseISO } from "date-fns";
 import type { NoteMetadata } from "@/lib/notes";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { cn } from "@/lib/utils";
 
 interface NotesFeedProps {

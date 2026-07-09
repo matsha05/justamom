@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
 import { TrackedLink } from "@/components/TrackedLink";

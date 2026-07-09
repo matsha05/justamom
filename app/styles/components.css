@@ -32,8 +32,8 @@
   display: inline-flex;
   align-items: center;
   padding: 0.25rem 0;
-  font-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.79rem);
-  font-weight: 500;
+  font-size: clamp(0.79rem, 0.76rem + 0.12vw, 0.84rem);
+  font-weight: 550;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-ink-muted);
@@ -260,20 +260,6 @@
   .note-feed-article:hover .note-feed-excerpt {
     color: var(--color-ink);
   }
-}
-
-.site-footer-signature {
-  transform-origin: left center;
-  transition:
-    transform var(--duration-normal) var(--ease-out),
-    opacity var(--duration-normal) var(--ease-out),
-    filter var(--duration-normal) var(--ease-out);
-}
-
-.site-footer-signature-block:hover .site-footer-signature {
-  transform: translateX(2px) rotate(-1.25deg);
-  opacity: 1;
-  filter: drop-shadow(0 8px 18px rgba(29, 27, 25, 0.08));
 }
 
 /* ============================================

@@ -6,7 +6,7 @@ import { track } from "@vercel/analytics";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CircleAlert, CircleCheck, Loader2 } from "lucide-react";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { Label } from "@/components/ui/label";
 import { useIdempotencyKey } from "@/hooks/useIdempotencyKey";
 import { useSubmitState } from "@/hooks/useSubmitState";

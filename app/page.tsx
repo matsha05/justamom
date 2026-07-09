@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllNotes } from "@/lib/notes";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
 import { buildPageMetadata } from "@/lib/metadata";

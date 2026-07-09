@@ -77,6 +77,27 @@ test("note pages render with a post-note newsletter CTA", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("notes archive closes with a newsletter invitation", async ({ page }) => {
+  await page.goto("/notes");
+
+  const archiveInvitation = page.getByRole("heading", {
+    name: "Want the next note in your inbox?",
+  });
+  await archiveInvitation.scrollIntoViewIfNeeded();
+
+  await expect(archiveInvitation).toBeVisible();
+  await expect(page.getByRole("button", { name: "Join the notes" })).toBeVisible();
+});
+
+test("speaking hero links directly to the inquiry form", async ({ page }) => {
+  await page.goto("/speaking");
+
+  await page.getByRole("link", { name: "Invite me to speak" }).first().click();
+
+  await expect(page).toHaveURL(/\/speaking#book$/);
+  await expect(page.locator("#book")).toBeVisible();
+});
+
 test("contact form shows client-side validation for missing topic", async ({ page }) => {
   await page.goto("/contact");
 
