@@ -22,6 +22,35 @@
   padding-bottom: var(--section-padding);
 }
 
+.section-page-hero {
+  padding-top: clamp(4.5rem, 7vw, 7.25rem);
+  padding-bottom: clamp(4.5rem, 7vw, 7.25rem);
+}
+
+.section-page-hero-compact {
+  padding-top: clamp(3.75rem, 6vw, 5.5rem);
+  padding-bottom: clamp(3.25rem, 5.5vw, 5rem);
+}
+
+.section-content {
+  padding-top: clamp(4.5rem, 7vw, 7rem);
+  padding-bottom: clamp(4.5rem, 7vw, 7rem);
+}
+
+.section-compact {
+  padding-top: clamp(3.25rem, 5vw, 5rem);
+  padding-bottom: clamp(3.25rem, 5vw, 5rem);
+}
+
+.section-notes-list {
+  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(4.5rem, 7vw, 7rem);
+}
+
+.container-prose-followup {
+  margin-top: clamp(5rem, 8vw, 8rem);
+}
+
 .section-warm {
   background: var(--color-paper-warm);
 }

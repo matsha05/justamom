@@ -6,6 +6,7 @@ export const conversionSources = {
   workPanel: "work_panel",
   speakingPanel: "speaking_panel",
   notePanel: "note_panel",
+  notesArchive: "notes_archive",
   contactPage: "contact_page",
   speakingPage: "speaking_page",
   aboutInvitation: "about_invitation",

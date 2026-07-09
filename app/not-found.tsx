@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
 
 export default function NotFound() {
     return (

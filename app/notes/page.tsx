@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllNotes } from "@/lib/notes";
 import { buildPageMetadata } from "@/lib/metadata";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
+import { PageHero } from "@/components/layout/PageHero";
+import { NewsletterSignupPanel } from "@/components/NewsletterSignupPanel";
 import { Button } from "@/components/ui/button";
 import { NotesFeed } from "@/components/notes/NotesFeed";
+import { marketingContent } from "@/content/site";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Notes for Moms",
@@ -18,17 +21,14 @@ export default function NotesPage() {
 
   return (
     <>
-      <section className="section section-warm pt-[clamp(3.75rem,8vw,6rem)] pb-10">
-        <div className="container-prose space-y-6">
-          <p className="text-label">Notes for Moms</p>
-          <h1 className="text-display">A Note for Moms</h1>
-          <p className="text-body-lg text-[var(--color-ink-soft)]">
-            Short notes for moms, sent twice a month.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Notes for Moms"
+        title="A Note for Moms"
+        description="Short notes for moms, sent twice a month."
+        density="compact"
+      />
 
-      <section className="section pt-8">
+      <section className="section section-notes-list">
         <div className="container">
           <div className="section-split">
             <div className="space-y-5 lg:pt-1">
@@ -48,6 +48,13 @@ export default function NotesPage() {
               supportingItemClassName="py-9 first:pt-0"
             />
           </div>
+        </div>
+
+        <div className="container-prose container-prose-followup">
+          <NewsletterSignupPanel
+            panel={marketingContent.newsletter.notesArchivePanel}
+            align="left"
+          />
         </div>
       </section>
     </>

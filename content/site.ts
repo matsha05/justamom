@@ -63,8 +63,16 @@ export const marketingContent = {
       heading: "Get A Note for Moms in your inbox",
       description:
         "If this note encouraged you, I send A Note for Moms twice a month.",
-      trust: "Twice a month. Honest, biblical, and easy to keep up with.",
+      trust: "Honest, biblical, and easy to keep up with.",
       source: conversionSources.notePanel,
+    } satisfies NewsletterPanelContent,
+    notesArchivePanel: {
+      eyebrow: "Newsletter",
+      heading: "Want the next note in your inbox?",
+      description:
+        "I send honest stories and Scripture for moms twice a month.",
+      trust: "",
+      source: conversionSources.notesArchive,
     } satisfies NewsletterPanelContent,
   },
   home: {
@@ -203,6 +211,14 @@ export const marketingContent = {
       heading: "Speaking",
       description:
         "I speak to moms about identity, motherhood, and following Jesus in everyday life.",
+      cta: {
+        href: "#book",
+        label: "Invite me to speak",
+        eventName: analyticsEvents.speakingCtaClick,
+        eventProperties: {
+          location: conversionSources.speakingPage,
+        },
+      } satisfies ContentActionLink,
     },
     topics: {
       eyebrow: "Topics I share",

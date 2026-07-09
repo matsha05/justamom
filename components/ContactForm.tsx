@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useReducer, useRef } from "react";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -12,8 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CheckCircle, Loader2 } from "lucide-react";
-import { ArrowIcon } from "@/components/icons";
+import { CheckCircle } from "lucide-react";
+import {
+  FormErrorMessage,
+  FormSubmitButton,
+  IdentityFields,
+} from "@/components/forms/FormPrimitives";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
 import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
@@ -145,15 +147,7 @@ export function ContactForm() {
     >
       <HoneypotField />
 
-      {formError ? (
-        <div
-          role="alert"
-          aria-live="assertive"
-          className="delight-panel delight-panel-error"
-        >
-          {formError}
-        </div>
-      ) : null}
+      <FormErrorMessage message={formError} />
 
       {successMessage ? (
         <div
@@ -171,30 +165,7 @@ export function ContactForm() {
         </div>
       ) : null}
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            autoComplete="name"
-            required
-            placeholder="Your name"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            autoComplete="email"
-            required
-            placeholder="you@example.com"
-          />
-        </div>
-      </div>
+      <IdentityFields />
 
       <div className="space-y-2">
         <Label htmlFor="subject">What&apos;s this about?</Label>
@@ -271,19 +242,11 @@ export function ContactForm() {
         />
       </div>
 
-      <Button type="submit" disabled={isSubmitting || isSuccess} className="w-full md:w-auto">
-        {isSubmitting ? (
-          <>
-            <Loader2 className="size-4 animate-spin" />
-            Sending…
-          </>
-        ) : (
-          <>
-            Send message
-            <ArrowIcon />
-          </>
-        )}
-      </Button>
+      <FormSubmitButton
+        isSubmitting={isSubmitting}
+        disabled={isSuccess}
+        className="w-full md:w-auto"
+      />
     </form>
   );
 }

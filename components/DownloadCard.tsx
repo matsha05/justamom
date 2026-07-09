@@ -1,7 +1,7 @@
 import "server-only";
 import fs from "fs";
 import path from "path";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

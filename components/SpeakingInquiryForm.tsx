@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2 } from "lucide-react";
-import { ArrowIcon } from "@/components/icons";
+import { CheckCircle } from "lucide-react";
+import {
+  FormErrorMessage,
+  FormSubmitButton,
+  IdentityFields,
+} from "@/components/forms/FormPrimitives";
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
 import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
@@ -99,40 +102,15 @@ export function SpeakingInquiryForm() {
     >
       <HoneypotField />
 
-      {formError ? (
-        <div
-          role="alert"
-          aria-live="assertive"
-          className="delight-panel delight-panel-error"
-        >
-          {formError}
-        </div>
-      ) : null}
+      <FormErrorMessage message={formError} />
 
-      <div className="grid md:grid-cols-2 gap-5">
-        <div className="space-y-2">
-          <Label htmlFor="name">Your Name</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            autoComplete="name"
-            required
-            placeholder="Jane Doe"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            autoComplete="email"
-            required
-            placeholder="jane@example.com"
-          />
-        </div>
-      </div>
+      <IdentityFields
+        nameLabel="Your Name"
+        emailLabel="Email Address"
+        namePlaceholder="Jane Doe"
+        emailPlaceholder="jane@example.com"
+        className="gap-5"
+      />
 
       <SpeakingEventFields
         required
@@ -160,19 +138,7 @@ export function SpeakingInquiryForm() {
         />
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-        {isSubmitting ? (
-          <>
-            <Loader2 className="size-4 animate-spin" />
-            Sending…
-          </>
-        ) : (
-          <>
-            Send message
-            <ArrowIcon />
-          </>
-        )}
-      </Button>
+      <FormSubmitButton isSubmitting={isSubmitting} className="w-full sm:w-auto" />
     </form>
   );
 }

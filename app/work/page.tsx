@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons/ArrowIcon";
+import { PageHero } from "@/components/layout/PageHero";
 import { siteConfig } from "@/lib/config";
 import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
@@ -16,17 +17,13 @@ export default function WorkPage() {
 
   return (
     <>
-      <section className="section section-warm">
-        <div className="container-prose">
-          <p className="text-label mb-6">{work.hero.eyebrow}</p>
-          <h1 className="text-display mb-6">{work.hero.heading}</h1>
-          <p className="text-body-lg text-[var(--color-ink-soft)]">
-            {work.hero.description}
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow={work.hero.eyebrow}
+        title={work.hero.heading}
+        description={work.hero.description}
+      />
 
-      <section className="section">
+      <section className="section section-content">
         <div className="container-prose space-y-10">
           <div className="space-y-4">
             <p className="text-label">{work.thesis.eyebrow}</p>
