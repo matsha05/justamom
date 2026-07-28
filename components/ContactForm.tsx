@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useRef } from "react";
+import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -19,105 +19,57 @@ import {
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
 import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
+import { useSpeakingEventDetails } from "@/hooks/useSpeakingEventDetails";
 import {
   CONTACT_SUBJECT_SPEAKING_INQUIRY,
   contactSubjectOptions,
 } from "@/lib/content";
 import { conversionMessages, conversionSources } from "@/lib/conversions";
 
-interface ContactFormState {
-  selectedSubject: string;
-  eventType: string;
-  audienceSize: string;
-  subjectError: string | null;
-  selectError: string | null;
-}
-
-type ContactFormAction =
-  | { type: "subjectChanged"; value: string }
-  | { type: "eventTypeChanged"; value: string }
-  | { type: "audienceSizeChanged"; value: string }
-  | { type: "subjectError"; message: string | null }
-  | { type: "selectError"; message: string | null }
-  | { type: "clearErrors" }
-  | { type: "reset" };
-
-const initialContactFormState: ContactFormState = {
-  selectedSubject: "",
-  eventType: "",
-  audienceSize: "",
-  subjectError: null,
-  selectError: null,
-};
-
-function contactFormReducer(
-  state: ContactFormState,
-  action: ContactFormAction
-): ContactFormState {
-  switch (action.type) {
-    case "subjectChanged":
-      return { ...state, selectedSubject: action.value, subjectError: null };
-    case "eventTypeChanged":
-      return { ...state, eventType: action.value, selectError: null };
-    case "audienceSizeChanged":
-      return { ...state, audienceSize: action.value, selectError: null };
-    case "subjectError":
-      return { ...state, subjectError: action.message };
-    case "selectError":
-      return { ...state, selectError: action.message };
-    case "clearErrors":
-      return { ...state, subjectError: null, selectError: null };
-    case "reset":
-      return initialContactFormState;
-  }
-}
-
 export function ContactForm() {
   const {
-    status,
     isSubmitting,
     isSuccess,
     successMessage,
     formError,
+    successBannerRef,
     submitContactForm,
     clearError,
     clearFeedbackOnInputChange,
   } = useContactFormSubmission();
-  const [
-    { selectedSubject, eventType, audienceSize, subjectError, selectError },
-    dispatch,
-  ] = useReducer(contactFormReducer, initialContactFormState);
-  const successBannerRef = useRef<HTMLDivElement>(null);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [subjectError, setSubjectError] = useState<string | null>(null);
+  const {
+    eventType,
+    audienceSize,
+    selectError,
+    updateEventType,
+    updateAudienceSize,
+    validateRequiredDetails,
+    clearValidationError,
+    resetDetails,
+  } = useSpeakingEventDetails();
 
   const isSpeakingInquiry = selectedSubject === CONTACT_SUBJECT_SPEAKING_INQUIRY;
   const subjectErrorId = "subject-error";
   const selectErrorId = "contact-speaking-select-error";
   const successMessageId = "contact-success-message";
 
-  useEffect(() => {
-    if (status === "success") {
-      successBannerRef.current?.focus();
-    }
-  }, [status]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     clearError();
 
     if (!selectedSubject) {
-      dispatch({ type: "subjectError", message: "Please select a topic." });
+      setSubjectError("Please select a topic.");
       return;
     }
 
-    if (isSpeakingInquiry && (!eventType || !audienceSize)) {
-      dispatch({
-        type: "selectError",
-        message: "Please select an event type and group size.",
-      });
+    if (isSpeakingInquiry && !validateRequiredDetails()) {
       return;
     }
 
-    dispatch({ type: "clearErrors" });
+    setSubjectError(null);
+    clearValidationError();
 
     const form = e.currentTarget;
     const formType = isSpeakingInquiry ? "speaking" : "contact";
@@ -134,7 +86,9 @@ export function ContactForm() {
 
     if (result.ok) {
       form.reset();
-      dispatch({ type: "reset" });
+      setSelectedSubject("");
+      setSubjectError(null);
+      resetDetails();
     }
   };
 
@@ -173,7 +127,8 @@ export function ContactForm() {
           required
           value={selectedSubject}
           onValueChange={(value) => {
-            dispatch({ type: "subjectChanged", value });
+            setSelectedSubject(value);
+            setSubjectError(null);
           }}
         >
           <SelectTrigger
@@ -215,12 +170,8 @@ export function ContactForm() {
             required
             eventType={eventType}
             audienceSize={audienceSize}
-            onEventTypeChange={(value) => {
-              dispatch({ type: "eventTypeChanged", value });
-            }}
-            onAudienceSizeChange={(value) => {
-              dispatch({ type: "audienceSizeChanged", value });
-            }}
+            onEventTypeChange={updateEventType}
+            onAudienceSizeChange={updateAudienceSize}
             selectError={selectError}
             selectErrorId={selectErrorId}
           />

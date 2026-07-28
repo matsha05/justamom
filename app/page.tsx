@@ -109,7 +109,7 @@ export default function HomePage() {
               {newsletter.homePanel.description}
             </p>
             <div className="max-w-md mx-auto">
-              <NewsletterForm variant="compact" source={newsletter.homePanel.source} />
+              <NewsletterForm source={newsletter.homePanel.source} />
             </div>
             {newsletter.homePanel.trust ? (
               <p className="text-caption text-[var(--color-ink-muted)]">

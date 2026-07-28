@@ -70,6 +70,7 @@ interface FormSubmitButtonProps {
   disabled?: boolean;
   className?: string;
   children?: ReactNode;
+  submittingLabel?: ReactNode;
 }
 
 export function FormSubmitButton({
@@ -77,6 +78,7 @@ export function FormSubmitButton({
   disabled = false,
   className,
   children = "Send message",
+  submittingLabel = "Sending…",
 }: FormSubmitButtonProps) {
   return (
     <Button
@@ -87,7 +89,7 @@ export function FormSubmitButton({
       {isSubmitting ? (
         <>
           <Loader2 className="size-4 animate-spin" />
-          Sending…
+          {submittingLabel}
         </>
       ) : (
         <>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { track } from "@vercel/analytics";
 import { analyticsEvents } from "@/lib/analytics/events";
@@ -39,6 +39,20 @@ export function useContactFormSubmission() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const { getKey, resetKey } = useIdempotencyKey();
+  const successBannerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (status === "success") {
+      successBannerRef.current?.focus();
+    }
+  }, [status]);
+
+  function failSubmission(message: string): SubmitContactFormResult {
+    toast.error(message);
+    setFormError(message);
+    setStatus("error");
+    return { ok: false, message };
+  }
 
   async function submitContactForm({
     form,
@@ -106,24 +120,14 @@ export function useContactFormSubmission() {
       if (response.status === 429) {
         const retryAfterSeconds = getRetryAfterSeconds(response);
         if (retryAfterSeconds) {
-          const message = formatRetryAfterMessage(retryAfterSeconds);
-          toast.error(message);
-          setFormError(message);
-          setStatus("error");
-          return { ok: false, message };
+          return failSubmission(formatRetryAfterMessage(retryAfterSeconds));
         }
       }
 
       const message = getStringFromRecord(data, "error") ?? errorFallbackMessage;
-      toast.error(message);
-      setFormError(message);
-      setStatus("error");
-      return { ok: false, message };
+      return failSubmission(message);
     } catch {
-      toast.error(networkErrorMessage);
-      setFormError(networkErrorMessage);
-      setStatus("error");
-      return { ok: false, message: networkErrorMessage };
+      return failSubmission(networkErrorMessage);
     }
   }
 
@@ -172,6 +176,7 @@ export function useContactFormSubmission() {
     isSuccess,
     successMessage,
     formError,
+    successBannerRef,
     submitContactForm,
     clearError,
     resetFeedback,

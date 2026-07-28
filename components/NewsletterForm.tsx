@@ -1,32 +1,17 @@
 "use client";
 
-import { useId, useState } from "react";
-import { toast } from "sonner";
-import { track } from "@vercel/analytics";
+import { useId } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { CircleAlert, CircleCheck, Loader2 } from "lucide-react";
-import { ArrowIcon } from "@/components/icons/ArrowIcon";
+import { CircleAlert, CircleCheck } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useIdempotencyKey } from "@/hooks/useIdempotencyKey";
-import { useSubmitState } from "@/hooks/useSubmitState";
-import {
-  fetchJson,
-  formatRetryAfterMessage,
-  getRetryAfterSeconds,
-  getStringFromRecord,
-} from "@/lib/client/http";
-import { marketingContent } from "@/content/site";
-import { analyticsEvents } from "@/lib/analytics/events";
+import { FormSubmitButton } from "@/components/forms/FormPrimitives";
 import {
   conversionSources,
-  getCurrentPagePath,
   type ConversionSource,
-  type NewsletterVariant,
 } from "@/lib/conversions";
+import { useNewsletterSubmission } from "@/hooks/useNewsletterSubmission";
 
 interface NewsletterFormProps {
-  variant?: NewsletterVariant;
   className?: string;
   source?: ConversionSource;
 }
@@ -116,127 +101,48 @@ function FeedbackMessages({
 }
 
 export function NewsletterForm({
-  variant = "default",
   className = "",
   source = conversionSources.site,
 }: NewsletterFormProps) {
   const inputId = useId();
-  const [email, setEmail] = useState("");
-  const { status, setStatus, isSubmitting } = useSubmitState();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const { getKey, resetKey } = useIdempotencyKey();
+  const {
+    email,
+    errorMessage,
+    successMessage,
+    isSubmitting,
+    submitNewsletter,
+    updateEmail,
+  } = useNewsletterSubmission({ source });
 
-  const buttonText =
-    variant === "compact" ? "Join the notes" : marketingContent.newsletter.buttonLabel;
-  const isInlineVariant = variant === "compact" || variant === "hero";
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("submitting");
-    setErrorMessage(null);
-    setSuccessMessage(null);
-
-    const idempotencyKey = getKey();
-    const pagePath = getCurrentPagePath();
-    const trackingProps = {
-      source,
-      variant,
-      page_path: pagePath,
-    };
-    track(analyticsEvents.newsletterSignupStart, trackingProps);
-
-    try {
-      const { response, data } = await fetchJson("/api/newsletter", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "idempotency-key": idempotencyKey,
-        },
-        body: JSON.stringify({
-          email,
-          source,
-          variant,
-          page_path: pagePath,
-        }),
-      });
-
-      if (response.ok) {
-        const message =
-          getStringFromRecord(data, "message") ?? "You're in! Check your inbox.";
-        setStatus("success");
-        setEmail("");
-        setSuccessMessage(message);
-        track(analyticsEvents.newsletterSignupSuccess, trackingProps);
-        toast.success(message);
-        resetKey();
-        return;
-      }
-
-      if (response.status === 429) {
-        const retryAfterSeconds = getRetryAfterSeconds(response);
-        if (retryAfterSeconds) {
-          const message = formatRetryAfterMessage(retryAfterSeconds);
-          setStatus("error");
-          setErrorMessage(message);
-          toast.error(message);
-          return;
-        }
-      }
-
-      const message =
-        getStringFromRecord(data, "error") ?? "Something went wrong. Please try again.";
-      setStatus("error");
-      setErrorMessage(message);
-      toast.error(message);
-    } catch {
-      const message = "Network error. Please try again.";
-      setStatus("error");
-      setErrorMessage(message);
-      toast.error(message);
-    }
-  };
-
-  const resetMessages = (value: string) => {
-    setEmail(value);
-    resetKey();
-    if (errorMessage) setErrorMessage(null);
-    if (successMessage) setSuccessMessage(null);
-    if (status !== "idle") setStatus("idle");
+    await submitNewsletter();
   };
 
   return (
     <form onSubmit={handleSubmit} className={className} aria-busy={isSubmitting}>
-      <div className={isInlineVariant ? "space-y-2" : "space-y-4"}>
+      <div className="space-y-2">
         <Label htmlFor={inputId} className="text-caption text-[var(--color-ink-muted)]">
           Email address
         </Label>
 
-        <div className={isInlineVariant ? "flex flex-col sm:flex-row gap-3" : "space-y-2"}>
+        <div className="flex flex-col gap-3 sm:flex-row">
           <EmailField
             inputId={inputId}
             email={email}
             isSubmitting={isSubmitting}
             errorMessage={errorMessage}
             successMessage={successMessage}
-            placeholder={isInlineVariant ? "Your email" : "Enter your email"}
-            className={isInlineVariant ? "flex-1" : "w-full"}
-            onChange={resetMessages}
+            placeholder="Your email"
+            className="flex-1"
+            onChange={updateEmail}
           />
-          {isInlineVariant ? (
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Joining…
-                </>
-              ) : (
-                <>
-                  {buttonText}
-                  <ArrowIcon />
-                </>
-              )}
-            </Button>
-          ) : null}
+          <FormSubmitButton
+            isSubmitting={isSubmitting}
+            submittingLabel="Joining…"
+          >
+            Join the notes
+          </FormSubmitButton>
         </div>
 
         <FeedbackMessages
@@ -244,22 +150,6 @@ export function NewsletterForm({
           errorMessage={errorMessage}
           successMessage={successMessage}
         />
-
-        {!isInlineVariant ? (
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                Joining…
-              </>
-            ) : (
-              <>
-                {buttonText}
-                <ArrowIcon />
-              </>
-            )}
-          </Button>
-        ) : null}
       </div>
     </form>
   );

@@ -40,7 +40,7 @@ export function NewsletterSignupPanel({
           </p>
         </div>
         <div className={cn("max-w-md", isCentered && "mx-auto")}>
-          <NewsletterForm variant="compact" source={panel.source} />
+          <NewsletterForm source={panel.source} />
         </div>
         {panel.trust ? (
           <p className="text-caption text-[var(--color-ink-muted)]">{panel.trust}</p>

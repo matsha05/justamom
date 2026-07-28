@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import {
 import { HoneypotField } from "@/components/forms/HoneypotField";
 import { SpeakingEventFields } from "@/components/forms/SpeakingEventFields";
 import { useContactFormSubmission } from "@/hooks/useContactFormSubmission";
+import { useSpeakingEventDetails } from "@/hooks/useSpeakingEventDetails";
 import { conversionMessages, conversionSources } from "@/lib/conversions";
 
 export function SpeakingInquiryForm() {
@@ -21,35 +21,32 @@ export function SpeakingInquiryForm() {
     isSubmitting,
     successMessage,
     formError,
+    successBannerRef,
     submitContactForm,
     clearError,
     resetFeedback,
     clearFeedbackOnInputChange,
   } = useContactFormSubmission();
-  const [eventType, setEventType] = useState("");
-  const [audienceSize, setAudienceSize] = useState("");
-  const [selectError, setSelectError] = useState<string | null>(null);
-  const successBannerRef = useRef<HTMLDivElement>(null);
+  const {
+    eventType,
+    audienceSize,
+    selectError,
+    updateEventType,
+    updateAudienceSize,
+    validateRequiredDetails,
+    resetDetails,
+  } = useSpeakingEventDetails();
 
   const selectErrorId = "speaking-select-error";
   const successMessageId = "speaking-success-message";
-
-  useEffect(() => {
-    if (status === "success") {
-      successBannerRef.current?.focus();
-    }
-  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     clearError();
 
-    if (!eventType || !audienceSize) {
-      setSelectError("Please select an event type and group size.");
+    if (!validateRequiredDetails()) {
       return;
     }
-
-    setSelectError(null);
 
     const form = e.currentTarget;
     const result = await submitContactForm({
@@ -62,8 +59,7 @@ export function SpeakingInquiryForm() {
 
     if (result.ok) {
       form.reset();
-      setEventType("");
-      setAudienceSize("");
+      resetDetails();
     }
   };
 
@@ -116,14 +112,8 @@ export function SpeakingInquiryForm() {
         required
         eventType={eventType}
         audienceSize={audienceSize}
-        onEventTypeChange={(value) => {
-          setEventType(value);
-          setSelectError(null);
-        }}
-        onAudienceSizeChange={(value) => {
-          setAudienceSize(value);
-          setSelectError(null);
-        }}
+        onEventTypeChange={updateEventType}
+        onAudienceSizeChange={updateAudienceSize}
         selectError={selectError}
         selectErrorId={selectErrorId}
       />

@@ -25,7 +25,6 @@ export interface NewsletterPanelContent {
 
 export const marketingContent = {
   newsletter: {
-    buttonLabel: "Join A Note for Moms",
     homePanel: {
       eyebrow: "Newsletter",
       heading: "A Note for Moms.",
