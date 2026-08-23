@@ -5,7 +5,7 @@ import { MDXImage } from "@/components/MDXImage";
 import { NoteNewsletterCTA } from "@/components/NoteNewsletterCTA";
 import { NoteSignOff } from "@/components/NoteSignOff";
 import { NoteNavigation } from "@/components/notes/NoteNavigation";
-import type { NoteMetadata } from "@/lib/notes";
+import type { NoteMetadata, WritingKind } from "@/lib/notes";
 
 const mdxComponents = {
   p: ({ children, ...props }: HTMLAttributes<HTMLParagraphElement>) => (
@@ -40,6 +40,7 @@ const mdxComponents = {
 interface NoteArticleProps {
   content: string;
   postscript: string | null;
+  kind: WritingKind;
   previousNote: NoteMetadata | null;
   nextNote: NoteMetadata | null;
 }
@@ -47,6 +48,7 @@ interface NoteArticleProps {
 export function NoteArticle({
   content,
   postscript,
+  kind,
   previousNote,
   nextNote,
 }: NoteArticleProps) {
@@ -56,7 +58,7 @@ export function NoteArticle({
         <MDXRemote source={content} components={mdxComponents} />
       </div>
 
-      <NoteSignOff className="note-signoff" />
+      {kind === "note" ? <NoteSignOff className="note-signoff" /> : null}
       {postscript ? (
         <div className="note-article-content mt-8 text-body-lg">
           <MDXRemote source={postscript} components={mdxComponents} />

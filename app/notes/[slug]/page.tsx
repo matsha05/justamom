@@ -99,7 +99,7 @@ export default async function NotePage({ params }: PageProps) {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            All Notes
+            All writing
           </Link>
 
           <header>
@@ -116,6 +116,7 @@ export default async function NotePage({ params }: PageProps) {
           <NoteArticle
             content={note.content}
             postscript={note.postscript}
+            kind={note.metadata.kind}
             previousNote={prev}
             nextNote={next}
           />

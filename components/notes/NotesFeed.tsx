@@ -9,6 +9,7 @@ interface NotesFeedProps {
   maxSupportingNotes?: number;
   className?: string;
   supportingItemClassName?: string;
+  emptyMessage?: string;
 }
 
 export function NotesFeed({
@@ -16,6 +17,7 @@ export function NotesFeed({
   maxSupportingNotes,
   className,
   supportingItemClassName,
+  emptyMessage = "Writing is on the way.",
 }: NotesFeedProps) {
   const featuredNote = notes[0] ?? null;
   const supportingNotes =
@@ -27,7 +29,7 @@ export function NotesFeed({
     <div className={cn("space-y-9", className)}>
       {!featuredNote && supportingNotes.length === 0 ? (
         <p className="text-body text-[var(--color-ink-soft)]">
-          Notes are on the way.
+          {emptyMessage}
         </p>
       ) : null}
 
@@ -46,7 +48,7 @@ export function NotesFeed({
           </h3>
           <p className="note-feed-excerpt text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
           <Link className="link-arrow" href={`/notes/${featuredNote.slug}`}>
-            Read note
+            Read post
             <ArrowIcon />
           </Link>
         </article>
@@ -74,7 +76,7 @@ export function NotesFeed({
                 </h3>
                 <p className="note-feed-excerpt text-body mb-4">{note.excerpt}</p>
                 <Link className="link-arrow" href={`/notes/${note.slug}`}>
-                  Read note
+                  Read post
                   <ArrowIcon />
                 </Link>
               </article>

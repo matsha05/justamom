@@ -29,7 +29,7 @@ export const marketingContent = {
       eyebrow: "Newsletter",
       heading: "A Note for Moms.",
       description:
-        "Twice a month, I send honest stories and Scripture for moms.",
+        "Once a month, I send A Note for Moms and include links to recent posts.",
       trust: "",
       source: conversionSources.homePanel,
     } satisfies NewsletterPanelContent,
@@ -37,8 +37,8 @@ export const marketingContent = {
       eyebrow: "Newsletter",
       heading: "Want the notes in your inbox?",
       description:
-        "I send A Note for Moms twice a month with honest stories, Scripture, and encouragement for motherhood.",
-      trust: "Twice a month, and easy to keep up with.",
+        "Once a month, I send A Note for Moms with honest stories, Scripture, and links to recent posts.",
+      trust: "Once a month, and easy to keep up with.",
       source: conversionSources.aboutPanel,
     } satisfies NewsletterPanelContent,
     workPanel: {
@@ -46,7 +46,7 @@ export const marketingContent = {
       heading: "Follow along as the writing takes shape",
       description:
         "The newsletter is where I often share new ideas, honest stories, and early glimpses of the project.",
-      trust: "Two notes a month, plus a look at the writing as it grows.",
+      trust: "Once a month, plus a look at the writing as it grows.",
       source: conversionSources.workPanel,
     } satisfies NewsletterPanelContent,
     speakingPanel: {
@@ -61,65 +61,50 @@ export const marketingContent = {
       eyebrow: "Stay Connected",
       heading: "Get A Note for Moms in your inbox",
       description:
-        "If this note encouraged you, I send A Note for Moms twice a month.",
+        "If this encouraged you, I send A Note for Moms once a month.",
       trust: "Honest, biblical, and easy to keep up with.",
       source: conversionSources.notePanel,
     } satisfies NewsletterPanelContent,
     notesArchivePanel: {
       eyebrow: "Newsletter",
-      heading: "Want the next note in your inbox?",
+      heading: "Join A Note for Moms",
       description:
-        "I send honest stories and Scripture for moms twice a month.",
+        "Once a month, I send A Note for Moms and include links to recent posts.",
       trust: "",
       source: conversionSources.notesArchive,
     } satisfies NewsletterPanelContent,
   },
   home: {
     hero: {
-      eyebrow: "",
-      heading: "You are not just a mom.",
+      heading: "Hi, I’m Lizi.",
       description:
-        "Short notes for moms who feel pulled between 'just a mom' and 'do it all.'",
+        "I love to write and point women towards Jesus.",
       primaryCta: {
-        href: "#newsletter",
-        label: "Join A Note for Moms",
-        eventName: analyticsEvents.newsletterCtaClick,
-        eventProperties: {
-          location: conversionSources.homeHero,
-        },
+        href: "/notes",
+        label: "Read recent posts",
       } satisfies ContentActionLink,
       secondaryCta: {
-        href: "/notes",
-        label: "Read recent notes",
-      } satisfies ContentActionLink,
-      trust: "Read a few notes, or get them in your inbox twice a month.",
-    },
-    work: {
-      heading: "The project taking shape behind the notes",
-      description:
-        "A simple look at the manuscript and the ideas behind it.",
-      cta: {
-        href: "/work",
-        label: "Read about the project",
+        href: "/about",
+        label: "More about me",
       } satisfies ContentActionLink,
     },
     notes: {
-      eyebrow: "Latest Notes",
-      heading: "Start with a recent note",
+      eyebrow: "Recent Posts",
+      heading: "Recent writing",
       description:
-        "If you're new here, start with a note or two.",
+        "Monthly notes and other writing, all in one place.",
       cta: {
         href: "/notes",
-        label: "Read all notes",
+        label: "See all writing",
       } satisfies ContentActionLink,
     },
     speaking: {
       heading: "Speaking for women's gatherings",
       description:
-        "Topics, host details, and a simple way to reach out.",
+        "I speak to moms about identity, motherhood, and following Jesus in everyday life.",
       cta: {
         href: "/speaking",
-        label: "See speaking topics",
+        label: "Learn about speaking",
         eventName: analyticsEvents.speakingCtaClick,
         eventProperties: {
           location: conversionSources.homeSpeakingSection,
@@ -130,21 +115,25 @@ export const marketingContent = {
       heading: "Get in touch",
       description: "For literary, editorial, or speaking inquiries.",
     },
-    more: {
-      eyebrow: "A few other things",
-      heading: "If you want to keep looking around",
-    },
   },
   about: {
     metadataDescription:
-      "About Lizi Shaw, Christian writer and speaker behind A Note for Moms.",
+      "About Lizi Shaw, a Christian writer and speaker who points women towards Jesus.",
     hero: {
       eyebrow: "About Me",
-      heading: "Hi, I'm Lizi Shaw.",
+      heading: "Hi, I’m Lizi Shaw",
       paragraphs: [
-        "I'm a wife and mom of three, and I know motherhood can feel beautiful and disorienting at the same time. The days are full, and it is easy to feel pulled between feeling small and feeling like you should be able to do everything.",
-        "I want to help moms come back to what is true. Scripture reminds us who we are before it asks anything from us, and that changes how we live through the ordinary work of motherhood.",
-        "In my writing and speaking, I hope moms leave encouraged, grounded in truth, and reminded that they belong to Christ.",
+        "I may love to write, but I don’t love writing this “about me” section. I find it awkward listing a bunch of generic traits about myself when I’d really rather sit next to you with a hot cup of coffee (black of course) with our feet kicked up on the coffee table having half a conversation while our kids run wild. Or at a park before the morning sun starts to beat down and the slides get too hot and our tiny humans can’t make it another moment without food in their bellies. For me, that’s when time blinks by and my heart feels the fullest.",
+        "I love to write and I love Jesus. I love when I am able to get a glimpse of how He is working in the mundane moments of motherhood. I am on a search to recognize Him in the baby giggles and side walk chalk as well as in the tears and the uncomfortable unknown. Ultimately, I just want to know Him more and share His goodness any way I can.",
+        "I hope you find a lot of encouragement here. I hope this page is one that brings you a lot of peace in a world that is full of confusion. And I hope we get to see each other face to face sometimes so that we can continue to build each other up as we continue to serve our King Jesus.",
+      ],
+    },
+    facts: {
+      heading: "About me facts:",
+      items: [
+        "I am a wife to Matt and mom to three; Emma, Cooper & Elliana + 1 puppy, Banks",
+        "I live in the great state of CO.",
+        "I love coffee, running, skiing and anything else that gets me into nature.",
       ],
     },
     invitation: {
@@ -204,7 +193,7 @@ export const marketingContent = {
   },
   speaking: {
     metadataDescription:
-      "Speaking topics from Lizi Shaw on motherhood, identity, and everyday faithfulness, grounded in Scripture.",
+      "Lizi Shaw speaks to moms about motherhood, identity, and following Jesus in everyday life.",
     hero: {
       eyebrow: "Speaking",
       heading: "Speaking",
@@ -219,32 +208,8 @@ export const marketingContent = {
         },
       } satisfies ContentActionLink,
     },
-    topics: {
-      eyebrow: "Topics I share",
-      heading: "Messages I return to",
-      description:
-        "These are a few messages I often share. I'm always happy to shape them for your church, retreat, or gathering.",
-      items: [
-        {
-          title: "Identity in the Noise",
-          description:
-            "A talk about the noise and pressure around modern motherhood, and the steadier identity Scripture offers.",
-        },
-        {
-          title: "Finding God in the Ordinary",
-          description:
-            "A message about meeting God in ordinary motherhood and the quiet faithfulness of everyday life.",
-        },
-        {
-          title: "A Calling, Not a Consequence",
-          description:
-            "A talk about the dignity of motherhood and the freedom to honor it without shrinking the rest of a woman's calling.",
-        },
-      ],
-    },
     bio: {
-      eyebrow: "Short bio (third-person)",
-      description: "For host intros, event pages, or printed programs.",
+      eyebrow: "For event hosts",
       body:
         "Lizi Shaw is a writer and speaker based in Niwot, Colorado. She writes and speaks to moms about motherhood, identity, and everyday faithfulness. Her work is rooted in Scripture and shaped by her own life as a wife and mother of three.",
     },
@@ -252,7 +217,7 @@ export const marketingContent = {
       eyebrow: "Inquiries",
       heading: "Invite me to speak",
       description:
-        "For availability, dates, and event details, share a few basics below, or email.",
+        "If you'd like to invite me to your church, retreat, or gathering, share a few details below or send me an email.",
       followUp: "I'll follow up personally.",
     },
   },

@@ -6,11 +6,14 @@ import matter from "gray-matter";
 import { cache } from "react";
 import { splitNoteContent } from "@/lib/note-content";
 
+export type WritingKind = "note" | "blog";
+
 export interface NoteMetadata {
   slug: string;
   title: string;
   date: string;
   excerpt: string;
+  kind: WritingKind;
 }
 
 interface NoteRecord extends NoteMetadata {
@@ -37,6 +40,20 @@ function parseDate(value: string, slug: string): string {
   return value;
 }
 
+function parseWritingKind(value: unknown, slug: string): WritingKind {
+  if (value === undefined) {
+    return "note";
+  }
+
+  if (value === "note" || value === "blog") {
+    return value;
+  }
+
+  throw new Error(
+    `Invalid frontmatter: 'kind' must be 'note' or 'blog' for note '${slug}'.`
+  );
+}
+
 function parseNoteFile(fileName: string): NoteRecord {
   const slug = fileName.replace(/\.mdx$/, "");
   const fullPath = path.join(notesDirectory, fileName);
@@ -46,12 +63,14 @@ function parseNoteFile(fileName: string): NoteRecord {
   const title = parseRequiredString(data.title, "title", slug);
   const date = parseDate(parseRequiredString(data.date, "date", slug), slug);
   const excerpt = parseRequiredString(data.excerpt, "excerpt", slug);
+  const kind = parseWritingKind(data.kind, slug);
 
   return {
     slug,
     title,
     date,
     excerpt,
+    kind,
     content,
   };
 }
@@ -70,6 +89,7 @@ export function getAllNotes(): NoteMetadata[] {
     title: note.title,
     date: note.date,
     excerpt: note.excerpt,
+    kind: note.kind,
   }));
 }
 
@@ -86,6 +106,7 @@ export function getNoteBySlug(slug: string) {
       title: note.title,
       date: note.date,
       excerpt: note.excerpt,
+      kind: note.kind,
     },
     content: contentSections.body,
     postscript: contentSections.postscript,

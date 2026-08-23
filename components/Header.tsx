@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config";
 import { DesktopNav } from "@/components/header/DesktopNav";
@@ -17,16 +17,28 @@ export function Header() {
   const mobileMenuRef = useRef<HTMLDialogElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
+  const restoreMenuFocusRef = useRef(true);
+
+  const closeMobileMenu = useCallback((restoreFocus = true) => {
+    restoreMenuFocusRef.current = restoreFocus;
+    setMobileMenuOpen(false);
+  }, []);
+
+  const dismissMobileMenu = useCallback(() => closeMobileMenu(), [closeMobileMenu]);
+  const finishMobileNavigation = useCallback(
+    () => closeMobileMenu(false),
+    [closeMobileMenu]
+  );
 
   useBodyScrollLock(mobileMenuOpen);
   useFocusTrap({
     containerRef: mobileMenuRef,
     active: mobileMenuOpen,
-    onEscape: () => setMobileMenuOpen(false),
+    onEscape: dismissMobileMenu,
   });
 
   useEffect(() => {
-    if (wasOpenRef.current && !mobileMenuOpen) {
+    if (wasOpenRef.current && !mobileMenuOpen && restoreMenuFocusRef.current) {
       menuToggleRef.current?.focus();
     }
     wasOpenRef.current = mobileMenuOpen;
@@ -46,35 +58,31 @@ export function Header() {
             <span className="header-brand-name text-h3 font-normal tracking-[-0.01em] text-[var(--color-ink)] leading-tight">
               {siteConfig.site.name}
             </span>
-            <span className="header-brand-tagline text-caption font-medium text-[var(--color-ink-muted)] tracking-[0.08em]">
-              {siteConfig.site.tagline}
-            </span>
+            {siteConfig.site.tagline ? (
+              <span className="header-brand-tagline text-caption font-medium text-[var(--color-ink-muted)] tracking-[0.08em]">
+                {siteConfig.site.tagline}
+              </span>
+            ) : null}
           </Link>
 
           <DesktopNav pathname={pathname} />
 
-          <button
-            type="button"
-            ref={menuToggleRef}
-            className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-[background-color,transform] hover:bg-[var(--color-paper-soft)] active:scale-95 rounded-full"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-            aria-haspopup="dialog"
-          >
-            {mobileMenuOpen ? (
+          {!mobileMenuOpen ? (
+            <button
+              type="button"
+              ref={menuToggleRef}
+              className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-[background-color,transform] hover:bg-[var(--color-paper-soft)] active:scale-95 rounded-full"
+              onClick={() => {
+                restoreMenuFocusRef.current = true;
+                setMobileMenuOpen(true);
+              }}
+              aria-label="Open menu"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+              aria-haspopup="dialog"
+            >
               <svg
-                className="size-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg
+                aria-hidden="true"
                 className="size-6"
                 fill="none"
                 stroke="currentColor"
@@ -87,16 +95,19 @@ export function Header() {
                   d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
                 />
               </svg>
-            )}
-          </button>
+            </button>
+          ) : null}
         </div>
 
-        <MobileMenu
-          isOpen={mobileMenuOpen}
-          pathname={pathname}
-          onClose={() => setMobileMenuOpen(false)}
-          menuRef={mobileMenuRef}
-        />
+        {mobileMenuOpen ? (
+          <MobileMenu
+            isOpen
+            pathname={pathname}
+            onClose={dismissMobileMenu}
+            onNavigate={finishMobileNavigation}
+            menuRef={mobileMenuRef}
+          />
+        ) : null}
       </div>
     </header>
   );

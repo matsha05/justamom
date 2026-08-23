@@ -3,18 +3,23 @@ const defaultFormspreeEndpoint =
   process.env.FORMSPREE_ENDPOINT ?? "https://formspree.io/f/mqezoggn";
 const defaultTwitterHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@lizishaw";
 
+export const writingSubnavLinks = [
+  { href: "/notes#recent-notes", label: "Recent Notes" },
+  { href: "/notes#blog", label: "Blog" },
+] as const;
+
 export const siteConfig = {
   site: {
     name: "Lizi Shaw",
-    tagline: "Speaker · Writer · Encourager",
+    tagline: "",
     url: defaultSiteUrl,
     locale: "en_US",
   },
   author: {
     name: "Lizi Shaw",
-    jobTitle: "Christian Speaker & Writer",
+    jobTitle: "Christian Writer & Speaker",
     description:
-      "Christian writer and speaker helping moms live from identity received in Christ, not performance.",
+      "Christian writer and speaker pointing women towards Jesus through honest writing about faith and ordinary life.",
     location: {
       city: "Niwot",
       region: "Colorado",
@@ -32,18 +37,18 @@ export const siteConfig = {
   },
   content: {
     seoDescription:
-      "Short notes for moms about faith, motherhood, and identity in Christ.",
+      "Writing from Lizi Shaw about following Jesus through motherhood and ordinary life.",
     openGraphDescription:
-      "Short notes for moms feeling pulled between 'just a mom' and 'do it all.'",
+      "Notes and other writing from Lizi Shaw about faith, motherhood, and ordinary life.",
     twitterDescription:
-      "Short notes for moms about faith, motherhood, and identity in Christ.",
+      "Notes and other writing from Lizi Shaw about faith and ordinary life.",
     keywords: [
       "a note for moms",
-      "biblical motherhood",
+      "christian writing for women",
       "christian mom speaker",
       "faith and motherhood",
-      "mom encouragement",
-      "biblical parenting",
+      "following Jesus",
+      "everyday faith",
     ],
   },
   legal: {
@@ -68,9 +73,8 @@ export const siteConfig = {
     mailerLiteApiBaseUrl: "https://connect.mailerlite.com/api",
   },
   navLinks: [
-    { href: "/notes", label: "Notes" },
-    { href: "/work", label: "Work" },
-    { href: "/about", label: "About" },
+    { href: "/about", label: "About Me" },
+    { href: "/notes", label: "Writing" },
     { href: "/speaking", label: "Speaking" },
     { href: "/contact", label: "Contact" },
   ],

@@ -23,24 +23,21 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="section section-hero pt-[clamp(3.9rem,8.4vw,7.1rem)]">
+      <section className="section section-hero py-[clamp(3.25rem,7vw,5.75rem)]">
         <div className="container">
-          <div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div className="space-y-7">
-              <h1 className="text-display max-w-[11ch]">{home.hero.heading}</h1>
-              <p className="text-body-lg max-w-[34ch] text-[var(--color-ink-soft)]">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,24rem)] lg:gap-[clamp(4rem,8vw,7rem)]">
+            <div className="max-w-[39rem] space-y-7">
+              <p className="text-label">Welcome</p>
+              <h1 className="text-display max-w-[12ch]">{home.hero.heading}</h1>
+              <p className="text-body-lg max-w-[37ch] text-[var(--color-ink-soft)]">
                 {home.hero.description}
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Button asChild>
-                  <TrackedLink
-                    href={home.hero.primaryCta.href}
-                    eventName={home.hero.primaryCta.eventName}
-                    eventProperties={home.hero.primaryCta.eventProperties}
-                  >
+                  <Link href={home.hero.primaryCta.href}>
                     {home.hero.primaryCta.label}
                     <ArrowIcon />
-                  </TrackedLink>
+                  </Link>
                 </Button>
                 <Button asChild variant="outline">
                   <Link href={home.hero.secondaryCta.href}>
@@ -49,39 +46,24 @@ export default function HomePage() {
                   </Link>
                 </Button>
               </div>
-              <p className="text-caption text-[var(--color-ink-muted)]">
-                {home.hero.trust}
-              </p>
-              <div className="mt-1" aria-hidden="true">
-                <Image
-                  src="/images/signature.png"
-                  alt=""
-                  width={110}
-                  height={100}
-                  className="w-[110px] h-[100px] opacity-85"
-                  sizes="110px"
-                />
-              </div>
             </div>
-            <div className="flex justify-center lg:justify-end">
-              <div className="hero-portrait-shell w-[min(340px,82vw)] lg:w-[390px]">
-                <div className="image-editorial aspect-[3/4] relative">
-                  <Image
-                    src="/images/home-family-hero.avif"
-                    alt="Lizi Shaw with her family sitting outdoors"
-                    fill
-                    className="object-cover object-[center_58%]"
-                    priority
-                    sizes="(min-width: 1280px) 390px, (min-width: 1024px) 34vw, (min-width: 640px) 44vw, 82vw"
-                  />
-                </div>
+            <div className="hero-portrait-shell mx-auto w-[min(100%,24rem)] lg:ml-auto lg:mr-0">
+              <div className="image-editorial relative aspect-[4/5] sm:aspect-[3/4]">
+                <Image
+                  src="/images/home-lizi-poles.avif"
+                  alt="Lizi Shaw smiling on a mountain trail and holding up her hiking poles"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(min-width: 1024px) 384px, (min-width: 640px) 384px, 88vw"
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="notes" className="section section-warm">
+      <section id="notes" className="section section-compact section-warm">
         <div className="container">
           <div className="section-split">
             <div className="space-y-4">
@@ -90,12 +72,14 @@ export default function HomePage() {
               <p className="text-body text-[var(--color-ink-soft)] max-w-[28ch]">
                 {home.notes.description}
               </p>
+            </div>
+            <div className="space-y-8">
+              <NotesFeed notes={notes} maxSupportingNotes={2} />
               <Link className="link-arrow" href={home.notes.cta.href}>
                 {home.notes.cta.label}
                 <ArrowIcon />
               </Link>
             </div>
-            <NotesFeed notes={notes} maxSupportingNotes={2} />
           </div>
         </div>
       </section>
@@ -121,70 +105,47 @@ export default function HomePage() {
       </section>
 
       <section className="section section-soft">
-        <div className="container-prose space-y-8">
-          <div className="space-y-3">
-            <p className="text-label">{home.more.eyebrow}</p>
-            <h2 className="text-h2">{home.more.heading}</h2>
-          </div>
-
-          <div className="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
-            <Link
-              href={home.work.cta.href}
-              className="group block py-6 md:flex md:items-start md:justify-between md:gap-8"
-            >
-              <div className="space-y-2">
-                <h3 className="text-h3">{home.work.heading}</h3>
-                <p className="text-body text-[var(--color-ink-soft)] max-w-[34ch]">
-                  {home.work.description}
-                </p>
-              </div>
-              <span className="link-arrow mt-3 md:mt-1">
-                {home.work.cta.label}
-                <ArrowIcon />
-              </span>
-            </Link>
-
+        <div className="container">
+          <div className="grid border-y border-[var(--color-border-strong)] lg:grid-cols-[1.2fr_0.8fr]">
             <TrackedLink
               href={home.speaking.cta.href}
               eventName={home.speaking.cta.eventName}
               eventProperties={home.speaking.cta.eventProperties}
-              className="group block py-6 md:flex md:items-start md:justify-between md:gap-8"
+              className="group block py-9 pr-0 lg:py-11 lg:pr-14"
             >
-              <div className="space-y-2">
-                <h3 className="text-h3">{home.speaking.heading}</h3>
+              <div className="space-y-3">
+                <p className="text-label">Speaking</p>
+                <h2 className="text-h2">{home.speaking.heading}</h2>
                 <p className="text-body text-[var(--color-ink-soft)] max-w-[34ch]">
                   {home.speaking.description}
                 </p>
               </div>
-              <span className="link-arrow mt-3 md:mt-1">
+              <span className="link-arrow mt-5">
                 {home.speaking.cta.label}
                 <ArrowIcon />
               </span>
             </TrackedLink>
 
-            <Link
-              href="/contact"
-              className="group block py-6 md:flex md:items-start md:justify-between md:gap-8"
-            >
-              <div className="space-y-2">
-                <h3 className="text-h3">{home.contact.heading}</h3>
+            <div className="border-t border-[var(--color-border)] py-9 lg:border-l lg:border-t-0 lg:py-11 lg:pl-14">
+              <div className="space-y-3">
+                <p className="text-label">Contact</p>
+                <h2 className="text-h3">{home.contact.heading}</h2>
                 <p className="text-body text-[var(--color-ink-soft)] max-w-[34ch]">
                   {home.contact.description}
                 </p>
               </div>
-              <span className="link-arrow mt-3 md:mt-1">
+              <Link href="/contact" className="link-arrow mt-5">
                 Send a message
                 <ArrowIcon />
-              </span>
-            </Link>
+              </Link>
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="mt-4 block text-caption text-[var(--color-ink-muted)] underline underline-offset-4"
+              >
+                {siteConfig.contact.email}
+              </a>
+            </div>
           </div>
-
-          <a
-            href={`mailto:${siteConfig.contact.email}`}
-            className="inline-block text-body text-[var(--color-ink-soft)] underline underline-offset-4"
-          >
-            {siteConfig.contact.email}
-          </a>
         </div>
       </section>
     </>

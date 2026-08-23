@@ -149,6 +149,114 @@
   border: 1px solid var(--color-border);
 }
 
+.about-editorial-section {
+  padding-top: clamp(4rem, 7vw, 6.75rem);
+  padding-bottom: clamp(4rem, 7vw, 6.75rem);
+}
+
+.about-editorial-grid {
+  display: grid;
+  gap: clamp(3rem, 7vw, 4.75rem);
+}
+
+.about-copy-column {
+  max-width: 40rem;
+}
+
+.about-facts {
+  margin-top: clamp(2.75rem, 5vw, 3.75rem);
+  padding-top: clamp(1.75rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--color-border);
+}
+
+.about-invitation {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 1.25rem;
+  padding-top: clamp(1.75rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--color-border);
+}
+
+.about-photo-rail {
+  display: flex;
+  gap: 1rem;
+  margin-inline: calc(clamp(1.5rem, 5vw, 4rem) * -1);
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+  padding-bottom: 0.65rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.about-photo-pair {
+  display: contents;
+}
+
+.about-photo-frame {
+  position: relative;
+  flex: 0 0 min(78vw, 20rem);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-paper);
+  scroll-snap-align: start;
+}
+
+.about-photo-frame-landscape {
+  flex-basis: min(88vw, 28rem);
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 960px) {
+  .about-editorial-grid {
+    grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 0.9fr);
+    align-items: start;
+    gap: clamp(3rem, 5vw, 4.25rem);
+  }
+
+  .about-photo-rail {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .about-photo-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-column: 1 / -1;
+    gap: 0.9rem;
+  }
+
+  .about-photo-frame {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .about-photo-frame-lead,
+  .about-photo-frame-landscape {
+    grid-column: 1 / -1;
+  }
+
+  .about-photo-frame-lead {
+    aspect-ratio: 3 / 4;
+  }
+
+  .about-photo-frame-landscape {
+    aspect-ratio: 4 / 3;
+  }
+
+  .about-invitation {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 3rem;
+  }
+}
+
 .site-footer {
   position: relative;
   overflow: hidden;

@@ -7,7 +7,9 @@ import { siteConfig } from "@/lib/config";
 
 export const runtime = "nodejs";
 
-export const alt = `${siteConfig.site.name} | ${siteConfig.site.tagline}`;
+export const alt = siteConfig.site.tagline
+  ? `${siteConfig.site.name} | ${siteConfig.site.tagline}`
+  : siteConfig.site.name;
 export const size = {
   width: 1200,
   height: 630,
@@ -103,13 +105,18 @@ export default async function Image() {
           />
         </div>
 
-        <div style={titleStyle}>
+        <div
+          style={{
+            ...titleStyle,
+            marginBottom: siteConfig.site.tagline ? titleStyle.marginBottom : 0,
+          }}
+        >
           {siteConfig.site.name}
         </div>
 
-        <div style={taglineStyle}>
-          {siteConfig.site.tagline}
-        </div>
+        {siteConfig.site.tagline ? (
+          <div style={taglineStyle}>{siteConfig.site.tagline}</div>
+        ) : null}
       </div>
     ),
     {

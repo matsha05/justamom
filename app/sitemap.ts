@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllNotes } from "@/lib/notes";
 import { absoluteUrl } from "@/lib/config";
 
-const staticPageLastModified = new Date("2026-05-27T00:00:00.000Z");
+const staticPageLastModified = new Date("2026-08-22T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const notes = getAllNotes();
@@ -40,12 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: notesLastModified,
       changeFrequency: "weekly",
       priority: 0.8,
-    },
-    {
-      url: absoluteUrl("/work"),
-      lastModified: staticPageLastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
     },
     {
       url: absoluteUrl("/contact"),

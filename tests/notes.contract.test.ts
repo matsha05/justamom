@@ -11,6 +11,7 @@ interface ParsedNote {
   title: unknown;
   date: unknown;
   excerpt: unknown;
+  kind: unknown;
   content: string;
 }
 
@@ -29,6 +30,7 @@ function readNotes(): ParsedNote[] {
         title: data.title,
         date: data.date,
         excerpt: data.excerpt,
+        kind: data.kind,
         content,
       };
     });
@@ -56,6 +58,10 @@ describe("note content contract", () => {
       const date = expectRequiredString(note.date, "date", note.fileName);
       expect(Date.parse(date), `${note.fileName} has an invalid date`).not.toBeNaN();
       expectRequiredString(note.excerpt, "excerpt", note.fileName);
+      expect(
+        [undefined, "note", "blog"],
+        `${note.fileName} has an unsupported writing kind`
+      ).toContain(note.kind);
     }
   });
 

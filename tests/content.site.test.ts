@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { marketingContent } from "@/content/site";
-import { analyticsEvents } from "@/lib/analytics/events";
 import { conversionSourceValues, conversionSources } from "@/lib/conversions";
 
 describe("marketing content", () => {
-  it("keeps homepage newsletter CTA wired to the analytics contract", () => {
-    expect(marketingContent.home.hero.primaryCta.eventName).toBe(
-      analyticsEvents.newsletterCtaClick
-    );
+  it("keeps the homepage reading-first", () => {
+    expect(marketingContent.home.hero.primaryCta).toMatchObject({
+      href: "/notes",
+      label: "Read recent posts",
+    });
+    expect(marketingContent.home.hero.secondaryCta).toMatchObject({
+      href: "/about",
+      label: "More about me",
+    });
   });
 
   it("keeps a stable source for the homepage newsletter form", () => {
@@ -28,5 +32,26 @@ describe("marketing content", () => {
 
     expect(new Set(sources).size).toBe(sources.length);
     expect(sources.every((source) => conversionSourceValues.includes(source))).toBe(true);
+  });
+
+  it("describes A Note for Moms as a monthly email", () => {
+    const newsletterCopy = JSON.stringify(marketingContent.newsletter);
+
+    expect(newsletterCopy).toMatch(/once a month/i);
+    expect(newsletterCopy).not.toMatch(/twice a month|two notes a month/i);
+  });
+
+  it("uses Lizi's authored About copy", () => {
+    expect(marketingContent.about.hero.heading).toBe("Hi, I’m Lizi Shaw");
+    expect(marketingContent.about.hero.paragraphs[0]).toMatch(
+      /hot cup of coffee \(black of course\)/
+    );
+    expect(marketingContent.about.facts.items).toHaveLength(3);
+  });
+
+  it("keeps the speaking invitation simple", () => {
+    expect(marketingContent.home.speaking.cta.label).toBe("Learn about speaking");
+    expect(marketingContent.speaking).not.toHaveProperty("topics");
+    expect(marketingContent.speaking.bio.eyebrow).toBe("For event hosts");
   });
 });

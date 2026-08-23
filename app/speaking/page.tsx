@@ -10,7 +10,7 @@ import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Speaking Topics",
+  title: "Speaking",
   description: marketingContent.speaking.metadataDescription,
   pathname: "/speaking",
 });
@@ -52,32 +52,9 @@ export default function SpeakingPage() {
         </Button>
       </PageHero>
 
-      <section className="section section-content">
-        <div className="container">
-          <div className="section-split">
-            <div className="space-y-4">
-              <p className="text-label">{speaking.topics.eyebrow}</p>
-              <h2 className="text-h2">{speaking.topics.heading}</h2>
-              <p className="text-body text-[var(--color-ink-soft)]">
-                {speaking.topics.description}
-              </p>
-            </div>
-            <div className="space-y-8">
-              {speaking.topics.items.map((topic) => (
-                <div key={topic.title} className="topic-card">
-                  <h3 className="text-h3 mb-2">{topic.title}</h3>
-                  <p className="text-body">{topic.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="container-prose container-prose-followup space-y-4">
+      <section className="section section-compact">
+        <div className="container-prose space-y-4">
           <p className="text-label">{speaking.bio.eyebrow}</p>
-          <p className="text-caption text-[var(--color-ink-muted)]">
-            {speaking.bio.description}
-          </p>
           <p className="text-body-lg text-[var(--color-ink-soft)]">
             {speaking.bio.body}
           </p>

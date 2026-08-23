@@ -23,10 +23,10 @@ export default function NotFound() {
                 {/* Secondary Links */}
                 <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-caption">
                     <Link href="/about" className="text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors">
-                        About
+                        About Me
                     </Link>
                     <Link href="/notes" className="text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors">
-                        Notes
+                        Writing
                     </Link>
                     <Link href="/speaking" className="text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors">
                         Speaking

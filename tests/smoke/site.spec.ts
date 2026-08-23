@@ -1,15 +1,49 @@
 import { expect, test } from "@playwright/test";
 import { conversionSources } from "@/lib/conversions";
 
-test("homepage highlights the primary newsletter CTA", async ({ page }) => {
+test("homepage leads readers into Lizi's writing", async ({ page }) => {
   await page.goto("/");
 
   await expect(
-    page.getByRole("heading", { name: "You are not just a mom." })
+    page.getByRole("heading", { name: "Hi, I’m Lizi." })
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Join A Note for Moms" })
+    page.getByRole("link", { name: "Read recent posts" })
   ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "More about me" })
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Work" })).toHaveCount(0);
+  await expect(page.getByText("You are not just a mom.")).toHaveCount(0);
+  await expect(page.getByText("Books and reading")).toHaveCount(0);
+  await expect(
+    page.getByAltText("Lizi Shaw smiling on a mountain trail and holding up her hiking poles")
+  ).toBeVisible();
+  await expect(page.locator("#notes article.note-feed-article")).toHaveCount(3);
+  await expect(page.getByRole("link", { name: "See all writing" })).toBeVisible();
+  await expect(page.locator('main img[src*="signature"]')).toHaveCount(0);
+});
+
+test("desktop Writing navigation reveals its two sections", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Desktop-only smoke coverage.");
+
+  await page.goto("/");
+  const primaryNav = page.getByRole("navigation", { name: "Primary" });
+  const writingLink = primaryNav.getByRole("link", { name: "Writing", exact: true });
+
+  await writingLink.hover();
+  await expect(primaryNav.getByRole("link", { name: "Recent Notes" })).toBeVisible();
+  await expect(primaryNav.getByRole("link", { name: "Blog" })).toBeVisible();
+
+  await primaryNav.getByRole("button", { name: "Hide Writing sections" }).press("Escape");
+  await expect(primaryNav.getByRole("link", { name: "Recent Notes" })).toHaveCount(0);
+
+  const writingToggle = primaryNav.locator('button[aria-controls="writing-subnav"]');
+  await writingToggle.press("Enter");
+  await expect(writingToggle).toHaveAttribute("aria-expanded", "true");
+  await writingToggle.press("Escape");
+  await expect(writingToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(writingToggle).toBeFocused();
 });
 
 test("newsletter signup shows success state", async ({ page }) => {
@@ -110,13 +144,52 @@ test("note pages render with a post-note newsletter CTA", async ({ page }) => {
 test("notes archive closes with a newsletter invitation", async ({ page }) => {
   await page.goto("/notes");
 
+  await expect(page.getByRole("heading", { name: "Writing", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "A Note for Moms", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Blog" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recent notes" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Blog" })).toBeVisible();
+  await expect(page.getByText("Blog posts are on the way.")).toBeVisible();
+
   const archiveInvitation = page.getByRole("heading", {
-    name: "Want the next note in your inbox?",
+    name: "Join A Note for Moms",
   });
   await archiveInvitation.scrollIntoViewIfNeeded();
 
   await expect(archiveInvitation).toBeVisible();
   await expect(page.getByRole("button", { name: "Join the notes" })).toBeVisible();
+});
+
+test("professional portrait appears only on Speaking", async ({ page }) => {
+  await page.goto("/about");
+  await expect(page.getByAltText("Lizi Shaw smiling in a cream sweater")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Hi, I’m Lizi Shaw" })).toBeVisible();
+  await expect(page.getByText(/hot cup of coffee \(black of course\)/)).toBeVisible();
+  await expect(page.getByAltText("Lizi laughing at home with two of her children")).toBeVisible();
+  await expect(page.getByAltText("Lizi laughing as two of her children hug her outside")).toBeVisible();
+  await expect(page.getByAltText("Lizi and Matt smiling together beneath a rainbow")).toBeVisible();
+  await expect(
+    page.getByAltText("Lizi sitting on a picnic blanket with her three children at an outdoor concert")
+  ).toBeVisible();
+  await expect(page.locator('img[src*="about-lizi-red-rocks"]')).toHaveCount(0);
+  await expect(page.locator('img[src*="about-lizi-banks"]')).toHaveCount(0);
+  await expect(page.locator('img[src*="about-lizi-hiking"]')).toHaveCount(0);
+  await expect(page.locator('img[src*="about-lizi-outdoors"]')).toHaveCount(0);
+  await expect(page.locator('img[src*="about-lizi-family-banks"]')).toHaveCount(0);
+  await expect(page.locator('img[src*="home-lizi-table"]')).toHaveCount(0);
+  await expect(page.locator('img[src*="about-lizi-race-day"]')).toHaveCount(0);
+
+  await page.goto("/speaking");
+  await expect(page.getByAltText("Lizi Shaw smiling in a cream sweater")).toBeVisible();
+  await expect(page.getByText("Topics I share")).toHaveCount(0);
+  await expect(page.getByText("Identity in the Noise")).toHaveCount(0);
+});
+
+test("the retired work section redirects into the writing archive", async ({ page }) => {
+  await page.goto("/work");
+
+  await expect(page).toHaveURL(/\/notes$/);
+  await expect(page.getByRole("heading", { name: "Writing", exact: true })).toBeVisible();
 });
 
 test("speaking hero links directly to the inquiry form", async ({ page }) => {

@@ -23,9 +23,13 @@ const sourceSans3 = Source_Sans_3({
   display: "swap",
 });
 
+const siteTitle = siteConfig.site.tagline
+  ? `${siteConfig.site.name} | ${siteConfig.site.tagline}`
+  : siteConfig.site.name;
+
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
+    default: siteTitle,
     template: `%s | ${siteConfig.site.name}`,
   },
   description: siteConfig.content.seoDescription,
@@ -38,7 +42,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   metadataBase: new URL(siteConfig.site.url),
   openGraph: {
-    title: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
+    title: siteTitle,
     description: siteConfig.content.openGraphDescription,
     url: siteConfig.site.url,
     siteName: siteConfig.site.name,
@@ -47,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.site.name} | ${siteConfig.site.tagline}`,
+    title: siteTitle,
     description: siteConfig.content.twitterDescription,
     creator: siteConfig.social.twitterHandle,
   },
@@ -64,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"

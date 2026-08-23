@@ -15,50 +15,82 @@ export default function AboutPage() {
     const { about } = marketingContent;
 
     return (
-        <>
-            {/* Hero Section */}
-            <section className="section section-warm">
-                <div className="container">
-                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-                        {/* Photo */}
-                        <div className="lg:col-span-5">
-                            <div className="sticky top-32">
-                                <div className="image-editorial aspect-[4/5] relative">
-                                    <Image
-                                        src="/images/lizi-solo-portrait.avif"
-                                        alt="Lizi Shaw smiling in a cream sweater"
-                                        fill
-                                        className="object-cover"
-                                        priority
-                                        sizes="(min-width: 1024px) 40vw, 90vw"
-                                    />
-                                </div>
-                            </div>
+        <section className="section section-warm about-editorial-section">
+            <div className="container">
+                <div className="about-editorial-grid">
+                    <div className="about-copy-column">
+                        <p className="text-label mb-6">{about.hero.eyebrow}</p>
+                        <h1 className="text-display mb-10">{about.hero.heading}</h1>
+
+                        <div className="prose text-body-lg text-[var(--color-ink-soft)]">
+                            {about.hero.paragraphs.map((paragraph) => (
+                                <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+                            ))}
                         </div>
 
-                        {/* Bio Content */}
-                        <div className="lg:col-span-7">
-                            <p className="text-label mb-6">{about.hero.eyebrow}</p>
-                            <h1 className="text-display mb-10">{about.hero.heading}</h1>
-
-                            <div className="prose text-body-lg text-[var(--color-ink-soft)]">
-                                {about.hero.paragraphs.map((paragraph) => (
-                                    <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+                        <div className="about-facts">
+                            <h2 className="text-h3 mb-5">{about.facts.heading}</h2>
+                            <ul className="space-y-3 pl-5 text-body text-[var(--color-ink-soft)] marker:text-[var(--color-accent)] list-disc">
+                                {about.facts.items.map((fact) => (
+                                    <li key={fact}>{fact}</li>
                                 ))}
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <aside className="about-photo-rail" aria-label="Photos from Lizi's life">
+                        <div className="about-photo-frame about-photo-frame-lead">
+                            <Image
+                                src="/images/about-lizi-kitchen-laugh.avif"
+                                alt="Lizi laughing at home with two of her children"
+                                fill
+                                priority
+                                className="object-cover"
+                                sizes="(min-width: 960px) 340px, 92vw"
+                            />
+                        </div>
+
+                        <div className="about-photo-pair">
+                            <div className="about-photo-frame about-photo-frame-portrait">
+                                <Image
+                                    src="/images/about-lizi-kids-hug.avif"
+                                    alt="Lizi laughing as two of her children hug her outside"
+                                    fill
+                                    className="object-cover"
+                                    sizes="(min-width: 960px) 165px, 44vw"
+                                />
+                            </div>
+
+                            <div className="about-photo-frame about-photo-frame-portrait">
+                                <Image
+                                    src="/images/about-lizi-rainbow.avif"
+                                    alt="Lizi and Matt smiling together beneath a rainbow"
+                                    fill
+                                    className="object-cover"
+                                    sizes="(min-width: 960px) 165px, 44vw"
+                                />
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* Invitation Section */}
-            <section className="section pt-10">
-                <div className="container-prose">
-                    <div className="border-t border-[var(--color-border)] pt-8 space-y-4">
-                        <h2 className="text-h3">{about.invitation.heading}</h2>
-                        <p className="text-body text-[var(--color-ink-soft)]">
-                            {about.invitation.description}
-                        </p>
+                        <div className="about-photo-frame about-photo-frame-landscape">
+                            <Image
+                                src="/images/about-lizi-kids-picnic.avif"
+                                alt="Lizi sitting on a picnic blanket with her three children at an outdoor concert"
+                                fill
+                                className="object-cover"
+                                sizes="(min-width: 960px) 340px, 92vw"
+                            />
+                        </div>
+                    </aside>
+
+                    <div className="about-invitation">
+                        <div className="space-y-2">
+                            <h2 className="text-h3">{about.invitation.heading}</h2>
+                            <p className="text-body text-[var(--color-ink-soft)]">
+                                {about.invitation.description}
+                            </p>
+                        </div>
                         <TrackedLink
                             className="link-arrow"
                             href={about.invitation.cta.href}
@@ -70,7 +102,7 @@ export default function AboutPage() {
                         </TrackedLink>
                     </div>
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     );
 }
