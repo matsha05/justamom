@@ -20,7 +20,7 @@ test("mobile navigation opens and closes", async ({ page }, testInfo) => {
   await expect(writingToggle).toHaveAttribute("aria-expanded", "false");
   await writingToggle.click();
   await expect(writingToggle).toHaveAttribute("aria-expanded", "true");
-  await expect(dialog.getByRole("link", { name: "Recent Notes" })).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Notes", exact: true })).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Blog" })).toBeVisible();
 
   await page.getByRole("button", { name: "Close menu" }).click();

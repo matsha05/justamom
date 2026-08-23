@@ -32,11 +32,11 @@ test("desktop Writing navigation reveals its two sections", async ({ page }, tes
   const writingLink = primaryNav.getByRole("link", { name: "Writing", exact: true });
 
   await writingLink.hover();
-  await expect(primaryNav.getByRole("link", { name: "Recent Notes" })).toBeVisible();
+  await expect(primaryNav.getByRole("link", { name: "Notes", exact: true })).toBeVisible();
   await expect(primaryNav.getByRole("link", { name: "Blog" })).toBeVisible();
 
   await primaryNav.getByRole("button", { name: "Hide Writing sections" }).press("Escape");
-  await expect(primaryNav.getByRole("link", { name: "Recent Notes" })).toHaveCount(0);
+  await expect(primaryNav.getByRole("link", { name: "Notes", exact: true })).toHaveCount(0);
 
   const writingToggle = primaryNav.locator('button[aria-controls="writing-subnav"]');
   await writingToggle.press("Enter");
@@ -149,7 +149,7 @@ test("notes archive contains only recent notes and closes with a newsletter invi
     name: "Writing sections",
     exact: true,
   });
-  await expect(writingDirectory.getByRole("link", { name: "Recent Notes" })).toHaveAttribute(
+  await expect(writingDirectory.getByRole("link", { name: "Notes", exact: true })).toHaveAttribute(
     "aria-current",
     "page"
   );
@@ -180,7 +180,7 @@ test("blog has its own archive page", async ({ page }) => {
     "page"
   );
   await expect(
-    writingDirectory.getByRole("link", { name: "Recent Notes", exact: true })
+    writingDirectory.getByRole("link", { name: "Notes", exact: true })
   ).toBeVisible();
   await expect(page.getByText("Blog posts are on the way.")).toBeVisible();
   await expect(page.getByRole("link", { name: "Read recent notes" })).toHaveAttribute(

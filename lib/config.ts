@@ -4,7 +4,7 @@ const defaultFormspreeEndpoint =
 const defaultTwitterHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@lizishaw";
 
 export const writingSubnavLinks = [
-  { href: "/notes", label: "Recent Notes" },
+  { href: "/notes", label: "Notes" },
   { href: "/blog", label: "Blog" },
 ] as const;
 
