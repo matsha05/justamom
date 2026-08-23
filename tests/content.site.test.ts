@@ -6,7 +6,7 @@ describe("marketing content", () => {
   it("keeps the homepage reading-first", () => {
     expect(marketingContent.home.hero.primaryCta).toMatchObject({
       href: "/notes",
-      label: "Read recent posts",
+      label: "Read recent notes",
     });
     expect(marketingContent.home.hero.secondaryCta).toMatchObject({
       href: "/about",
@@ -28,6 +28,7 @@ describe("marketing content", () => {
       marketingContent.newsletter.speakingPanel.source,
       marketingContent.newsletter.notePanel.source,
       marketingContent.newsletter.notesArchivePanel.source,
+      marketingContent.newsletter.blogArchivePanel.source,
     ];
 
     expect(new Set(sources).size).toBe(sources.length);

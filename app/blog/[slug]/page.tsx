@@ -12,30 +12,30 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return getAllWritingSlugs("note").map((slug) => ({ slug }));
+  return getAllWritingSlugs("blog").map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
   try {
-    const note = getNoteBySlug(slug);
-    if (note.metadata.kind !== "note") {
-      throw new Error("Not a note");
+    const post = getNoteBySlug(slug);
+    if (post.metadata.kind !== "blog") {
+      throw new Error("Not a blog post");
     }
 
     return buildArticleMetadata({
-      title: note.metadata.title,
-      description: note.metadata.excerpt,
-      pathname: getWritingHref({ slug, kind: "note" }),
-      publishedTime: note.metadata.date,
+      title: post.metadata.title,
+      description: post.metadata.excerpt,
+      pathname: getWritingHref({ slug, kind: "blog" }),
+      publishedTime: post.metadata.date,
     });
   } catch {
-    return { title: "Note Not Found" };
+    return { title: "Post Not Found" };
   }
 }
 
-export default async function NotePage({ params }: PageProps) {
+export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  return <WritingDetailPage slug={slug} kind="note" />;
+  return <WritingDetailPage slug={slug} kind="blog" />;
 }

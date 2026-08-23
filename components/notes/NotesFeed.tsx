@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { format, parseISO } from "date-fns";
-import type { NoteMetadata } from "@/lib/notes";
+import { getWritingHref, type NoteMetadata } from "@/lib/notes";
 import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { cn } from "@/lib/utils";
 
@@ -40,14 +40,14 @@ export function NotesFeed({
           </div>
           <h3 className="text-h2 mb-4">
             <Link
-              href={`/notes/${featuredNote.slug}`}
+              href={getWritingHref(featuredNote)}
               className="note-feed-title-link"
             >
               {featuredNote.title}
             </Link>
           </h3>
           <p className="note-feed-excerpt text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
-          <Link className="link-arrow" href={`/notes/${featuredNote.slug}`}>
+          <Link className="link-arrow" href={getWritingHref(featuredNote)}>
             Read post
             <ArrowIcon />
           </Link>
@@ -68,14 +68,14 @@ export function NotesFeed({
                 </div>
                 <h3 className="text-h3 mb-3">
                   <Link
-                    href={`/notes/${note.slug}`}
+                    href={getWritingHref(note)}
                     className="note-feed-title-link"
                   >
                     {note.title}
                   </Link>
                 </h3>
                 <p className="note-feed-excerpt text-body mb-4">{note.excerpt}</p>
-                <Link className="link-arrow" href={`/notes/${note.slug}`}>
+                <Link className="link-arrow" href={getWritingHref(note)}>
                   Read post
                   <ArrowIcon />
                 </Link>

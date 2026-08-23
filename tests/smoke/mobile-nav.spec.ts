@@ -28,7 +28,7 @@ test("mobile navigation opens and closes", async ({ page }, testInfo) => {
   await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
 });
 
-test("mobile Writing sections navigate to the archive anchors", async ({ page }, testInfo) => {
+test("mobile Writing sections navigate to separate archives", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile-only smoke coverage.");
 
   await page.goto("/");
@@ -37,8 +37,8 @@ test("mobile Writing sections navigate to the archive anchors", async ({ page },
   await dialog.getByRole("button", { name: "Show Writing sections" }).click();
   await dialog.getByRole("link", { name: "Blog" }).click();
 
-  await expect(page).toHaveURL(/\/notes#blog$/);
-  await expect(page.locator("#blog")).toBeVisible();
+  await expect(page).toHaveURL(/\/blog$/);
+  await expect(page.getByRole("heading", { name: "Blog", exact: true }).first()).toBeVisible();
   await expect(dialog).toBeHidden();
 });
 

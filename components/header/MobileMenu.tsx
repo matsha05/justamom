@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { CaretDown } from "@/components/CaretDown";
 import { siteConfig, writingSubnavLinks } from "@/lib/config";
-import { isNavLinkActive } from "@/components/header/nav-utils";
+import {
+  isNavLinkActive,
+  isWritingSectionActive,
+} from "@/components/header/nav-utils";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -85,6 +88,8 @@ export function MobileMenu({
         </h2>
         {siteConfig.navLinks.map((link, index) => {
           const isActive = isNavLinkActive(pathname, link.href);
+          const isWritingActive =
+            link.href === "/notes" && isWritingSectionActive(pathname);
 
           if (link.href === "/notes") {
             return (
@@ -98,6 +103,7 @@ export function MobileMenu({
                     href={link.href}
                     aria-current={isActive ? "page" : undefined}
                     className="nav-mobile-link"
+                    data-section-active={isWritingActive ? "true" : undefined}
                     onClick={onNavigate}
                   >
                     {link.label}
@@ -121,6 +127,11 @@ export function MobileMenu({
                         <Link
                           href={subnavLink.href}
                           className="mobile-notes-subnav-link"
+                          aria-current={
+                            isNavLinkActive(pathname, subnavLink.href)
+                              ? "page"
+                              : undefined
+                          }
                           onClick={onNavigate}
                         >
                           {subnavLink.label}

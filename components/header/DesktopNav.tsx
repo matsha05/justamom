@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CaretDown } from "@/components/CaretDown";
 import { siteConfig, writingSubnavLinks } from "@/lib/config";
-import { isNavLinkActive } from "@/components/header/nav-utils";
+import {
+  isNavLinkActive,
+  isWritingSectionActive,
+} from "@/components/header/nav-utils";
 
 interface DesktopNavProps {
   pathname: string | null;
@@ -44,6 +47,8 @@ export function DesktopNav({ pathname }: DesktopNavProps) {
     <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
       {siteConfig.navLinks.map((link) => {
         const isActive = isNavLinkActive(pathname, link.href);
+        const isWritingActive =
+          link.href === "/notes" && isWritingSectionActive(pathname);
 
         if (link.href === "/notes") {
           return (
@@ -68,6 +73,7 @@ export function DesktopNav({ pathname }: DesktopNavProps) {
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
                   className="nav-link"
+                  data-section-active={isWritingActive ? "true" : undefined}
                   onClick={() => setWritingOpen(false)}
                 >
                   {link.label}
@@ -94,6 +100,11 @@ export function DesktopNav({ pathname }: DesktopNavProps) {
                           <Link
                             href={subnavLink.href}
                             className="notes-subnav-link"
+                            aria-current={
+                              isNavLinkActive(pathname, subnavLink.href)
+                                ? "page"
+                                : undefined
+                            }
                             onClick={() => setWritingOpen(false)}
                           >
                             {subnavLink.label}

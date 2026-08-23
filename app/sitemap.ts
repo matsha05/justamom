@@ -1,20 +1,36 @@
 import type { MetadataRoute } from "next";
-import { getAllNotes } from "@/lib/notes";
+import { getAllNotes, getWritingHref } from "@/lib/notes";
 import { absoluteUrl } from "@/lib/config";
 
-const staticPageLastModified = new Date("2026-08-22T00:00:00.000Z");
+const staticPageLastModified = new Date("2026-08-23T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const notes = getAllNotes();
+  const monthlyNotes = notes.filter((note) => note.kind === "note");
+  const blogPosts = notes.filter((note) => note.kind === "blog");
   const notesLastModified =
-    notes.length > 0 ? new Date(notes[0].date) : staticPageLastModified;
+    monthlyNotes.length > 0 ? new Date(monthlyNotes[0].date) : staticPageLastModified;
+  const blogLastModified =
+    blogPosts.length > 0 ? new Date(blogPosts[0].date) : staticPageLastModified;
 
-  const noteEntries: MetadataRoute.Sitemap = notes.map((note) => ({
-    url: absoluteUrl(`/notes/${note.slug}`),
+  const writingEntries: MetadataRoute.Sitemap = notes.map((note) => ({
+    url: absoluteUrl(getWritingHref(note)),
     lastModified: new Date(note.date),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
+
+  const blogIndexEntry: MetadataRoute.Sitemap =
+    blogPosts.length > 0
+      ? [
+          {
+            url: absoluteUrl("/blog"),
+            lastModified: blogLastModified,
+            changeFrequency: "weekly",
+            priority: 0.7,
+          },
+        ]
+      : [];
 
   return [
     {
@@ -41,6 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    ...blogIndexEntry,
     {
       url: absoluteUrl("/contact"),
       lastModified: staticPageLastModified,
@@ -53,6 +70,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.3,
     },
-    ...noteEntries,
+    ...writingEntries,
   ];
 }

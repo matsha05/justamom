@@ -8,7 +8,7 @@ test("homepage leads readers into Lizi's writing", async ({ page }) => {
     page.getByRole("heading", { name: "Hi, I’m Lizi." })
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Read recent posts" })
+    page.getByRole("link", { name: "Read recent notes" })
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "More about me" })
@@ -20,7 +20,7 @@ test("homepage leads readers into Lizi's writing", async ({ page }) => {
     page.getByAltText("Lizi Shaw smiling on a mountain trail and holding up her hiking poles")
   ).toBeVisible();
   await expect(page.locator("#notes article.note-feed-article")).toHaveCount(3);
-  await expect(page.getByRole("link", { name: "See all writing" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "See all notes" })).toBeVisible();
   await expect(page.locator('main img[src*="signature"]')).toHaveCount(0);
 });
 
@@ -141,15 +141,22 @@ test("note pages render with a post-note newsletter CTA", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("notes archive closes with a newsletter invitation", async ({ page }) => {
+test("notes archive contains only recent notes and closes with a newsletter invitation", async ({ page }) => {
   await page.goto("/notes");
 
-  await expect(page.getByRole("heading", { name: "Writing", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "A Note for Moms", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Blog" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "A Note for Moms", exact: true })).toBeVisible();
+  const writingDirectory = page.getByRole("navigation", {
+    name: "Writing sections",
+    exact: true,
+  });
+  await expect(writingDirectory.getByRole("link", { name: "Recent Notes" })).toHaveAttribute(
+    "aria-current",
+    "page"
+  );
+  await expect(writingDirectory.getByRole("link", { name: "Blog" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Recent notes" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Blog" })).toBeVisible();
-  await expect(page.getByText("Blog posts are on the way.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Blog" })).toHaveCount(0);
+  await expect(page.getByText("Blog posts are on the way.")).toHaveCount(0);
 
   const archiveInvitation = page.getByRole("heading", {
     name: "Join A Note for Moms",
@@ -158,6 +165,28 @@ test("notes archive closes with a newsletter invitation", async ({ page }) => {
 
   await expect(archiveInvitation).toBeVisible();
   await expect(page.getByRole("button", { name: "Join the notes" })).toBeVisible();
+});
+
+test("blog has its own archive page", async ({ page }) => {
+  await page.goto("/blog");
+
+  await expect(page.getByRole("heading", { name: "Blog", exact: true }).first()).toBeVisible();
+  const writingDirectory = page.getByRole("navigation", {
+    name: "Writing sections",
+    exact: true,
+  });
+  await expect(writingDirectory.getByRole("link", { name: "Blog", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page"
+  );
+  await expect(
+    writingDirectory.getByRole("link", { name: "Recent Notes", exact: true })
+  ).toBeVisible();
+  await expect(page.getByText("Blog posts are on the way.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Read recent notes" })).toHaveAttribute(
+    "href",
+    "/notes"
+  );
 });
 
 test("professional portrait appears only on Speaking", async ({ page }) => {
@@ -189,7 +218,7 @@ test("the retired work section redirects into the writing archive", async ({ pag
   await page.goto("/work");
 
   await expect(page).toHaveURL(/\/notes$/);
-  await expect(page.getByRole("heading", { name: "Writing", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "A Note for Moms", exact: true })).toBeVisible();
 });
 
 test("speaking hero links directly to the inquiry form", async ({ page }) => {

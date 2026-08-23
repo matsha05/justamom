@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { siteConfig } from "@/lib/config";
+import { siteConfig, writingSubnavLinks } from "@/lib/config";
 
 const newsletterLink = { href: "/#newsletter", label: "Newsletter" };
 const footerLinks = [
   ...siteConfig.navLinks.slice(0, 1),
   newsletterLink,
-  ...siteConfig.navLinks.slice(1),
+  ...writingSubnavLinks,
+  ...siteConfig.navLinks.slice(2),
 ];
 const legalLink = { href: "/legal", label: "Privacy & Terms" };
 

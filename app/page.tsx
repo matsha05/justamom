@@ -18,7 +18,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function HomePage() {
-  const notes = getAllNotes();
+  const notes = getAllNotes().filter((note) => note.kind === "note");
   const { home, newsletter } = marketingContent;
 
   return (
@@ -75,7 +75,10 @@ export default function HomePage() {
             </div>
             <div className="space-y-8">
               <NotesFeed notes={notes} maxSupportingNotes={2} />
-              <Link className="link-arrow" href={home.notes.cta.href}>
+              <Link
+                className="link-arrow writing-archive-link"
+                href={home.notes.cta.href}
+              >
                 {home.notes.cta.label}
                 <ArrowIcon />
               </Link>

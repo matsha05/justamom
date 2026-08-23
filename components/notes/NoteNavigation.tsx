@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons/ArrowIcon";
-import type { NoteMetadata } from "@/lib/notes";
+import { getWritingHref, type NoteMetadata } from "@/lib/notes";
 import { cn } from "@/lib/utils";
 
 interface NoteNavigationProps {
@@ -20,7 +20,7 @@ export function NoteNavigation({
 
   return (
     <nav
-      aria-label="More notes"
+      aria-label="More writing"
       className="note-adjacent-nav mt-12 border-t border-[var(--color-border)] pt-8"
     >
       <div
@@ -31,7 +31,7 @@ export function NoteNavigation({
       >
         {previousNote ? (
           <Link
-            href={`/notes/${previousNote.slug}`}
+            href={getWritingHref(previousNote)}
             className="note-adjacent-link group block flex-1"
           >
             <span className="note-adjacent-label mb-2 flex items-center gap-2 text-caption text-[var(--color-ink-muted)]">
@@ -46,7 +46,7 @@ export function NoteNavigation({
 
         {nextNote ? (
           <Link
-            href={`/notes/${nextNote.slug}`}
+            href={getWritingHref(nextNote)}
             className={cn(
               "note-adjacent-link group block flex-1",
               previousNote && "note-adjacent-link-end"

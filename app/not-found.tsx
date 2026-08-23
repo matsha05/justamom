@@ -26,7 +26,10 @@ export default function NotFound() {
                         About Me
                     </Link>
                     <Link href="/notes" className="text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors">
-                        Writing
+                        Recent Notes
+                    </Link>
+                    <Link href="/blog" className="text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors">
+                        Blog
                     </Link>
                     <Link href="/speaking" className="text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors">
                         Speaking

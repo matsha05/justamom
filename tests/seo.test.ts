@@ -3,9 +3,10 @@ import sitemap from "@/app/sitemap";
 import robots from "@/app/robots";
 import { metadata as labMetadata } from "@/app/lab/layout";
 import { metadata as notesMetadata } from "@/app/notes/page";
+import { metadata as blogMetadata } from "@/app/blog/page";
 import { generateMetadata as generateNoteMetadata } from "@/app/notes/[slug]/page";
 import { absoluteUrl } from "@/lib/config";
-import { getAllNotes } from "@/lib/notes";
+import { getAllNotes, getWritingHref } from "@/lib/notes";
 
 vi.mock("server-only", () => ({}));
 
@@ -30,13 +31,14 @@ describe("SEO guardrails", () => {
 
     expect(urls).toContain(absoluteUrl("/"));
     expect(urls).toContain(absoluteUrl("/notes"));
+    expect(urls).not.toContain(absoluteUrl("/blog"));
     expect(
       entries.find((entry) => entry.url === absoluteUrl("/"))?.lastModified
-    ).toEqual(new Date("2026-08-22T00:00:00.000Z"));
+    ).toEqual(new Date("2026-08-23T00:00:00.000Z"));
     expect(urls).not.toContain(absoluteUrl("/work"));
 
     for (const note of getAllNotes()) {
-      expect(urls).toContain(absoluteUrl(`/notes/${note.slug}`));
+      expect(urls).toContain(absoluteUrl(getWritingHref(note)));
     }
   });
 
@@ -47,6 +49,17 @@ describe("SEO guardrails", () => {
     expect(notesMetadata.openGraph).toMatchObject({
       type: "website",
       url: "/notes",
+    });
+    expect(blogMetadata.alternates).toMatchObject({
+      canonical: "/blog",
+    });
+    expect(blogMetadata.openGraph).toMatchObject({
+      type: "website",
+      url: "/blog",
+    });
+    expect(blogMetadata.robots).toMatchObject({
+      index: false,
+      follow: true,
     });
 
     const noteMetadata = await generateNoteMetadata({
@@ -61,5 +74,14 @@ describe("SEO guardrails", () => {
       url: "/notes/grace-increasing",
       publishedTime: "2026-05-20",
     });
+  });
+
+  it("builds kind-aware writing URLs", () => {
+    expect(
+      getWritingHref({ slug: "a-monthly-note", kind: "note" })
+    ).toBe("/notes/a-monthly-note");
+    expect(
+      getWritingHref({ slug: "a-blog-post", kind: "blog" })
+    ).toBe("/blog/a-blog-post");
   });
 });

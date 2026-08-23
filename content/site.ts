@@ -73,6 +73,14 @@ export const marketingContent = {
       trust: "",
       source: conversionSources.notesArchive,
     } satisfies NewsletterPanelContent,
+    blogArchivePanel: {
+      eyebrow: "Newsletter",
+      heading: "Join A Note for Moms",
+      description:
+        "Once a month, I send A Note for Moms and include links to recent posts.",
+      trust: "",
+      source: conversionSources.blogArchive,
+    } satisfies NewsletterPanelContent,
   },
   home: {
     hero: {
@@ -81,7 +89,7 @@ export const marketingContent = {
         "I love to write and point women towards Jesus.",
       primaryCta: {
         href: "/notes",
-        label: "Read recent posts",
+        label: "Read recent notes",
       } satisfies ContentActionLink,
       secondaryCta: {
         href: "/about",
@@ -89,13 +97,13 @@ export const marketingContent = {
       } satisfies ContentActionLink,
     },
     notes: {
-      eyebrow: "Recent Posts",
-      heading: "Recent writing",
+      eyebrow: "Recent Notes",
+      heading: "A Note for Moms",
       description:
-        "Monthly notes and other writing, all in one place.",
+        "Monthly notes about following Jesus through motherhood and ordinary life.",
       cta: {
         href: "/notes",
-        label: "See all writing",
+        label: "See all notes",
       } satisfies ContentActionLink,
     },
     speaking: {

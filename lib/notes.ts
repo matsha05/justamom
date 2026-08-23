@@ -113,15 +113,30 @@ export function getNoteBySlug(slug: string) {
   };
 }
 
-export function getAllNoteSlugs(): string[] {
-  return readNotes().map((note) => note.slug);
+export function getWritingBasePath(kind: WritingKind): "/notes" | "/blog" {
+  return kind === "blog" ? "/blog" : "/notes";
 }
 
-export function getAdjacentNotes(currentSlug: string): {
+export function getWritingHref(
+  writing: Pick<NoteMetadata, "slug" | "kind">
+): string {
+  return `${getWritingBasePath(writing.kind)}/${writing.slug}`;
+}
+
+export function getAllWritingSlugs(kind: WritingKind): string[] {
+  return readNotes()
+    .filter((note) => note.kind === kind)
+    .map((note) => note.slug);
+}
+
+export function getAdjacentWriting(
+  currentSlug: string,
+  kind: WritingKind
+): {
   prev: NoteMetadata | null;
   next: NoteMetadata | null;
 } {
-  const notes = getAllNotes();
+  const notes = getAllNotes().filter((note) => note.kind === kind);
   const currentIndex = notes.findIndex((note) => note.slug === currentSlug);
 
   if (currentIndex === -1) {
