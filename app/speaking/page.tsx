@@ -27,14 +27,15 @@ export default function SpeakingPage() {
         density="compact"
         media={
           <div className="mx-auto w-[min(270px,70vw)] lg:ml-auto lg:mr-0">
-            <div className="image-editorial aspect-[4/5] relative">
+            <div className="image-editorial">
               <Image
-                src="/images/lizi-solo-portrait.avif"
-                alt="Lizi Shaw smiling in a cream sweater"
-                fill
-                className="object-cover"
+                src="/images/speaking-lizi-brick-portrait.avif"
+                alt="Lizi Shaw smiling outside beside a brick wall"
+                width={1200}
+                height={1582}
+                className="block h-auto w-full"
                 priority
-                sizes="(min-width: 1024px) 280px, 70vw"
+                sizes="(min-width: 1024px) 270px, 70vw"
               />
             </div>
           </div>

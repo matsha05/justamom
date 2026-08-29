@@ -42,8 +42,8 @@ export default function AboutPage() {
                     <aside className="about-photo-rail" aria-label="Photos from Lizi's life">
                         <div className="about-photo-frame about-photo-frame-lead">
                             <Image
-                                src="/images/about-lizi-kitchen-laugh.avif"
-                                alt="Lizi laughing at home with two of her children"
+                                src="/images/about-lizi-three-kids.avif"
+                                alt="Lizi smiling outdoors with her three children"
                                 fill
                                 priority
                                 className="object-cover"

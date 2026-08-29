@@ -189,12 +189,13 @@ test("blog has its own archive page", async ({ page }) => {
   );
 });
 
-test("professional portrait appears only on Speaking", async ({ page }) => {
+test("Lizi's requested photos appear on Speaking and About", async ({ page }) => {
   await page.goto("/about");
-  await expect(page.getByAltText("Lizi Shaw smiling in a cream sweater")).toHaveCount(0);
+  await expect(page.getByAltText("Lizi Shaw smiling outside beside a brick wall")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Hi, I’m Lizi Shaw" })).toBeVisible();
   await expect(page.getByText(/hot cup of coffee \(black of course\)/)).toBeVisible();
-  await expect(page.getByAltText("Lizi laughing at home with two of her children")).toBeVisible();
+  await expect(page.getByAltText("Lizi smiling outdoors with her three children")).toBeVisible();
+  await expect(page.getByAltText("Lizi laughing at home with two of her children")).toHaveCount(0);
   await expect(page.getByAltText("Lizi laughing as two of her children hug her outside")).toBeVisible();
   await expect(page.getByAltText("Lizi and Matt smiling together beneath a rainbow")).toBeVisible();
   await expect(
@@ -209,7 +210,19 @@ test("professional portrait appears only on Speaking", async ({ page }) => {
   await expect(page.locator('img[src*="about-lizi-race-day"]')).toHaveCount(0);
 
   await page.goto("/speaking");
-  await expect(page.getByAltText("Lizi Shaw smiling in a cream sweater")).toBeVisible();
+  const speakingPortrait = page.getByAltText("Lizi Shaw smiling outside beside a brick wall");
+  await expect(speakingPortrait).toBeVisible();
+  await expect(page.getByAltText("Lizi smiling outdoors with her three children")).toHaveCount(0);
+
+  const aspectRatioDifference = await speakingPortrait.evaluate((image: HTMLImageElement) => {
+    const bounds = image.getBoundingClientRect();
+    const renderedRatio = bounds.width / bounds.height;
+    const naturalRatio = image.naturalWidth / image.naturalHeight;
+
+    return Math.abs(renderedRatio - naturalRatio);
+  });
+
+  expect(aspectRatioDifference).toBeLessThan(0.01);
   await expect(page.getByText("Topics I share")).toHaveCount(0);
   await expect(page.getByText("Identity in the Noise")).toHaveCount(0);
 });
