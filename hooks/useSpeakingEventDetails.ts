@@ -2,51 +2,43 @@
 
 import { useState } from "react";
 
-const MISSING_DETAILS_MESSAGE = "Please select an event type and group size.";
+export interface SpeakingEventDetails {
+  organization: string;
+  eventDate: string;
+  location: string;
+  eventType: string;
+  audienceSize: string;
+  message: string;
+}
+
+export type SpeakingEventDetail = keyof SpeakingEventDetails;
+
+const emptyDetails: SpeakingEventDetails = {
+  organization: "",
+  eventDate: "",
+  location: "",
+  eventType: "",
+  audienceSize: "",
+  message: "",
+};
 
 export function useSpeakingEventDetails() {
-  const [eventType, setEventType] = useState("");
-  const [audienceSize, setAudienceSize] = useState("");
-  const [selectError, setSelectError] = useState<string | null>(null);
+  const [details, setDetails] = useState<SpeakingEventDetails>(emptyDetails);
 
-  function updateEventType(value: string) {
-    setEventType(value);
-    setSelectError(null);
-  }
-
-  function updateAudienceSize(value: string) {
-    setAudienceSize(value);
-    setSelectError(null);
-  }
-
-  function validateRequiredDetails() {
-    if (eventType && audienceSize) {
-      setSelectError(null);
-      return true;
-    }
-
-    setSelectError(MISSING_DETAILS_MESSAGE);
-    return false;
-  }
-
-  function clearValidationError() {
-    setSelectError(null);
+  function updateDetail(field: SpeakingEventDetail, value: string) {
+    setDetails((currentDetails) => ({
+      ...currentDetails,
+      [field]: value,
+    }));
   }
 
   function resetDetails() {
-    setEventType("");
-    setAudienceSize("");
-    setSelectError(null);
+    setDetails(emptyDetails);
   }
 
   return {
-    eventType,
-    audienceSize,
-    selectError,
-    updateEventType,
-    updateAudienceSize,
-    validateRequiredDetails,
-    clearValidationError,
+    details,
+    updateDetail,
     resetDetails,
   };
 }

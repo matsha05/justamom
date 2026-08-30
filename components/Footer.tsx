@@ -1,17 +1,21 @@
 import Link from "next/link";
-import { siteConfig, writingSubnavLinks } from "@/lib/config";
+import { siteConfig, type WritingSubnavLink } from "@/lib/config";
 
 const newsletterLink = { href: "/#newsletter", label: "Newsletter" };
-const footerLinks = [
-  ...siteConfig.navLinks.slice(0, 1),
-  newsletterLink,
-  ...writingSubnavLinks,
-  ...siteConfig.navLinks.slice(2),
-];
 const legalLink = { href: "/legal", label: "Privacy & Terms" };
 
-export function Footer() {
+interface FooterProps {
+  writingLinks: readonly WritingSubnavLink[];
+}
+
+export function Footer({ writingLinks }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const footerLinks = [
+    ...siteConfig.navLinks.slice(0, 1),
+    newsletterLink,
+    ...writingLinks,
+    ...siteConfig.navLinks.slice(2),
+  ];
 
   return (
     <footer className="site-footer border-t border-[var(--color-border)] bg-[var(--color-paper)]">

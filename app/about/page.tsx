@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Fragment } from "react";
 import { ArrowIcon } from "@/components/icons/ArrowIcon";
 import { buildPageMetadata } from "@/lib/metadata";
 import { marketingContent } from "@/content/site";
@@ -23,8 +24,25 @@ export default function AboutPage() {
                         <h1 className="text-display mb-10">{about.hero.heading}</h1>
 
                         <div className="prose text-body-lg text-[var(--color-ink-soft)]">
-                            {about.hero.paragraphs.map((paragraph) => (
-                                <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+                            {about.hero.paragraphs.map((paragraph, index) => (
+                                <Fragment key={paragraph.slice(0, 32)}>
+                                    <p>{paragraph}</p>
+                                    {index === 0 ? (
+                                        <div
+                                            className="about-photo-frame about-photo-frame-lead about-photo-frame-lead-flow"
+                                            data-about-lead-photo="responsive"
+                                        >
+                                            <Image
+                                                src="/images/about-lizi-three-kids.avif"
+                                                alt="Lizi smiling outdoors with her three children"
+                                                fill
+                                                priority
+                                                className="object-cover"
+                                                sizes="(min-width: 1280px) 360px, (min-width: 960px) 34vw, calc(100vw - 3rem)"
+                                            />
+                                        </div>
+                                    ) : null}
+                                </Fragment>
                             ))}
                         </div>
 
@@ -40,17 +58,6 @@ export default function AboutPage() {
                     </div>
 
                     <aside className="about-photo-rail" aria-label="Photos from Lizi's life">
-                        <div className="about-photo-frame about-photo-frame-lead">
-                            <Image
-                                src="/images/about-lizi-three-kids.avif"
-                                alt="Lizi smiling outdoors with her three children"
-                                fill
-                                priority
-                                className="object-cover"
-                                sizes="(min-width: 960px) 340px, 92vw"
-                            />
-                        </div>
-
                         <div className="about-photo-pair">
                             <div className="about-photo-frame about-photo-frame-portrait">
                                 <Image

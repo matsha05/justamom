@@ -53,39 +53,6 @@ export const contactFormSchema = z
       });
     }
 
-    if (data.form_type === "speaking") {
-      if (!data.event_type) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["event_type"],
-          message: "Please select an event type.",
-        });
-      }
-
-      if (!data.audience_size) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["audience_size"],
-          message: "Please select a group size.",
-        });
-      }
-
-      if (!data.event_date) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["event_date"],
-          message: "Please provide an event date.",
-        });
-      }
-
-      if (!data.location) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["location"],
-          message: "Please provide the event location.",
-        });
-      }
-    }
   });
 
 export function getValidationMessage(error: z.ZodError): string {

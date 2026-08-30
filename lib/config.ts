@@ -8,6 +8,16 @@ export const writingSubnavLinks = [
   { href: "/blog", label: "Blog" },
 ] as const;
 
+export type WritingSubnavLink = (typeof writingSubnavLinks)[number];
+
+export function getVisibleWritingSubnavLinks(
+  hasBlogPosts: boolean
+): WritingSubnavLink[] {
+  return writingSubnavLinks.filter(
+    (link) => hasBlogPosts || link.href !== "/blog"
+  );
+}
+
 export const siteConfig = {
   site: {
     name: "Lizi Shaw",

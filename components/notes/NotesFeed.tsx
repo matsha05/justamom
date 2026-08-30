@@ -35,9 +35,12 @@ export function NotesFeed({
 
       {featuredNote ? (
         <article className="note-feed-article note-feed-article-featured group border-b border-[var(--color-border)] pb-9">
-          <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
+          <time
+            dateTime={featuredNote.date}
+            className="text-caption mb-3 block text-[var(--color-ink-muted)]"
+          >
             {format(parseISO(featuredNote.date), "MMMM d, yyyy")}
-          </div>
+          </time>
           <h3 className="text-h2 mb-4">
             <Link
               href={getWritingHref(featuredNote)}
@@ -47,7 +50,11 @@ export function NotesFeed({
             </Link>
           </h3>
           <p className="note-feed-excerpt text-body mb-5 max-w-[58ch]">{featuredNote.excerpt}</p>
-          <Link className="link-arrow" href={getWritingHref(featuredNote)}>
+          <Link
+            className="link-arrow"
+            href={getWritingHref(featuredNote)}
+            aria-label={`Read post: ${featuredNote.title}`}
+          >
             Read post
             <ArrowIcon />
           </Link>
@@ -63,9 +70,12 @@ export function NotesFeed({
                 key={note.slug}
                 className={cn("note-feed-article group py-8 first:pt-0", supportingItemClassName)}
               >
-                <div className="text-caption mb-3 text-[var(--color-ink-faint)]">
+                <time
+                  dateTime={note.date}
+                  className="text-caption mb-3 block text-[var(--color-ink-muted)]"
+                >
                   {formattedDate}
-                </div>
+                </time>
                 <h3 className="text-h3 mb-3">
                   <Link
                     href={getWritingHref(note)}
@@ -75,7 +85,11 @@ export function NotesFeed({
                   </Link>
                 </h3>
                 <p className="note-feed-excerpt text-body mb-4">{note.excerpt}</p>
-                <Link className="link-arrow" href={getWritingHref(note)}>
+                <Link
+                  className="link-arrow"
+                  href={getWritingHref(note)}
+                  aria-label={`Read post: ${note.title}`}
+                >
                   Read post
                   <ArrowIcon />
                 </Link>

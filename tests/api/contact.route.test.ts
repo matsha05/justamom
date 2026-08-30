@@ -102,8 +102,10 @@ describe("POST /api/contact", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it("requires event date for speaking inquiries", async () => {
-    const fetchSpy = vi.spyOn(global, "fetch");
+  it("accepts a speaking inquiry with only name and email", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
 
     const response = await POST(
       createContactRequest(
@@ -111,18 +113,52 @@ describe("POST /api/contact", () => {
           form_type: "speaking",
           subject: "Speaking Inquiry",
           message: "",
-          event_type: "Retreat",
-          audience_size: "20-50",
+          event_type: "",
+          audience_size: "",
           event_date: "",
-          location: "Denver, CO",
+          location: "",
         })
       )
     );
     const body = await response.json();
+    const forwardedBody = fetchSpy.mock.calls[0]?.[1]?.body as FormData;
 
-    expect(response.status).toBe(400);
-    expect(body.error).toContain("event date");
-    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(forwardedBody.get("name")).toBe("Jane Example");
+    expect(forwardedBody.get("email")).toBe("jane@example.com");
+    expect(forwardedBody.get("event_date")).toBeNull();
+    expect(forwardedBody.get("event_type")).toBeNull();
+  });
+
+  it("forwards any optional speaking details that are provided", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
+
+    const response = await POST(
+      createContactRequest(
+        contactPayload({
+          form_type: "speaking",
+          subject: "Speaking Inquiry",
+          organization: "Monday Night Mamas",
+          message: "A gathering about honest friendship.",
+          event_type: "Retreat",
+          audience_size: "20-50",
+          event_date: "Oct 10, 2026",
+          location: "Denver, CO",
+        })
+      )
+    );
+    const forwardedBody = fetchSpy.mock.calls[0]?.[1]?.body as FormData;
+
+    expect(response.status).toBe(200);
+    expect(forwardedBody.get("organization")).toBe("Monday Night Mamas");
+    expect(forwardedBody.get("message")).toBe("A gathering about honest friendship.");
+    expect(forwardedBody.get("event_type")).toBe("Retreat");
+    expect(forwardedBody.get("audience_size")).toBe("20-50");
+    expect(forwardedBody.get("event_date")).toBe("Oct 10, 2026");
+    expect(forwardedBody.get("location")).toBe("Denver, CO");
   });
 
   it("enforces fingerprint rate limiting", async () => {

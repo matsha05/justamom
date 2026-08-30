@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CaretDown } from "@/components/CaretDown";
-import { siteConfig, writingSubnavLinks } from "@/lib/config";
+import { siteConfig, type WritingSubnavLink } from "@/lib/config";
 import {
   isNavLinkActive,
   isWritingSectionActive,
@@ -11,9 +11,10 @@ import {
 
 interface DesktopNavProps {
   pathname: string | null;
+  writingLinks: readonly WritingSubnavLink[];
 }
 
-export function DesktopNav({ pathname }: DesktopNavProps) {
+export function DesktopNav({ pathname, writingLinks }: DesktopNavProps) {
   const [writingOpen, setWritingOpen] = useState(false);
   const writingGroupRef = useRef<HTMLDivElement>(null);
   const writingToggleRef = useRef<HTMLButtonElement>(null);
@@ -95,7 +96,7 @@ export function DesktopNav({ pathname }: DesktopNavProps) {
                 <div id="writing-subnav" className="notes-subnav-corridor">
                   <div className="notes-subnav-panel">
                     <ul aria-label="Writing sections">
-                      {writingSubnavLinks.map((subnavLink) => (
+                      {writingLinks.map((subnavLink) => (
                         <li key={subnavLink.href}>
                           <Link
                             href={subnavLink.href}

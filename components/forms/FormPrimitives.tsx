@@ -12,6 +12,7 @@ interface IdentityFieldsProps {
   namePlaceholder?: string;
   emailPlaceholder?: string;
   className?: string;
+  showRequiredHint?: boolean;
 }
 
 export function IdentityFields({
@@ -20,11 +21,20 @@ export function IdentityFields({
   namePlaceholder = "Your name",
   emailPlaceholder = "you@example.com",
   className,
+  showRequiredHint = false,
 }: IdentityFieldsProps) {
+  const requiredHint = showRequiredHint ? (
+    <span className="text-[var(--color-ink-muted)] font-normal normal-case">
+      (required)
+    </span>
+  ) : null;
+
   return (
     <div className={cn("grid gap-4 md:grid-cols-2", className)}>
       <div className="space-y-2">
-        <Label htmlFor="name">{nameLabel}</Label>
+        <Label htmlFor="name">
+          {nameLabel} {requiredHint}
+        </Label>
         <Input
           type="text"
           id="name"
@@ -35,7 +45,9 @@ export function IdentityFields({
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="email">{emailLabel}</Label>
+        <Label htmlFor="email">
+          {emailLabel} {requiredHint}
+        </Label>
         <Input
           type="email"
           id="email"

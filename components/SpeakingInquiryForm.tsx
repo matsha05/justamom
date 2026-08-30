@@ -1,7 +1,5 @@
 "use client";
 
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import {
@@ -28,25 +26,16 @@ export function SpeakingInquiryForm() {
     clearFeedbackOnInputChange,
   } = useContactFormSubmission();
   const {
-    eventType,
-    audienceSize,
-    selectError,
-    updateEventType,
-    updateAudienceSize,
-    validateRequiredDetails,
+    details,
+    updateDetail,
     resetDetails,
   } = useSpeakingEventDetails();
 
-  const selectErrorId = "speaking-select-error";
   const successMessageId = "speaking-success-message";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     clearError();
-
-    if (!validateRequiredDetails()) {
-      return;
-    }
 
     const form = e.currentTarget;
     const result = await submitContactForm({
@@ -106,27 +95,13 @@ export function SpeakingInquiryForm() {
         namePlaceholder="Jane Doe"
         emailPlaceholder="jane@example.com"
         className="gap-5"
+        showRequiredHint
       />
 
       <SpeakingEventFields
-        required
-        eventType={eventType}
-        audienceSize={audienceSize}
-        onEventTypeChange={updateEventType}
-        onAudienceSizeChange={updateAudienceSize}
-        selectError={selectError}
-        selectErrorId={selectErrorId}
+        details={details}
+        onDetailChange={updateDetail}
       />
-
-      <div className="space-y-2">
-        <Label htmlFor="message">Tell me about your event theme or vision</Label>
-        <Textarea
-          id="message"
-          name="message"
-          rows={4}
-          placeholder="What is the heart behind this gathering?"
-        />
-      </div>
 
       <FormSubmitButton isSubmitting={isSubmitting} className="w-full sm:w-auto" />
     </form>

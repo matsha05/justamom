@@ -9,8 +9,13 @@ import { MobileMenu } from "@/components/header/MobileMenu";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useScrollThreshold } from "@/hooks/useScrollThreshold";
+import type { WritingSubnavLink } from "@/lib/config";
 
-export function Header() {
+interface HeaderProps {
+  writingLinks: readonly WritingSubnavLink[];
+}
+
+export function Header({ writingLinks }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrolled = useScrollThreshold(20);
   const pathname = usePathname();
@@ -65,7 +70,7 @@ export function Header() {
             ) : null}
           </Link>
 
-          <DesktopNav pathname={pathname} />
+          <DesktopNav pathname={pathname} writingLinks={writingLinks} />
 
           {!mobileMenuOpen ? (
             <button
@@ -103,6 +108,7 @@ export function Header() {
           <MobileMenu
             isOpen
             pathname={pathname}
+            writingLinks={writingLinks}
             onClose={dismissMobileMenu}
             onNavigate={finishMobileNavigation}
             menuRef={mobileMenuRef}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -39,20 +39,16 @@ export function ContactForm() {
   } = useContactFormSubmission();
   const [selectedSubject, setSelectedSubject] = useState("");
   const [subjectError, setSubjectError] = useState<string | null>(null);
+  const [contactMessage, setContactMessage] = useState("");
   const {
-    eventType,
-    audienceSize,
-    selectError,
-    updateEventType,
-    updateAudienceSize,
-    validateRequiredDetails,
-    clearValidationError,
+    details,
+    updateDetail,
     resetDetails,
   } = useSpeakingEventDetails();
+  const subjectTriggerRef = useRef<HTMLButtonElement>(null);
 
   const isSpeakingInquiry = selectedSubject === CONTACT_SUBJECT_SPEAKING_INQUIRY;
   const subjectErrorId = "subject-error";
-  const selectErrorId = "contact-speaking-select-error";
   const successMessageId = "contact-success-message";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,15 +57,11 @@ export function ContactForm() {
 
     if (!selectedSubject) {
       setSubjectError("Please select a topic.");
-      return;
-    }
-
-    if (isSpeakingInquiry && !validateRequiredDetails()) {
+      requestAnimationFrame(() => subjectTriggerRef.current?.focus());
       return;
     }
 
     setSubjectError(null);
-    clearValidationError();
 
     const form = e.currentTarget;
     const formType = isSpeakingInquiry ? "speaking" : "contact";
@@ -88,6 +80,7 @@ export function ContactForm() {
       form.reset();
       setSelectedSubject("");
       setSubjectError(null);
+      setContactMessage("");
       resetDetails();
     }
   };
@@ -119,10 +112,15 @@ export function ContactForm() {
         </div>
       ) : null}
 
-      <IdentityFields />
+      <IdentityFields showRequiredHint />
 
       <div className="space-y-2">
-        <Label htmlFor="subject">What&apos;s this about?</Label>
+        <Label htmlFor="subject">
+          What&apos;s this about?{" "}
+          <span className="text-[var(--color-ink-muted)] font-normal normal-case">
+            (required)
+          </span>
+        </Label>
         <Select
           required
           value={selectedSubject}
@@ -132,7 +130,9 @@ export function ContactForm() {
           }}
         >
           <SelectTrigger
+            ref={subjectTriggerRef}
             id="subject"
+            aria-required="true"
             aria-invalid={Boolean(subjectError)}
             aria-describedby={subjectError ? subjectErrorId : undefined}
           >
@@ -160,38 +160,31 @@ export function ContactForm() {
       </div>
 
       {isSpeakingInquiry ? (
-        <div className="space-y-6 py-4 border-t border-b border-[var(--color-border)] animate-fade-in">
-          <p className="text-body bg-[var(--color-paper-soft)] p-4 rounded-md">
-            <strong>Great!</strong> Tell me a bit about your event so I can check
-            availability.
-          </p>
-
+        <div className="animate-fade-in">
           <SpeakingEventFields
-            required
-            eventType={eventType}
-            audienceSize={audienceSize}
-            onEventTypeChange={updateEventType}
-            onAudienceSizeChange={updateAudienceSize}
-            selectError={selectError}
-            selectErrorId={selectErrorId}
+            details={details}
+            onDetailChange={updateDetail}
           />
         </div>
-      ) : null}
-
-      <div className="space-y-2">
-        <Label htmlFor="message">Message</Label>
-        <Textarea
-          id="message"
-          name="message"
-          required
-          rows={5}
-          placeholder={
-            isSpeakingInquiry
-              ? "Tell me about your event theme or vision…"
-              : "How can I help you?"
-          }
-        />
-      </div>
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="message">
+            Message{" "}
+            <span className="text-[var(--color-ink-muted)] font-normal normal-case">
+              (required)
+            </span>
+          </Label>
+          <Textarea
+            id="message"
+            name="message"
+            value={contactMessage}
+            onChange={(event) => setContactMessage(event.target.value)}
+            required
+            rows={5}
+            placeholder="How can I help you?"
+          />
+        </div>
+      )}
 
       <FormSubmitButton
         isSubmitting={isSubmitting}

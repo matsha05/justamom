@@ -225,7 +225,7 @@ export const marketingContent = {
       eyebrow: "Inquiries",
       heading: "Invite me to speak",
       description:
-        "If you'd like to invite me to your church, retreat, or gathering, share a few details below or send me an email.",
+        "If you'd like to invite me to your church, retreat, or gathering, your name and email are enough to start. Share any event details you already know, or send me an email.",
       followUp: "I'll follow up personally.",
     },
   },

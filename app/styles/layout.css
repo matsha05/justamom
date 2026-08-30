@@ -157,6 +157,7 @@
 .about-editorial-grid {
   display: grid;
   gap: clamp(3rem, 7vw, 4.75rem);
+  position: relative;
 }
 
 .about-copy-column {
@@ -209,11 +210,21 @@
   aspect-ratio: 4 / 3;
 }
 
+.about-photo-frame-lead-flow {
+  width: 100%;
+  margin-block: 0.25rem clamp(2rem, 8vw, 3rem);
+}
+
 @media (min-width: 960px) {
   .about-editorial-grid {
-    grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 0.9fr);
+    --about-editorial-gap: clamp(3rem, 5vw, 4.25rem);
+    --about-photo-rail-width: max(
+      18rem,
+      calc((100% - var(--about-editorial-gap)) * 0.3673469)
+    );
+    grid-template-columns: minmax(0, 1fr) var(--about-photo-rail-width);
     align-items: start;
-    gap: clamp(3rem, 5vw, 4.25rem);
+    gap: var(--about-editorial-gap);
   }
 
   .about-photo-rail {
@@ -223,6 +234,13 @@
     margin: 0;
     padding: 0;
     overflow: visible;
+  }
+
+  .about-photo-rail::before {
+    content: "";
+    grid-column: 1 / -1;
+    width: 100%;
+    aspect-ratio: 3 / 4;
   }
 
   .about-photo-pair {
@@ -237,12 +255,17 @@
     min-width: 0;
   }
 
-  .about-photo-frame-lead,
   .about-photo-frame-landscape {
     grid-column: 1 / -1;
   }
 
-  .about-photo-frame-lead {
+  .about-photo-frame-lead-flow {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    z-index: 1;
+    width: var(--about-photo-rail-width);
+    margin: 0;
     aspect-ratio: 3 / 4;
   }
 

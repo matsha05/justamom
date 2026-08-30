@@ -11,7 +11,9 @@ interface DatePickerProps {
     name: string;
     ariaLabel?: string;
     required?: boolean;
+    value?: string;
     defaultValue?: string;
+    onValueChange?: (value: string) => void;
 }
 
 function parseDisplayDate(value: string): Date | undefined {
@@ -34,11 +36,14 @@ export function DatePicker({
     name,
     ariaLabel,
     required = false,
+    value,
     defaultValue = "",
+    onValueChange,
 }: DatePickerProps) {
     const popoverId = useId();
-    const [inputValue, setInputValue] = useState(defaultValue);
+    const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
     const [isPopperOpen, setIsPopperOpen] = useState(false);
+    const inputValue = value ?? uncontrolledValue;
     const selected = useMemo(() => parseDisplayDate(inputValue), [inputValue]);
 
     // Manage popover closing on outside click
@@ -79,12 +84,19 @@ export function DatePicker({
 
     const handleDaySelect = (date: Date | undefined) => {
         if (date) {
-            setInputValue(format(date, "MMM d, yyyy"));
+            updateValue(format(date, "MMM d, yyyy"));
             setIsPopperOpen(false);
             returnFocusToInput();
         } else {
-            setInputValue("");
+            updateValue("");
         }
+    };
+
+    const updateValue = (nextValue: string) => {
+        if (value === undefined) {
+            setUncontrolledValue(nextValue);
+        }
+        onValueChange?.(nextValue);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -108,8 +120,9 @@ export function DatePicker({
                     id={id}
                     name={name}
                     required={required}
+                    aria-required={required}
                     value={inputValue}
-                    onChange={(event) => setInputValue(event.target.value)}
+                    onChange={(event) => updateValue(event.target.value)}
                     onClick={() => setIsPopperOpen(!isPopperOpen)}
                     onKeyDown={handleKeyDown}
                     aria-label={ariaLabel}

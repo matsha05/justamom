@@ -1,6 +1,7 @@
 import { DatePicker } from "@/components/DatePicker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -12,41 +13,44 @@ import {
   speakingAudienceSizeOptions,
   speakingEventTypeOptions,
 } from "@/lib/content";
+import type {
+  SpeakingEventDetail,
+  SpeakingEventDetails,
+} from "@/hooks/useSpeakingEventDetails";
 
 interface SpeakingEventFieldsProps {
-  eventType: string;
-  audienceSize: string;
-  onEventTypeChange: (value: string) => void;
-  onAudienceSizeChange: (value: string) => void;
-  required?: boolean;
-  selectError?: string | null;
-  selectErrorId?: string;
+  details: SpeakingEventDetails;
+  onDetailChange: (field: SpeakingEventDetail, value: string) => void;
 }
 
 export function SpeakingEventFields({
-  eventType,
-  audienceSize,
-  onEventTypeChange,
-  onAudienceSizeChange,
-  required = false,
-  selectError,
-  selectErrorId,
+  details,
+  onDetailChange,
 }: SpeakingEventFieldsProps) {
-  const selectDescribedBy = selectError && selectErrorId ? selectErrorId : undefined;
+  const optionalHint = (
+    <span className="text-[var(--color-ink-muted)] font-normal normal-case">
+      (optional)
+    </span>
+  );
 
   return (
-    <>
+    <fieldset className="space-y-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-paper-soft)]/45 p-5 sm:p-6">
+      <legend className="px-2 text-h4">Event details, if known</legend>
+      <p className="text-body text-[var(--color-ink-soft)]">
+        Share whatever you already know. Every field in this section is optional.
+      </p>
+
       <div className="space-y-2">
         <Label htmlFor="org">
-          Church / Group Name{" "}
-          <span className="text-[var(--color-ink-faint)] lowercase font-normal">
-            (optional)
-          </span>
+          Church / Group Name {optionalHint}
         </Label>
         <Input
           type="text"
           id="org"
           name="organization"
+          value={details.organization}
+          onChange={(event) => onDetailChange("organization", event.target.value)}
+          aria-required={false}
           autoComplete="organization"
           placeholder="e.g. Grace Community Church or Monday Night Mamas"
         />
@@ -54,21 +58,26 @@ export function SpeakingEventFields({
 
       <div className="grid md:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <Label htmlFor="event_date">Event Date(s)</Label>
+          <Label htmlFor="event_date">Event Date(s) {optionalHint}</Label>
           <DatePicker
             id="event_date"
             name="event_date"
-            ariaLabel="Event Date(s)"
-            required={required}
+            ariaLabel="Event Date(s) (optional)"
+            value={details.eventDate}
+            onValueChange={(value) => onDetailChange("eventDate", value)}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="location">Location (City, State)</Label>
+          <Label htmlFor="location">
+            Location (City, State) {optionalHint}
+          </Label>
           <Input
             type="text"
             id="location"
             name="location"
-            required={required}
+            value={details.location}
+            onChange={(event) => onDetailChange("location", event.target.value)}
+            aria-required={false}
             autoComplete="address-level2"
             placeholder="e.g. Denver, CO"
           />
@@ -77,12 +86,14 @@ export function SpeakingEventFields({
 
       <div className="grid md:grid-cols-2 gap-5">
         <div className="space-y-2">
-          <Label htmlFor="event_type">Event Type</Label>
-          <Select value={eventType} onValueChange={onEventTypeChange}>
+          <Label htmlFor="event_type">Event Type {optionalHint}</Label>
+          <Select
+            value={details.eventType}
+            onValueChange={(value) => onDetailChange("eventType", value)}
+          >
             <SelectTrigger
               id="event_type"
-              aria-invalid={Boolean(selectError)}
-              aria-describedby={selectDescribedBy}
+              aria-required={false}
             >
               <SelectValue placeholder="Select a type…" />
             </SelectTrigger>
@@ -94,15 +105,19 @@ export function SpeakingEventFields({
               ))}
             </SelectContent>
           </Select>
-          <input type="hidden" name="event_type" value={eventType} />
+          <input type="hidden" name="event_type" value={details.eventType} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="audience_size">Approx. Group Size</Label>
-          <Select value={audienceSize} onValueChange={onAudienceSizeChange}>
+          <Label htmlFor="audience_size">
+            Approx. Group Size {optionalHint}
+          </Label>
+          <Select
+            value={details.audienceSize}
+            onValueChange={(value) => onDetailChange("audienceSize", value)}
+          >
             <SelectTrigger
               id="audience_size"
-              aria-invalid={Boolean(selectError)}
-              aria-describedby={selectDescribedBy}
+              aria-required={false}
             >
               <SelectValue placeholder="Select size…" />
             </SelectTrigger>
@@ -114,20 +129,22 @@ export function SpeakingEventFields({
               ))}
             </SelectContent>
           </Select>
-          <input type="hidden" name="audience_size" value={audienceSize} />
+          <input type="hidden" name="audience_size" value={details.audienceSize} />
         </div>
       </div>
 
-      {selectError && selectErrorId ? (
-        <p
-          id={selectErrorId}
-          role="alert"
-          aria-live="assertive"
-          className="text-caption text-[var(--color-error)]"
-        >
-          {selectError}
-        </p>
-      ) : null}
-    </>
+      <div className="space-y-2">
+        <Label htmlFor="message">Event theme or vision {optionalHint}</Label>
+        <Textarea
+          id="message"
+          name="message"
+          value={details.message}
+          onChange={(event) => onDetailChange("message", event.target.value)}
+          aria-required={false}
+          rows={4}
+          placeholder="What is the heart behind this gathering?"
+        />
+      </div>
+    </fieldset>
   );
 }

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { CaretDown } from "@/components/CaretDown";
-import { siteConfig, writingSubnavLinks } from "@/lib/config";
+import { siteConfig, type WritingSubnavLink } from "@/lib/config";
 import {
   isNavLinkActive,
   isWritingSectionActive,
@@ -12,6 +12,7 @@ import {
 interface MobileMenuProps {
   isOpen: boolean;
   pathname: string | null;
+  writingLinks: readonly WritingSubnavLink[];
   onClose: () => void;
   onNavigate: () => void;
   menuRef: RefObject<HTMLDialogElement | null>;
@@ -20,6 +21,7 @@ interface MobileMenuProps {
 export function MobileMenu({
   isOpen,
   pathname,
+  writingLinks,
   onClose,
   onNavigate,
   menuRef,
@@ -122,7 +124,7 @@ export function MobileMenu({
 
                 {writingOpen ? (
                   <ul id="mobile-writing-subnav" className="mobile-notes-subnav" aria-label="Writing sections">
-                    {writingSubnavLinks.map((subnavLink) => (
+                    {writingLinks.map((subnavLink) => (
                       <li key={subnavLink.href}>
                         <Link
                           href={subnavLink.href}
