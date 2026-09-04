@@ -2,6 +2,8 @@
 
 Personal website for Lizi Shaw (speaker, writer, encourager). Built with Next.js App Router and MDX notes.
 
+Lizi and first-time contributors: start with [Managing your site with Codex](docs/lizi-start-here.md) for Mac setup, everyday prompts, and how both laptops share changes.
+
 ## Stack
 
 - Next.js 16 (App Router)
@@ -12,7 +14,8 @@ Personal website for Lizi Shaw (speaker, writer, encourager). Built with Next.js
 ## Local development
 
 ```bash
-npm install
+npm ci
+# Create .env.local from .env.local.example only if no local config exists.
 npm run dev
 ```
 
@@ -29,7 +32,15 @@ npm run test:smoke
 npm run test:design-system
 ```
 
+For browser checks, install Chromium once with `npx playwright install chromium`. Use the safe local preview configuration below. The browser suite uses a development server on port 3001 and can reuse a running server, so confirm it belongs to this checkout and uses the intended preview configuration before testing.
+
+`npm run start` serves a production build and requires production configuration. Use `npm run dev` for the disabled-delivery visual preview.
+
 ## Environment variables
+
+For local visual previews, copy `.env.local.example` to `.env.local` only if no local environment file exists. This disables newsletter and contact delivery; it does not contain production credentials. Do not overwrite an existing configuration. A contact or newsletter delivery error is expected in this preview.
+
+For real integrations and production, use the configuration below and keep values outside Git:
 
 Create `.env.local` in the repo root:
 
