@@ -44,9 +44,9 @@ export function PostFootnote({
           className="post-footnote-backlink"
           href={`#footnote-ref-${number}`}
           role="doc-backlink"
-          aria-label={`Back to footnote ${number} in the post`}
+          aria-label={`Back to the story at footnote ${number}`}
         >
-          Back to the story <span aria-hidden="true">↩</span>
+          Back to the story
         </a>
       </div>
     </li>

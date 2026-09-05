@@ -91,15 +91,13 @@
 
 .post-footnotes {
   margin-top: clamp(3rem, 7vw, 4.5rem);
-  padding: clamp(1.25rem, 4vw, 2.25rem);
-  border-top: 1px dashed var(--color-accent-light);
-  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-  background: var(--color-paper-warm);
+  padding-top: clamp(1.5rem, 4vw, 2rem);
+  border-top: 1px solid var(--color-border-strong);
 }
 
 .post-footnotes-list {
   display: grid;
-  gap: 1.75rem;
+  gap: clamp(1.4rem, 3vw, 1.75rem);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -107,27 +105,21 @@
 
 .post-footnote {
   display: grid;
-  grid-template-columns: 1.75rem minmax(0, 1fr);
+  grid-template-columns: 1.25rem minmax(0, 1fr);
   align-items: start;
-  gap: 0.85rem;
-  border-radius: var(--radius-md);
+  gap: 0.75rem;
   scroll-margin-top: 8rem;
 }
 
 .post-footnote-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  margin-top: 0.1rem;
-  border: 1px solid var(--color-accent-light);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-accent);
+  padding-top: 0.025rem;
+  font-family: var(--font-heading), Georgia, serif;
+  font-size: 1.125rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 400;
+  line-height: 1.55;
+  text-align: right;
+  color: var(--color-ink-muted);
 }
 
 .note-article-content .post-footnote-copy p {
@@ -139,14 +131,24 @@
 .post-footnote-backlink {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  min-height: 1.75rem;
+  min-height: 2.75rem;
   font-family: var(--font-body);
   font-size: 0.875rem;
   line-height: 1.5;
-  color: var(--color-accent);
+  color: var(--color-ink-muted);
   text-decoration: underline;
+  text-decoration-color: var(--color-border-strong);
+  text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    text-decoration-color var(--duration-fast) var(--ease-out);
+}
+
+.post-footnote-backlink:hover,
+.post-footnote-backlink:focus-visible {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
 }
 
 .post-footnote-reference a:focus-visible,
