@@ -24,7 +24,7 @@ test("homepage leads readers into Lizi's writing", async ({ page }) => {
   await expect(page.locator('main img[src*="signature"]')).toHaveCount(0);
 });
 
-test("desktop Writing navigation hides empty sections", async ({ page }, testInfo) => {
+test("desktop Writing navigation shows Notes and Blog", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Desktop-only smoke coverage.");
 
   await page.goto("/");
@@ -33,7 +33,7 @@ test("desktop Writing navigation hides empty sections", async ({ page }, testInf
 
   await writingLink.hover();
   await expect(primaryNav.getByRole("link", { name: "Notes", exact: true })).toBeVisible();
-  await expect(primaryNav.getByRole("link", { name: "Blog" })).toHaveCount(0);
+  await expect(primaryNav.getByRole("link", { name: "Blog" })).toBeVisible();
 
   await primaryNav.getByRole("button", { name: "Hide Writing sections" }).press("Escape");
   await expect(primaryNav.getByRole("link", { name: "Notes", exact: true })).toHaveCount(0);
@@ -44,6 +44,11 @@ test("desktop Writing navigation hides empty sections", async ({ page }, testInf
   await writingToggle.press("Escape");
   await expect(writingToggle).toHaveAttribute("aria-expanded", "false");
   await expect(writingToggle).toBeFocused();
+
+  await writingToggle.press("Enter");
+  await primaryNav.getByRole("link", { name: "Blog", exact: true }).click();
+  await expect(page).toHaveURL(/\/blog$/);
+  await expect(page.getByRole("heading", { name: "Blog", exact: true })).toBeVisible();
 });
 
 test("newsletter signup shows success state", async ({ page }) => {
@@ -153,11 +158,13 @@ test("notes archive contains only recent notes and closes with a newsletter invi
     "aria-current",
     "page"
   );
-  await expect(writingDirectory.getByRole("link", { name: "Blog" })).toHaveCount(0);
+  await expect(writingDirectory.getByRole("link", { name: "Blog" })).toHaveAttribute("href", "/blog");
   await expect(
     page.getByRole("contentinfo").getByRole("link", { name: "Blog" })
-  ).toHaveCount(0);
+  ).toHaveAttribute("href", "/blog");
   await expect(page.getByRole("heading", { name: "Recent notes" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Feeling Thingish", exact: true })).toHaveCount(0);
+  await expect(page.locator('main a[href="/blog/feeling-thingish"]')).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Blog" })).toHaveCount(0);
   await expect(page.getByText("Blog posts are on the way.")).toHaveCount(0);
 
@@ -178,15 +185,49 @@ test("blog has its own archive page", async ({ page }) => {
     name: "Writing sections",
     exact: true,
   });
-  await expect(writingDirectory.getByRole("link", { name: "Blog", exact: true })).toHaveCount(0);
+  await expect(writingDirectory.getByRole("link", { name: "Blog", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(
     writingDirectory.getByRole("link", { name: "Notes", exact: true })
   ).toBeVisible();
-  await expect(page.getByText("Blog posts are on the way.")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Read recent notes" })).toHaveAttribute(
-    "href",
-    "/notes"
-  );
+  await expect(page.getByText("Blog posts are on the way.")).toHaveCount(0);
+  const firstPost = page.getByRole("link", { name: "Feeling Thingish", exact: true });
+  await expect(firstPost).toBeVisible();
+  await expect(firstPost).toHaveAttribute("href", "/blog/feeling-thingish");
+  await expect(page.locator('main a[href^="/notes/"]')).toHaveCount(0);
+  await firstPost.click();
+  await expect(page).toHaveURL(/\/blog\/feeling-thingish$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Feeling Thingish", exact: true })).toBeVisible();
+});
+
+test("Feeling Thingish footnotes let readers jump down and return to the post", async ({ page }) => {
+  await page.goto("/blog/feeling-thingish");
+
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 1, name: "Feeling Thingish", exact: true })).toBeVisible();
+  await expect(main.locator("img")).toHaveCount(0);
+  await expect(main.getByText("In it with you,", { exact: true })).toHaveCount(0);
+
+  const footnotes = main.locator('[role="doc-endnotes"][aria-label="Footnotes"]');
+  await expect(footnotes).toHaveCount(1);
+  await expect(main.locator('[role="doc-noteref"]')).toHaveCount(3);
+  await expect(footnotes.locator('[role="doc-backlink"]')).toHaveCount(3);
+
+  for (const number of [1, 2, 3]) {
+    const reference = main.locator(`#footnote-ref-${number}`);
+    const footnote = footnotes.locator(`#footnote-${number}`);
+    const returnLink = footnote.locator('[role="doc-backlink"]');
+
+    await expect(reference).toHaveAttribute("role", "doc-noteref");
+    await expect(reference).toHaveAttribute("href", `#footnote-${number}`);
+    await reference.click();
+    await expect(page).toHaveURL(new RegExp(`#footnote-${number}$`));
+    await expect(footnote).toBeInViewport();
+
+    await expect(returnLink).toHaveAttribute("href", `#footnote-ref-${number}`);
+    await returnLink.click();
+    await expect(page).toHaveURL(new RegExp(`#footnote-ref-${number}$`));
+    await expect(reference).toBeInViewport();
+  }
 });
 
 test("Lizi's requested photos appear on Speaking and About", async ({ page }) => {

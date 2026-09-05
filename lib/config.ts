@@ -10,12 +10,8 @@ export const writingSubnavLinks = [
 
 export type WritingSubnavLink = (typeof writingSubnavLinks)[number];
 
-export function getVisibleWritingSubnavLinks(
-  hasBlogPosts: boolean
-): WritingSubnavLink[] {
-  return writingSubnavLinks.filter(
-    (link) => hasBlogPosts || link.href !== "/blog"
-  );
+export function getVisibleWritingSubnavLinks(): WritingSubnavLink[] {
+  return [...writingSubnavLinks];
 }
 
 export const siteConfig = {

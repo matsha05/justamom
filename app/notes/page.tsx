@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getAllNotes } from "@/lib/notes";
 import { buildPageMetadata } from "@/lib/metadata";
 import { ArrowIcon } from "@/components/icons/ArrowIcon";
@@ -27,6 +28,19 @@ export default function NotesPage() {
         title="A Note for Moms"
         description="Monthly notes about following Jesus through motherhood and ordinary life."
         density="compact"
+        className="writing-directory-hero"
+        media={
+          <div className="image-editorial writing-directory-photo">
+            <Image
+              src="/images/notes-kitchen-with-kids.avif"
+              alt="Lizi holding Ellie in the kitchen while Cooper bakes beside the mixer"
+              width={1400}
+              height={1050}
+              sizes="(min-width: 1024px) 448px, (min-width: 500px) 448px, 90vw"
+              priority
+            />
+          </div>
+        }
       >
         <WritingDirectoryNav current="notes" />
       </PageHero>

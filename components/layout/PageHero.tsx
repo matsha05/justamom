@@ -39,7 +39,7 @@ export function PageHero({
     >
       {media ? (
         <div className="container">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(240px,320px)] lg:items-center">
+          <div className="page-hero-layout grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(240px,320px)] lg:items-center">
             <div className="max-w-2xl">{introduction}</div>
             {media}
           </div>

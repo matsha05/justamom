@@ -5,6 +5,11 @@ import { MDXImage } from "@/components/MDXImage";
 import { NoteNewsletterCTA } from "@/components/NoteNewsletterCTA";
 import { NoteSignOff } from "@/components/NoteSignOff";
 import { NoteNavigation } from "@/components/notes/NoteNavigation";
+import {
+  FootnoteReference,
+  PostFootnote,
+  PostFootnotes,
+} from "@/components/notes/PostFootnotes";
 import type { NoteMetadata, WritingKind } from "@/lib/notes";
 
 const mdxComponents = {
@@ -35,6 +40,9 @@ const mdxComponents = {
   ),
   img: MDXImage,
   DownloadCard,
+  FootnoteReference,
+  PostFootnote,
+  PostFootnotes,
 };
 
 interface NoteArticleProps {
