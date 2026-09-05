@@ -43,6 +43,44 @@ test("mobile Writing sections open the separate Blog archive", async ({ page }, 
   await expect(dialog).toBeHidden();
 });
 
+test("resizing an open mobile menu releases the desktop page", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.includes("mobile"), "Mobile-only smoke coverage.");
+
+  await page.setViewportSize({ width: 767, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(page.locator("dialog:modal")).toHaveCount(1);
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+
+  await page.setViewportSize({ width: 768, height: 800 });
+  await expect(page.locator("dialog")).toHaveCount(0);
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(
+    page.getByRole("button", { name: "Open menu", includeHidden: true })
+  ).not.toBeFocused();
+
+  await page.mouse.wheel(0, 500);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await page
+    .getByRole("navigation", { name: "Primary", exact: true })
+    .getByRole("link", { name: "Contact", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/contact$/);
+  await expect(
+    page.getByRole("textbox", { name: "Name (required)", exact: true })
+  ).toBeVisible();
+
+  await page.setViewportSize({ width: 767, height: 800 });
+  const openMenu = page.getByRole("button", { name: "Open menu" });
+  await expect(page.locator("dialog")).toHaveCount(0);
+  await openMenu.click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("dialog")).toHaveCount(0);
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(openMenu).toBeFocused();
+});
+
 test("mobile navigation remains reachable in a short viewport", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile-only smoke coverage.");
 

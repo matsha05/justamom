@@ -49,6 +49,16 @@ export function Header({ writingLinks }: HeaderProps) {
     wasOpenRef.current = mobileMenuOpen;
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    const desktopViewport = window.matchMedia("(min-width: 48rem)");
+    const handleViewportChange = (event: MediaQueryListEvent) => {
+      if (event.matches) closeMobileMenu(false);
+    };
+
+    desktopViewport.addEventListener("change", handleViewportChange);
+    return () => desktopViewport.removeEventListener("change", handleViewportChange);
+  }, [closeMobileMenu]);
+
   return (
     <header
       className={`sticky top-0 z-50 border-b border-transparent transition-[padding,background-color,border-color,backdrop-filter] duration-300 ${
