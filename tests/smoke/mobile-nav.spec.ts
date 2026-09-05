@@ -21,25 +21,25 @@ test("mobile navigation opens and closes", async ({ page }, testInfo) => {
   await writingToggle.click();
   await expect(writingToggle).toHaveAttribute("aria-expanded", "true");
   await expect(dialog.getByRole("link", { name: "Notes", exact: true })).toBeVisible();
-  await expect(dialog.getByRole("link", { name: "Blog" })).toHaveCount(0);
+  await expect(dialog.getByRole("link", { name: "Blog" })).toBeVisible();
 
   await page.getByRole("button", { name: "Close menu" }).click();
   await expect(dialog).toBeHidden();
   await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
 });
 
-test("mobile Writing sections omit the empty Blog archive", async ({ page }, testInfo) => {
+test("mobile Writing sections open the separate Blog archive", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile-only smoke coverage.");
 
   await page.goto("/");
   await page.getByRole("button", { name: "Open menu" }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "Show Writing sections" }).click();
-  await expect(dialog.getByRole("link", { name: "Blog" })).toHaveCount(0);
-  await dialog.getByRole("link", { name: "Notes", exact: true }).click();
+  await expect(dialog.getByRole("link", { name: "Notes", exact: true })).toBeVisible();
+  await dialog.getByRole("link", { name: "Blog", exact: true }).click();
 
-  await expect(page).toHaveURL(/\/notes$/);
-  await expect(page.getByRole("heading", { name: "A Note for Moms", exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/blog$/);
+  await expect(page.getByRole("heading", { name: "Blog", exact: true })).toBeVisible();
   await expect(dialog).toBeHidden();
 });
 

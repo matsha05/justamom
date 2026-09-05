@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getAllNotes } from "@/lib/notes";
 import { buildPageMetadata } from "@/lib/metadata";
 import { ArrowIcon } from "@/components/icons/ArrowIcon";
@@ -30,6 +31,20 @@ export default function BlogPage() {
         title="Blog"
         description="Other writing from Lizi. New posts will be gathered here as they’re published."
         density="compact"
+        className="writing-directory-hero"
+        media={
+          <div className="image-editorial writing-directory-photo">
+            <Image
+              src="/images/blog-girls-on-path.avif"
+              alt="Ellie riding her bike and Emma walking ahead on a tree-lined path"
+              width={916}
+              height={1222}
+              className="writing-directory-photo-path"
+              sizes="(min-width: 1024px) 448px, (min-width: 500px) 448px, 90vw"
+              priority
+            />
+          </div>
+        }
       >
         <WritingDirectoryNav current="blog" />
       </PageHero>

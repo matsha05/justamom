@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { getVisibleWritingSubnavLinks } from "@/lib/config";
-import { getAllNotes } from "@/lib/notes";
 
 interface WritingDirectoryNavProps {
   current: "notes" | "blog";
 }
 
 export function WritingDirectoryNav({ current }: WritingDirectoryNavProps) {
-  const writingLinks = getVisibleWritingSubnavLinks(
-    getAllNotes().some((note) => note.kind === "blog")
-  );
+  const writingLinks = getVisibleWritingSubnavLinks();
 
   return (
     <nav aria-label="Writing sections" className="writing-directory-nav">

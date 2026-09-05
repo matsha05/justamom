@@ -32,6 +32,34 @@
   padding-bottom: clamp(3.25rem, 5.5vw, 5rem);
 }
 
+.writing-directory-hero .page-hero-layout {
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.writing-directory-photo {
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.writing-directory-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.writing-directory-photo .writing-directory-photo-path {
+  object-position: 50% 62%;
+}
+
+@media (min-width: 1024px) {
+  .writing-directory-hero .page-hero-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+  }
+}
+
 .section-content {
   padding-top: clamp(4.5rem, 7vw, 7rem);
   padding-bottom: clamp(4.5rem, 7vw, 7rem);
