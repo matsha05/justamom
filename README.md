@@ -13,6 +13,8 @@ Lizi and first-time contributors: start with [Managing your site with Codex](doc
 
 ## Local development
 
+Use Node.js 24 LTS (the version in `.nvmrc`). CI and the production package configuration use the same major version.
+
 ```bash
 npm ci
 # Create .env.local from .env.local.example only if no local config exists.

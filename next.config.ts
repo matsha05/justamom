@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
+  // Keep the shared project instructions maintained in this repository.
+  agentRules: false,
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   devIndicators: false,
   allowedDevOrigins: ["127.0.0.1"],

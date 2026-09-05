@@ -346,7 +346,7 @@ test("contact success feedback receives focus", async ({ page }) => {
 
   await page.goto("/contact");
   const form = page.locator("form");
-  await form.evaluate((element) => {
+  await form.evaluate((element: HTMLFormElement) => {
     element.noValidate = true;
   });
   await form.getByRole("combobox", { name: "What's this about?" }).click();
