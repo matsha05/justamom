@@ -37,7 +37,9 @@ describe("SEO guardrails", () => {
     expect(urls).not.toContain(absoluteUrl("/notes/feeling-thingish"));
     expect(
       entries.find((entry) => entry.url === absoluteUrl("/blog"))?.lastModified
-    ).toEqual(new Date("2026-09-04"));
+    ).toEqual(new Date(Math.max(...getAllNotes()
+      .filter((post) => post.kind === "blog")
+      .map((post) => new Date(post.date).getTime()))));
     expect(
       entries.find((entry) => entry.url === absoluteUrl("/"))?.lastModified
     ).toEqual(new Date("2026-08-23T00:00:00.000Z"));

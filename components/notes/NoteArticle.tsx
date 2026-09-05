@@ -5,6 +5,8 @@ import { MDXImage } from "@/components/MDXImage";
 import { NoteNewsletterCTA } from "@/components/NoteNewsletterCTA";
 import { NoteSignOff } from "@/components/NoteSignOff";
 import { NoteNavigation } from "@/components/notes/NoteNavigation";
+import { BookRecommendations } from "@/components/notes/BookRecommendations";
+import { BookReviewHeading } from "@/components/notes/BookReviewHeading";
 import {
   FootnoteReference,
   PostFootnote,
@@ -40,6 +42,8 @@ const mdxComponents = {
   ),
   img: MDXImage,
   DownloadCard,
+  BookRecommendations,
+  BookReviewHeading,
   FootnoteReference,
   PostFootnote,
   PostFootnotes,
