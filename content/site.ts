@@ -121,7 +121,7 @@ export const marketingContent = {
     },
     contact: {
       heading: "Get in touch",
-      description: "For literary, editorial, or speaking inquiries.",
+      description: "Want to say hi? Have a question or something on your mind? I’d love to hear from you!",
     },
   },
   about: {
