@@ -47,7 +47,7 @@ describe("marketing content", () => {
     expect(marketingContent.about.hero.paragraphs[0]).toMatch(
       /hot cup of coffee \(black of course\)/
     );
-    expect(marketingContent.about.facts.items).toHaveLength(3);
+    expect(marketingContent.about.facts.items).toHaveLength(4);
   });
 
   it("keeps the speaking invitation simple", () => {

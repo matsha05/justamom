@@ -91,7 +91,7 @@ Setup is ready for everyday editing when Codex confirms the instructions loaded,
 
 ### Add a note
 
-> Add this as a new Note using the site's existing note workflow. The title is “[title]” and the date is “[date].” Keep my wording exactly as provided, including the greeting and P.S. If an excerpt is missing, suggest one for me to approve. Show me a local preview and keep the writing on my laptop until I approve uploading it. Here is the text: …
+> Add this as a new Note using the site's existing note workflow. The title is “[title]” and the date is “[date].” Keep my wording exactly as provided, including the greeting, but leave out the newsletter P.S. If an excerpt is missing, suggest one for me to approve. Show me a local preview and keep the writing on my laptop until I approve uploading it. Here is the text: …
 
 ### Ask for ideas without changing anything
 

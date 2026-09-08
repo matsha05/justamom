@@ -36,7 +36,7 @@ excerpt: "One sentence capturing the heart of the note."
 - When a Scripture passage is clearly quoted, format the quoted words and citation as a markdown blockquote so it inherits the standard note quote styling
 - If a line might be either body copy or a title, or if the Scripture formatting is ambiguous, stop and flag it for review instead of auto-publishing
 - If the source includes `In it with you, Lizi`, leave it in the raw import only long enough to preserve structure, then make sure the site renders the shared sign-off instead of duplicating it in the body
-- If the source includes a `P.S.`, preserve that authored copy and make sure it renders after the shared sign-off
+- P.S. sections are for Lizi's email newsletters. Omit them from website notes unless she explicitly asks to include one; keep the original newsletter source unchanged
 - Slug should be lowercase with hyphens (e.g., `the-quiet-yes`)
 - Keep body copy exactly as provided by Lizi (no sentence rewrites)
 - Preserve bold and italics already present in the source; do not add emphasis for effect
@@ -50,7 +50,7 @@ Before publishing, confirm the note follows the site's note visual standard:
 - Scripture quotes use markdown blockquote (`>`) so they render with the editorial quote style
 - Keep strong emphasis in markdown (`**...**`) only where already present in source copy
 - Compare the rendered note against at least one recent published note to catch duplicated title text, missing greeting rhythm, or inline Scripture that should render as a quote
-- Confirm the rendered note shows only one sign-off, with any `P.S.` content below it
+- Confirm the rendered note shows only one sign-off and no newsletter P.S. section unless Lizi explicitly requested one
 - All note detail pages must inherit these styles through `app/notes/[slug]/page.tsx` + `app/globals.css`
 
 ## 5. Validate and Prepare
