@@ -137,11 +137,12 @@ export const marketingContent = {
       ],
     },
     facts: {
-      heading: "About me facts:",
+      heading: "Some Fun Facts",
       items: [
         "I am a wife to Matt and mom to three; Emma, Cooper & Elliana + 1 puppy, Banks",
-        "I live in the great state of CO.",
-        "I love coffee, running, skiing and anything else that gets me into nature.",
+        "Born and raised in Boulder, CO, lived in Montana, Georgia & Texas, traveled to over 40 countries and finally made my way back home to Colorado.",
+        "If you’d like to bring me coffee, I’ll take it black and won’t say no to something sweet!",
+        "I love to run and hope that watching enough Ultra Documentaries will make me an Ultra Runner… or at least inspire me to go on adventure runs through the woods.",
       ],
     },
     invitation: {
