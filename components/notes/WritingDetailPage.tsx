@@ -88,6 +88,11 @@ export function WritingDetailPage({ slug, kind }: WritingDetailPageProps) {
 
           <header>
             <h1 className="text-display note-article-title">{writing.metadata.title}</h1>
+            {writing.metadata.subtitle ? (
+              <p className="mt-3 text-body-lg text-[var(--color-ink-soft)]">
+                {writing.metadata.subtitle}
+              </p>
+            ) : null}
             <time className="note-article-date mt-4 block text-caption text-[var(--color-ink-muted)]">
               {formattedDate}
             </time>

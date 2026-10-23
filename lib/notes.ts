@@ -11,6 +11,7 @@ export type WritingKind = "note" | "blog";
 export interface NoteMetadata {
   slug: string;
   title: string;
+  subtitle?: string;
   date: string;
   excerpt: string;
   kind: WritingKind;
@@ -68,6 +69,9 @@ function parseNoteFile(fileName: string): NoteRecord {
   return {
     slug,
     title,
+    ...(typeof data.subtitle === "string" && data.subtitle.trim()
+      ? { subtitle: data.subtitle.trim() }
+      : {}),
     date,
     excerpt,
     kind,
@@ -104,6 +108,7 @@ export function getNoteBySlug(slug: string) {
     slug: note.slug,
     metadata: {
       title: note.title,
+      subtitle: note.subtitle,
       date: note.date,
       excerpt: note.excerpt,
       kind: note.kind,

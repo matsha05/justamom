@@ -359,3 +359,20 @@
     line-height: 1.86;
   }
 }
+
+/* Framed poems retain the article's reading size and original line breaks. */
+.note-article-content .poetry-frame {
+  margin-block: clamp(2.5rem, 6vw, 4rem);
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-paper-warm);
+}
+
+.note-article-content .poetry-title {
+  margin: 0 0 0.35rem;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  color: var(--color-ink);
+}
