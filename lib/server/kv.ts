@@ -8,6 +8,16 @@ import {
   resetMemoryStoreForTests,
 } from "@/lib/server/kv-memory";
 
+const INCREMENT_WINDOW_SCRIPT = `
+local count = redis.call('INCR', KEYS[1])
+local ttl = redis.call('PTTL', KEYS[1])
+if count == 1 or ttl < 0 then
+  redis.call('PEXPIRE', KEYS[1], ARGV[1])
+  ttl = tonumber(ARGV[1])
+end
+return {count, ttl}
+`;
+
 export async function incrementInWindow(
   key: string,
   windowMs: number
@@ -15,20 +25,12 @@ export async function incrementInWindow(
   const redis = getRedisClient();
 
   if (redis) {
-    const count = Number(await redis.incr(key));
-
-    if (count === 1) {
-      await redis.pexpire(key, windowMs);
-      return { count, ttlMs: windowMs, source: "redis" };
-    }
-
-    const ttl = Number(await redis.pttl(key));
-    if (ttl < 0) {
-      await redis.pexpire(key, windowMs);
-      return { count, ttlMs: windowMs, source: "redis" };
-    }
-
-    return { count, ttlMs: ttl, source: "redis" };
+    const [count, ttlMs] = await redis.eval<unknown[], number[]>(
+      INCREMENT_WINDOW_SCRIPT,
+      [key],
+      [windowMs]
+    );
+    return { count: Number(count), ttlMs: Number(ttlMs), source: "redis" };
   }
 
   const fallback = memoryIncrementInWindow(key, windowMs);

@@ -1,5 +1,5 @@
 import {
-  fetchWithTimeout,
+  fetchAndConsumeWithTimeout,
   getErrorMessage,
   parseJsonSafely,
 } from "@/lib/server/http";
@@ -27,26 +27,28 @@ export async function lookupMailerLiteSubscriber(
   email: string,
   apiKey: string
 ): Promise<MailerLiteLookupResult> {
-  const response = await fetchWithTimeout(
+  return fetchAndConsumeWithTimeout(
     `${baseUrl}/subscribers/${encodeURIComponent(email)}`,
     {
       method: "GET",
       headers: createAuthorizationHeaders(apiKey),
+    },
+    async (response) => {
+      if (response.status === 200 || response.status === 404) {
+        void response.body?.cancel().catch(() => undefined);
+        return {
+          status: response.status,
+          message: null,
+        };
+      }
+
+      const payload = await parseJsonSafely(response);
+      return {
+        status: response.status,
+        message: getErrorMessage(payload),
+      };
     }
   );
-
-  if (response.status === 200 || response.status === 404) {
-    return {
-      status: response.status,
-      message: null,
-    };
-  }
-
-  const payload = await parseJsonSafely(response);
-  return {
-    status: response.status,
-    message: getErrorMessage(payload),
-  };
 }
 
 export async function createMailerLiteSubscriber(
@@ -62,28 +64,28 @@ export async function createMailerLiteSubscriber(
     ...(fields && Object.keys(fields).length > 0 ? { fields } : {}),
   };
 
-  const response = await fetchWithTimeout(`${baseUrl}/subscribers`, {
+  return fetchAndConsumeWithTimeout(`${baseUrl}/subscribers`, {
     method: "POST",
     headers: {
       ...createAuthorizationHeaders(apiKey),
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-  });
+  }, async (response) => {
+    if (response.ok) {
+      void response.body?.cancel().catch(() => undefined);
+      return {
+        ok: true,
+        status: response.status,
+        message: null,
+      };
+    }
 
-  if (response.ok) {
+    const payload = await parseJsonSafely(response);
     return {
-      ok: true,
+      ok: false,
       status: response.status,
-      message: null,
+      message: getErrorMessage(payload),
     };
-  }
-
-  const payload = await parseJsonSafely(response);
-
-  return {
-    ok: false,
-    status: response.status,
-    message: getErrorMessage(payload),
-  };
+  });
 }

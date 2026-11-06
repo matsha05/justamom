@@ -1,27 +1,35 @@
 import { parseJsonSafely, type JsonRecord } from "@/lib/json";
+import { withRequestDeadline } from "@/lib/http-deadline";
 
 const DEFAULT_TIMEOUT_MS = 8_000;
 
 export { parseJsonSafely };
 export type { JsonRecord };
 
+export async function fetchAndConsumeWithTimeout<T>(
+  url: string,
+  init: RequestInit,
+  consume: (response: Response) => Promise<T> | T,
+  timeoutMs: number = DEFAULT_TIMEOUT_MS
+): Promise<T> {
+  return withRequestDeadline(async (signal) => {
+    const response = await fetch(url, {
+      ...init,
+      signal,
+      cache: "no-store",
+    });
+    signal.throwIfAborted();
+    return consume(response);
+  }, timeoutMs, init.signal);
+}
+
+/** For callers that only need headers. Body readers must use the consume helper. */
 export async function fetchWithTimeout(
   url: string,
   init: RequestInit,
   timeoutMs: number = DEFAULT_TIMEOUT_MS
 ): Promise<Response> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    return await fetch(url, {
-      ...init,
-      signal: controller.signal,
-      cache: "no-store",
-    });
-  } finally {
-    clearTimeout(timeout);
-  }
+  return fetchAndConsumeWithTimeout(url, init, (response) => response, timeoutMs);
 }
 
 export function getErrorMessage(payload: JsonRecord | null): string | null {

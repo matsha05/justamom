@@ -1,4 +1,5 @@
 import { parseJsonSafely, type JsonRecord } from "@/lib/json";
+import { withRequestDeadline } from "@/lib/http-deadline";
 
 export type { JsonRecord };
 
@@ -6,9 +7,15 @@ export async function fetchJson(
   input: RequestInfo | URL,
   init?: RequestInit
 ): Promise<{ response: Response; data: JsonRecord | null }> {
-  const response = await fetch(input, init);
-  const data = await parseJsonSafely(response);
-  return { response, data };
+  const callerSignal = init?.signal !== undefined
+    ? init.signal
+    : input instanceof Request ? input.signal : undefined;
+  return withRequestDeadline(async (signal) => {
+    const response = await fetch(input, { ...init, signal });
+    signal.throwIfAborted();
+    const data = await parseJsonSafely(response);
+    return { response, data };
+  }, 25_000, callerSignal);
 }
 
 export function getStringFromRecord(data: JsonRecord | null, key: string): string | null {

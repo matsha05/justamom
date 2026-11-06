@@ -34,24 +34,24 @@ export async function POST(request: NextRequest) {
       windowMs: 5 * 60_000,
     });
     if (limit.limited) {
-      return respond(429, { error: "Too many recommendations at once. Please wait a few minutes and try again." }, { "Retry-After": String(limit.retryAfterSeconds) });
+      return await respond(429, { error: "Too many recommendations at once. Please wait a few minutes and try again." }, { "Retry-After": String(limit.retryAfterSeconds) });
     }
 
     let incoming: FormData;
     try {
       incoming = await request.formData();
     } catch {
-      return respond(400, { error: "Invalid form data." });
+      return await respond(400, { error: "Invalid form data." });
     }
     const parsed = schema.safeParse({
       recommendation: incoming.get("recommendation"),
       company: incoming.get("company") ?? "",
     });
-    if (!parsed.success) return respond(400, { error: getValidationMessage(parsed.error) });
-    if (parsed.data.company) return respond(200, { success: true, message: successMessage });
+    if (!parsed.success) return await respond(400, { error: getValidationMessage(parsed.error) });
+    if (parsed.data.company) return await respond(200, { success: true, message: successMessage });
 
     if (!isValidFormspreeEndpoint(siteConfig.contact.formspreeEndpoint)) {
-      return respond(503, { error: "Book recommendations are temporarily unavailable. Please try again later." });
+      return await respond(503, { error: "Book recommendations are temporarily unavailable. Please try again later." });
     }
     const forwarded = new FormData();
     forwarded.set("message", parsed.data.recommendation);
@@ -61,11 +61,11 @@ export async function POST(request: NextRequest) {
     const result = await forwardFormspreeSubmission(siteConfig.contact.formspreeEndpoint, forwarded);
     if (!result.ok) {
       logError("book-recommendations.formspree_failed", context, new Error("formspree_error"), { status: result.status });
-      return respond(502, { error: errorMessage });
+      return await respond(502, { error: errorMessage });
     }
-    return respond(200, { success: true, message: successMessage });
+    return await respond(200, { success: true, message: successMessage });
   } catch (error) {
-    await rollbackIdempotencyIfNeeded(idempotencyToken);
+    await rollbackIdempotencyIfNeeded(idempotencyToken, context);
     logError("book-recommendations.request_failed", context, error);
     return NextResponse.json({ error: errorMessage }, { status: 502 });
   }

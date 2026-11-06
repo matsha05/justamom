@@ -19,10 +19,12 @@ import {
   isValidFormspreeEndpoint,
 } from "@/lib/server/integrations/formspree";
 import { conversionMessages } from "@/lib/conversions";
+import { commitIdempotency, reserveIdempotencyResponse, rollbackIdempotency } from "@/lib/server/idempotency";
 
 const CONTACT_RATE_LIMIT = { limit: 12, windowMs: 5 * 60_000 };
 const CONTACT_MAX_BODY_BYTES = 64 * 1024;
 const CONTACT_IDEMPOTENCY_SCOPE = "contact";
+const UNKNOWN_DELIVERY_TTL_MS = 24 * 60 * 60_000;
 
 interface ContactSuccess {
   success: true;
@@ -31,6 +33,7 @@ interface ContactSuccess {
 
 interface ContactError {
   error: string;
+  code?: "delivery_unknown";
 }
 
 type ContactRouteResponse = ContactSuccess | ContactError;
@@ -90,6 +93,7 @@ export async function POST(request: NextRequest) {
     allowedContentTypes: ["multipart/form-data", "application/x-www-form-urlencoded"],
     maxBodyBytes: CONTACT_MAX_BODY_BYTES,
     idempotencyScope: CONTACT_IDEMPOTENCY_SCOPE,
+    requireIdempotencyKey: true,
   });
 
   if ("response" in preparedResult) {
@@ -97,6 +101,11 @@ export async function POST(request: NextRequest) {
   }
 
   const { context, idempotencyToken, respond } = preparedResult.prepared;
+  const unknownDelivery: ContactError = {
+    code: "delivery_unknown",
+    error: `Your message may have been sent, but we couldn't confirm it. Please email ${siteConfig.contact.email} before sending it again.`,
+  };
+  let deliveryStarted = false;
 
   try {
     const ip = getClientIp(request);
@@ -106,7 +115,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (ipLimit.limited) {
-      return respond(
+      return await respond(
         429,
         { error: "Too many requests. Please wait a few minutes and try again." },
         { "Retry-After": String(ipLimit.retryAfterSeconds) }
@@ -117,26 +126,35 @@ export async function POST(request: NextRequest) {
     try {
       incoming = await request.formData();
     } catch {
-      return respond(400, { error: "Invalid form data." });
+      return await respond(400, { error: "Invalid form data." });
     }
 
     const parsed = contactFormSchema.safeParse(toFormRecord(incoming));
     if (!parsed.success) {
-      return respond(400, { error: getValidationMessage(parsed.error) });
+      return await respond(400, { error: getValidationMessage(parsed.error) });
     }
 
     const data = parsed.data;
     const successMessage = successMessageFor(data.form_type);
 
     if (data.company) {
-      return respond(200, { success: true, message: successMessage });
+      return await respond(200, { success: true, message: successMessage });
     }
 
     if (!isValidFormspreeEndpoint(siteConfig.contact.formspreeEndpoint)) {
       logError("contact.invalid_formspree_endpoint", context, new Error("invalid_endpoint"));
-      return respond(500, { error: "Contact form is temporarily unavailable." });
+      return await respond(500, { error: "Contact form is temporarily unavailable." });
     }
 
+    if (!idempotencyToken) {
+      throw new Error("Contact delivery requires an owned request key.");
+    }
+    // Persist the conservative outcome before making the external write. If
+    // the process dies or the acknowledgement is lost, retry must not resend.
+    await reserveIdempotencyResponse(
+      idempotencyToken, 409, unknownDelivery, undefined, UNKNOWN_DELIVERY_TTL_MS
+    );
+    deliveryStarted = true;
     const upstreamResult = await forwardFormspreeSubmission(
       siteConfig.contact.formspreeEndpoint,
       buildForwardedFormData(data)
@@ -152,14 +170,33 @@ export async function POST(request: NextRequest) {
         message: upstreamResult.message,
       });
 
-      return respond(502, {
+      if (upstreamResult.outcome === "unknown") {
+        await rollbackIdempotencyIfNeeded(idempotencyToken, context);
+        return NextResponse.json(unknownDelivery, { status: 409 });
+      }
+
+      // A confirmed rejection is safe to retry. Discard the provisional
+      // outcome only while this request still owns its lease.
+      await rollbackIdempotency(idempotencyToken, true);
+      return NextResponse.json({
         error: conversionMessages.contactError,
-      });
+      }, { status: 502 });
     }
 
-    return respond(200, { success: true, message: successMessage });
+    const result: ContactSuccess = { success: true, message: successMessage };
+    try {
+      await commitIdempotency(idempotencyToken, 200, result);
+    } catch (error) {
+      // Delivery is acknowledged even if saving its result fails. Keep the
+      // reserved outcome so a lost browser response cannot trigger a resend.
+      logError("contact.result_save_failed", context, error);
+      await sendAlert("contact.result_save_failed", context, { delivery: "acknowledged" });
+    }
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    await rollbackIdempotencyIfNeeded(idempotencyToken);
+    // A reservation may have been stored even if its acknowledgement failed.
+    // Before the provider call it is safe to discard; afterward it must remain.
+    await rollbackIdempotencyIfNeeded(idempotencyToken, context, !deliveryStarted);
 
     logError("contact.request_failed", context, error);
     await sendAlert("contact.request_failed", context, {
@@ -167,8 +204,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { error: conversionMessages.contactError },
-      { status: 502 }
+      deliveryStarted ? unknownDelivery : { error: conversionMessages.contactError },
+      { status: deliveryStarted ? 409 : 503 }
     );
   }
 }

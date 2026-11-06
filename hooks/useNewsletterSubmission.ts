@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 import { toast } from "sonner";
 import { useIdempotencyKey } from "@/hooks/useIdempotencyKey";
@@ -31,21 +31,30 @@ export function useNewsletterSubmission({
   source,
 }: UseNewsletterSubmissionOptions) {
   const [email, setEmail] = useState("");
-  const { status, setStatus, isSubmitting } = useSubmitState();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { setSubmitState, isSubmitting, errorMessage, successMessage } = useSubmitState();
   const { getKey, resetKey } = useIdempotencyKey();
+  const submissionPendingRef = useRef(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   function showError(message: string) {
-    setStatus("error");
-    setErrorMessage(message);
+    setSubmitState({ status: "error", message });
     toast.error(message);
   }
 
   async function submitNewsletter() {
-    setStatus("submitting");
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    if (submissionPendingRef.current) {
+      return;
+    }
+
+    submissionPendingRef.current = true;
+    setSubmitState({ status: "submitting" });
 
     const pagePath = getCurrentPagePath();
     const trackingProps = {
@@ -53,9 +62,8 @@ export function useNewsletterSubmission({
       variant: NEWSLETTER_VARIANT,
       page_path: pagePath,
     };
-    track(analyticsEvents.newsletterSignupStart, trackingProps);
-
     try {
+      track(analyticsEvents.newsletterSignupStart, trackingProps);
       const { response, data } = await fetchJson("/api/newsletter", {
         method: "POST",
         headers: {
@@ -70,11 +78,14 @@ export function useNewsletterSubmission({
         }),
       });
 
+      if (!mountedRef.current) {
+        return;
+      }
+
       if (response.ok) {
         const message = getStringFromRecord(data, "message") ?? SUCCESS_FALLBACK;
-        setStatus("success");
+        setSubmitState({ status: "success", message });
         setEmail("");
-        setSuccessMessage(message);
         track(analyticsEvents.newsletterSignupSuccess, trackingProps);
         toast.success(message);
         resetKey();
@@ -91,23 +102,23 @@ export function useNewsletterSubmission({
 
       showError(getStringFromRecord(data, "error") ?? ERROR_FALLBACK);
     } catch {
-      showError(NETWORK_ERROR);
+      if (mountedRef.current) {
+        showError(NETWORK_ERROR);
+      }
+    } finally {
+      submissionPendingRef.current = false;
     }
   }
 
   function updateEmail(value: string) {
+    if (submissionPendingRef.current || value === email) {
+      return;
+    }
+
     setEmail(value);
     resetKey();
 
-    if (errorMessage) {
-      setErrorMessage(null);
-    }
-    if (successMessage) {
-      setSuccessMessage(null);
-    }
-    if (status !== "idle") {
-      setStatus("idle");
-    }
+    setSubmitState({ status: "idle" });
   }
 
   return {

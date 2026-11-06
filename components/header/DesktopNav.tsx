@@ -20,6 +20,16 @@ export function DesktopNav({ pathname, writingLinks }: DesktopNavProps) {
   const writingToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    const desktopViewport = window.matchMedia("(min-width: 48rem)");
+    const handleViewportChange = (event: MediaQueryListEvent) => {
+      if (!event.matches) setWritingOpen(false);
+    };
+
+    desktopViewport.addEventListener("change", handleViewportChange);
+    return () => desktopViewport.removeEventListener("change", handleViewportChange);
+  }, []);
+
+  useEffect(() => {
     if (!writingOpen) return;
 
     function handlePointerDown(event: PointerEvent) {

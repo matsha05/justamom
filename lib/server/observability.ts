@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { getClientIp, getRequestFingerprint, getRequestId, getUserAgent } from "@/lib/server/request";
+import { fetchAndConsumeWithTimeout } from "@/lib/server/http";
 
 type LogLevel = "info" | "warn" | "error";
 
@@ -91,32 +92,28 @@ export async function sendAlert(
   }
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3_000);
-
-    try {
-      await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          event,
-          requestId: context.requestId,
-          route: context.route,
-          ip: context.ip,
-          fingerprint: context.fingerprint,
-          origin: context.origin,
-          timestamp: new Date().toISOString(),
-          details,
-        }),
-        cache: "no-store",
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeout);
-    }
+    await fetchAndConsumeWithTimeout(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        event,
+        requestId: context.requestId,
+        route: context.route,
+        ip: context.ip,
+        fingerprint: context.fingerprint,
+        origin: context.origin,
+        timestamp: new Date().toISOString(),
+        details,
+      }),
+    }, (response) => {
+      void response.body?.cancel().catch(() => undefined);
+      if (!response.ok) {
+        throw new Error(`Alert endpoint returned HTTP ${response.status}.`);
+      }
+    }, 3_000);
   } catch (error) {
-    logError("alert.send_failed", context, error, { event });
+    logError("alert.send_failed", context, error, { alertEvent: event });
   }
 }

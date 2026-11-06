@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { track } from "@vercel/analytics";
 import { analyticsEvents } from "@/lib/analytics/events";
@@ -35,11 +35,25 @@ interface SubmitContactFormResult {
 }
 
 export function useContactFormSubmission() {
-  const { status, setStatus, isSubmitting, isSuccess } = useSubmitState();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
+  const {
+    status,
+    setSubmitState,
+    isSubmitting,
+    isSuccess,
+    successMessage,
+    errorMessage: formError,
+  } = useSubmitState();
   const { getKey, resetKey } = useIdempotencyKey();
   const successBannerRef = useRef<HTMLDivElement>(null);
+  const submissionPendingRef = useRef(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (status === "success") {
@@ -49,8 +63,7 @@ export function useContactFormSubmission() {
 
   function failSubmission(message: string): SubmitContactFormResult {
     toast.error(message);
-    setFormError(message);
-    setStatus("error");
+    setSubmitState({ status: "error", message });
     return { ok: false, message };
   }
 
@@ -65,11 +78,15 @@ export function useContactFormSubmission() {
     errorFallbackMessage = conversionMessages.contactError,
     networkErrorMessage = conversionMessages.networkError,
   }: SubmitContactFormOptions): Promise<SubmitContactFormResult> {
-    setStatus("submitting");
-    setSuccessMessage(null);
-    setFormError(null);
+    if (submissionPendingRef.current) {
+      return { ok: false, message: "" };
+    }
 
+    // Capture enabled fields before rendering the disabled form.
     const formData = new FormData(form);
+    submissionPendingRef.current = true;
+    setSubmitState({ status: "submitting" });
+
     const pagePath = getCurrentPagePath();
     formData.set("form_type", formType);
     formData.set("source", source);
@@ -87,14 +104,14 @@ export function useContactFormSubmission() {
       form_type: formType,
       page_path: pagePath,
     };
-    track(
-      formType === "speaking"
-        ? analyticsEvents.speakingInquiryStart
-        : analyticsEvents.contactInquiryStart,
-      trackingProps
-    );
-
     try {
+      track(
+        formType === "speaking"
+          ? analyticsEvents.speakingInquiryStart
+          : analyticsEvents.contactInquiryStart,
+        trackingProps
+      );
+
       const { response, data } = await fetchJson("/api/contact", {
         method: "POST",
         body: formData,
@@ -103,10 +120,13 @@ export function useContactFormSubmission() {
         },
       });
 
+      if (!mountedRef.current) {
+        return { ok: false, message: "" };
+      }
+
       if (response.ok) {
         const message = getStringFromRecord(data, "message") ?? successFallbackMessage;
-        setStatus("success");
-        setSuccessMessage(message);
+        setSubmitState({ status: "success", message });
         track(
           formType === "speaking"
             ? analyticsEvents.speakingInquirySuccess
@@ -127,47 +147,45 @@ export function useContactFormSubmission() {
       const message = getStringFromRecord(data, "error") ?? errorFallbackMessage;
       return failSubmission(message);
     } catch {
+      if (!mountedRef.current) {
+        return { ok: false, message: "" };
+      }
       return failSubmission(networkErrorMessage);
+    } finally {
+      submissionPendingRef.current = false;
     }
   }
 
   function clearError() {
     if (formError) {
-      setFormError(null);
+      setSubmitState({ status: "idle" });
     }
   }
 
   function resetFeedback() {
-    if (status !== "idle") {
-      setStatus("idle");
+    if (submissionPendingRef.current) {
+      return;
     }
 
-    if (successMessage) {
-      setSuccessMessage(null);
-    }
-
-    if (formError) {
-      setFormError(null);
-    }
-
+    setSubmitState({ status: "idle" });
     resetKey();
   }
 
   function clearFeedbackOnInputChange(event?: { isTrusted?: boolean }) {
-    if (event?.isTrusted === false) {
+    if (submissionPendingRef.current || event?.isTrusted === false) {
       return;
     }
 
-    resetKey();
-    clearError();
+    resetFeedback();
+  }
 
-    if (status !== "idle") {
-      setStatus("idle");
+  // Custom controls report intentional edits directly; native reset events do not.
+  function onDraftChange() {
+    if (submissionPendingRef.current) {
+      return false;
     }
-
-    if (isSuccess) {
-      setSuccessMessage(null);
-    }
+    resetFeedback();
+    return true;
   }
 
   return {
@@ -180,6 +198,7 @@ export function useContactFormSubmission() {
     submitContactForm,
     clearError,
     resetFeedback,
+    onDraftChange,
     clearFeedbackOnInputChange,
   };
 }

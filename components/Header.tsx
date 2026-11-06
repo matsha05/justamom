@@ -16,17 +16,25 @@ interface HeaderProps {
 }
 
 export function Header({ writingLinks }: HeaderProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const scrolled = useScrollThreshold(20);
   const pathname = usePathname();
+  const [mobileMenuState, setMobileMenuState] = useState({
+    pathname,
+    open: false,
+    restoreFocus: true,
+  });
+  const scrolled = useScrollThreshold(20);
   const mobileMenuRef = useRef<HTMLDialogElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
-  const restoreMenuFocusRef = useRef(true);
+
+  // A menu belongs to the route where it opened, including history navigation.
+  if (mobileMenuState.pathname !== pathname) {
+    setMobileMenuState({ pathname, open: false, restoreFocus: false });
+  }
+  const mobileMenuOpen = mobileMenuState.pathname === pathname && mobileMenuState.open;
 
   const closeMobileMenu = useCallback((restoreFocus = true) => {
-    restoreMenuFocusRef.current = restoreFocus;
-    setMobileMenuOpen(false);
+    setMobileMenuState((current) => ({ ...current, open: false, restoreFocus }));
   }, []);
 
   const dismissMobileMenu = useCallback(() => closeMobileMenu(), [closeMobileMenu]);
@@ -43,11 +51,11 @@ export function Header({ writingLinks }: HeaderProps) {
   });
 
   useEffect(() => {
-    if (wasOpenRef.current && !mobileMenuOpen && restoreMenuFocusRef.current) {
+    if (wasOpenRef.current && !mobileMenuOpen && mobileMenuState.restoreFocus) {
       menuToggleRef.current?.focus();
     }
     wasOpenRef.current = mobileMenuOpen;
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, mobileMenuState.restoreFocus]);
 
   useEffect(() => {
     const desktopViewport = window.matchMedia("(min-width: 48rem)");
@@ -88,8 +96,7 @@ export function Header({ writingLinks }: HeaderProps) {
               ref={menuToggleRef}
               className="md:hidden relative z-50 p-2 text-[var(--color-ink)] transition-[background-color,transform] hover:bg-[var(--color-paper-soft)] active:scale-95 rounded-full"
               onClick={() => {
-                restoreMenuFocusRef.current = true;
-                setMobileMenuOpen(true);
+                setMobileMenuState({ pathname, open: true, restoreFocus: true });
               }}
               aria-label="Open menu"
               aria-expanded="false"

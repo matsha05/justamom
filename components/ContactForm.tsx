@@ -35,6 +35,7 @@ export function ContactForm() {
     successBannerRef,
     submitContactForm,
     clearError,
+    onDraftChange,
     clearFeedbackOnInputChange,
   } = useContactFormSubmission();
   const [selectedSubject, setSelectedSubject] = useState("");
@@ -112,85 +113,95 @@ export function ContactForm() {
         </div>
       ) : null}
 
-      <IdentityFields showRequiredHint />
+      <fieldset disabled={isSubmitting} className="space-y-6">
+        <IdentityFields showRequiredHint />
 
-      <div className="space-y-2">
-        <Label htmlFor="subject">
-          What&apos;s this about?{" "}
-          <span className="text-[var(--color-ink-muted)] font-normal normal-case">
-            (required)
-          </span>
-        </Label>
-        <Select
-          required
-          value={selectedSubject}
-          onValueChange={(value) => {
-            setSelectedSubject(value);
-            setSubjectError(null);
-          }}
-        >
-          <SelectTrigger
-            ref={subjectTriggerRef}
-            id="subject"
-            aria-required="true"
-            aria-invalid={Boolean(subjectError)}
-            aria-describedby={subjectError ? subjectErrorId : undefined}
-          >
-            <SelectValue placeholder="Select a topic…" />
-          </SelectTrigger>
-          <SelectContent>
-            {contactSubjectOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <input type="hidden" name="subject" value={selectedSubject} required />
-        {subjectError ? (
-          <p
-            id={subjectErrorId}
-            role="alert"
-            aria-live="assertive"
-            className="text-caption text-[var(--color-error)]"
-          >
-            {subjectError}
-          </p>
-        ) : null}
-      </div>
-
-      {isSpeakingInquiry ? (
-        <div className="animate-fade-in">
-          <SpeakingEventFields
-            details={details}
-            onDetailChange={updateDetail}
-          />
-        </div>
-      ) : (
         <div className="space-y-2">
-          <Label htmlFor="message">
-            Message{" "}
+          <Label htmlFor="subject">
+            What&apos;s this about?{" "}
             <span className="text-[var(--color-ink-muted)] font-normal normal-case">
               (required)
             </span>
           </Label>
-          <Textarea
-            id="message"
-            name="message"
-            value={contactMessage}
-            onChange={(event) => setContactMessage(event.target.value)}
+          <Select
             required
-            rows={5}
-            placeholder="How can I help you?"
-          />
+            value={selectedSubject}
+            onValueChange={(value) => {
+              if (value === selectedSubject || !onDraftChange()) {
+                return;
+              }
+              setSelectedSubject(value);
+              setSubjectError(null);
+            }}
+          >
+            <SelectTrigger
+              ref={subjectTriggerRef}
+              id="subject"
+              aria-required="true"
+              aria-invalid={Boolean(subjectError)}
+              aria-describedby={subjectError ? subjectErrorId : undefined}
+            >
+              <SelectValue placeholder="Select a topic…" />
+            </SelectTrigger>
+            <SelectContent>
+              {contactSubjectOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <input type="hidden" name="subject" value={selectedSubject} required />
+          {subjectError ? (
+            <p
+              id={subjectErrorId}
+              role="alert"
+              aria-live="assertive"
+              className="text-caption text-[var(--color-error)]"
+            >
+              {subjectError}
+            </p>
+          ) : null}
         </div>
-      )}
 
-      <FormSubmitButton
-        isSubmitting={isSubmitting}
-        disabled={isSuccess}
-        className="w-full md:w-auto"
-      />
+        {isSpeakingInquiry ? (
+          <div className="animate-fade-in">
+            <SpeakingEventFields
+              details={details}
+              onDetailChange={(field, value) => {
+                if (value === details[field] || !onDraftChange()) {
+                  return;
+                }
+                updateDetail(field, value);
+              }}
+            />
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <Label htmlFor="message">
+              Message{" "}
+              <span className="text-[var(--color-ink-muted)] font-normal normal-case">
+                (required)
+              </span>
+            </Label>
+            <Textarea
+              id="message"
+              name="message"
+              value={contactMessage}
+              onChange={(event) => setContactMessage(event.target.value)}
+              required
+              rows={5}
+              placeholder="How can I help you?"
+            />
+          </div>
+        )}
+
+        <FormSubmitButton
+          isSubmitting={isSubmitting}
+          disabled={isSuccess}
+          className="w-full md:w-auto"
+        />
+      </fieldset>
     </form>
   );
 }

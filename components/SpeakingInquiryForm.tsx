@@ -23,6 +23,7 @@ export function SpeakingInquiryForm() {
     submitContactForm,
     clearError,
     resetFeedback,
+    onDraftChange,
     clearFeedbackOnInputChange,
   } = useContactFormSubmission();
   const {
@@ -89,21 +90,28 @@ export function SpeakingInquiryForm() {
 
       <FormErrorMessage message={formError} />
 
-      <IdentityFields
-        nameLabel="Your Name"
-        emailLabel="Email Address"
-        namePlaceholder="Jane Doe"
-        emailPlaceholder="jane@example.com"
-        className="gap-5"
-        showRequiredHint
-      />
+      <fieldset disabled={isSubmitting} className="space-y-6">
+        <IdentityFields
+          nameLabel="Your Name"
+          emailLabel="Email Address"
+          namePlaceholder="Jane Doe"
+          emailPlaceholder="jane@example.com"
+          className="gap-5"
+          showRequiredHint
+        />
 
-      <SpeakingEventFields
-        details={details}
-        onDetailChange={updateDetail}
-      />
+        <SpeakingEventFields
+          details={details}
+          onDetailChange={(field, value) => {
+            if (value === details[field] || !onDraftChange()) {
+              return;
+            }
+            updateDetail(field, value);
+          }}
+        />
 
-      <FormSubmitButton isSubmitting={isSubmitting} className="w-full sm:w-auto" />
+        <FormSubmitButton isSubmitting={isSubmitting} className="w-full sm:w-auto" />
+      </fieldset>
     </form>
   );
 }

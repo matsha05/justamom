@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (ipLimit.limited) {
-      return respond(
+      return await respond(
         429,
         { error: "Too many requests. Please wait a minute and try again." },
         { "Retry-After": String(ipLimit.retryAfterSeconds) }
@@ -80,12 +80,12 @@ export async function POST(request: NextRequest) {
     try {
       payload = await request.json();
     } catch {
-      return respond(400, { error: "Invalid request body." });
+      return await respond(400, { error: "Invalid request body." });
     }
 
     const parsed = newsletterRequestSchema.safeParse(payload);
     if (!parsed.success) {
-      return respond(400, { error: getValidationMessage(parsed.error) });
+      return await respond(400, { error: getValidationMessage(parsed.error) });
     }
 
     const email = parsed.data.email;
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (emailLimit.limited) {
-      return respond(
+      return await respond(
         429,
         { error: "Too many requests. Please wait a minute and try again." },
         { "Retry-After": String(emailLimit.retryAfterSeconds) }
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
         context,
         new Error("missing_mailerlite_config")
       );
-      return respond(500, {
+      return await respond(500, {
         error: "Newsletter signup is temporarily unavailable.",
       });
     }
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
     );
 
     if (lookupResult.status === 200) {
-      return respond(200, {
+      return await respond(200, {
         success: true,
         alreadySubscribed: true,
         message: siteConfig.newsletter.alreadySubscribedMessage,
@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
         status: lookupResult.status,
         message: lookupResult.message,
       });
-      return respond(502, {
+      return await respond(502, {
         error: "Newsletter signup is temporarily unavailable.",
       });
     }
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
         createResult.status === 422 &&
         upstreamMessage.toLowerCase().includes("already")
       ) {
-        return respond(200, {
+        return await respond(200, {
           success: true,
           alreadySubscribed: true,
           message: siteConfig.newsletter.alreadySubscribedMessage,
@@ -174,17 +174,17 @@ export async function POST(request: NextRequest) {
         status: createResult.status,
         message: createResult.message,
       });
-      return respond(502, {
+      return await respond(502, {
         error: "Newsletter signup is temporarily unavailable.",
       });
     }
 
-    return respond(200, {
+    return await respond(200, {
       success: true,
       message: siteConfig.newsletter.welcomeMessage,
     });
   } catch (error) {
-    await rollbackIdempotencyIfNeeded(idempotencyToken);
+    await rollbackIdempotencyIfNeeded(idempotencyToken, context);
 
     logError("newsletter.request_failed", context, error, {
       reason: "unexpected_error",

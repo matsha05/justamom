@@ -73,6 +73,8 @@ Notes:
 - Set `REQUIRE_REDIS=true` to fail closed if Redis is missing (prevents silent in-memory rate limiting).
 - In production runtime, `NEXT_PUBLIC_SITE_URL`, `FORMSPREE_ENDPOINT`, `MAILER_LITE_API_KEY`, and `MAILERLITE_GROUP_ID` are validated at startup.
 
+Contact API requests require an `idempotency-key` (the site's forms supply it). Keep the key for an unchanged retry; edits require a new key. The server binds new keys to the submitted contents. Before contact delivery it saves an uncertain-outcome record for 24 hours: if the provider acknowledgement is lost, the same key returns guidance instead of sending again. Confirmed success replaces that record with a 10-minute success response. This protection depends on Redis for durability across app instances; the optional memory backend is process-local. See [state-machine fixes and verification](docs/state-machine-fixes.md).
+
 ## Content workflows
 
 - Core page copy lives in `content/site.ts`.

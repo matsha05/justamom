@@ -18,6 +18,12 @@ export function getRedisClient(): Redis | null {
   redisClient = new Redis({
     url,
     token,
+    // The shared KV layer owns JSON parsing and also reads plain lock values.
+    automaticDeserialization: false,
+    // A new deadline per command covers response-body reads as well as headers.
+    // Do not retry an ambiguous mutation after a lost acknowledgement.
+    signal: () => AbortSignal.timeout(5_000),
+    retry: { retries: 0 },
   });
 
   return redisClient;

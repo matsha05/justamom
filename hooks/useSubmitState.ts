@@ -2,14 +2,22 @@
 
 import { useState } from "react";
 
-export type SubmitStatus = "idle" | "submitting" | "success" | "error";
+export type SubmitState =
+  | { status: "idle" | "submitting" }
+  | { status: "success"; message: string }
+  | { status: "error"; message: string };
 
-export function useSubmitState(initialStatus: SubmitStatus = "idle") {
-  const [status, setStatus] = useState<SubmitStatus>(initialStatus);
+export type SubmitStatus = SubmitState["status"];
+
+export function useSubmitState() {
+  const [state, setSubmitState] = useState<SubmitState>({ status: "idle" });
+  const { status } = state;
 
   return {
     status,
-    setStatus,
+    setSubmitState,
+    successMessage: state.status === "success" ? state.message : null,
+    errorMessage: state.status === "error" ? state.message : null,
     isSubmitting: status === "submitting",
     isSuccess: status === "success",
     isError: status === "error",

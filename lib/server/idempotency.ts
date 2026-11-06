@@ -1,7 +1,12 @@
-import { deleteValue, getJson, getValue, setJson, setValueIfAbsent } from "@/lib/server/kv";
+import {
+  acquireIdempotencyLease,
+  releaseOwnedIdempotencyLease,
+  writeOwnedIdempotencyResult,
+} from "@/lib/server/kv-idempotency";
 
 const DEFAULT_LOCK_TTL_MS = 60_000;
 const DEFAULT_RESULT_TTL_MS = 10 * 60_000;
+const DEFAULT_RESERVED_RESULT_TTL_MS = 24 * 60 * 60_000;
 
 interface CachedResponse<T> {
   status: number;
@@ -14,6 +19,7 @@ interface BeginOptions {
   key: string;
   lockTtlMs?: number;
   resultTtlMs?: number;
+  requestHash?: string;
 }
 
 interface IdempotencyToken {
@@ -21,6 +27,7 @@ interface IdempotencyToken {
   lockKey: string;
   lockValue: string;
   resultTtlMs: number;
+  requestHash?: string;
 }
 
 type BeginResult<T> =
@@ -34,7 +41,8 @@ type BeginResult<T> =
     }
   | {
       state: "in_progress";
-    };
+    }
+  | { state: "conflict" };
 
 function buildKeys(scope: string, key: string) {
   const normalizedScope = scope.toLowerCase();
@@ -51,30 +59,22 @@ export async function beginIdempotency<T = unknown>(
   const lockTtlMs = options.lockTtlMs ?? DEFAULT_LOCK_TTL_MS;
   const resultTtlMs = options.resultTtlMs ?? DEFAULT_RESULT_TTL_MS;
 
-  const cached = await getJson<CachedResponse<T>>(cacheKey);
-  if (cached) {
-    return {
-      state: "replay",
-      cached,
-    };
+  const lockValue = JSON.stringify({
+    owner: crypto.randomUUID(),
+    requestHash: options.requestHash ?? "",
+  });
+  const result = await acquireIdempotencyLease({
+    cacheKey,
+    lockKey,
+    lockValue,
+    requestHash: options.requestHash ?? "",
+    lockTtlMs,
+  });
+  if (result.state === "replay") {
+    const { status, body, headers } = JSON.parse(result.value) as CachedResponse<T>;
+    return { state: "replay", cached: { status, body, ...(headers ? { headers } : {}) } };
   }
-
-  const lockValue = crypto.randomUUID();
-  const acquired = await setValueIfAbsent(lockKey, lockValue, lockTtlMs);
-
-  if (!acquired) {
-    const replay = await getJson<CachedResponse<T>>(cacheKey);
-    if (replay) {
-      return {
-        state: "replay",
-        cached: replay,
-      };
-    }
-
-    return {
-      state: "in_progress",
-    };
-  }
+  if (result.state !== "acquired") return { state: result.state };
 
   return {
     state: "acquired",
@@ -83,14 +83,15 @@ export async function beginIdempotency<T = unknown>(
       lockKey,
       lockValue,
       resultTtlMs,
+      requestHash: options.requestHash,
     },
   };
 }
 
-async function releaseLock(lockKey: string, lockValue: string) {
-  const current = await getValue(lockKey);
-  if (current === lockValue) {
-    await deleteValue(lockKey);
+export class IdempotencyLeaseLostError extends Error {
+  constructor() {
+    super("The idempotency lease expired or changed owners.");
+    this.name = "IdempotencyLeaseLostError";
   }
 }
 
@@ -100,19 +101,44 @@ export async function commitIdempotency<T>(
   body: T,
   headers?: Record<string, string>
 ) {
-  await setJson(
-    token.cacheKey,
-    {
+  await writeResult(token, status, body, headers, token.resultTtlMs, false);
+}
+
+export async function reserveIdempotencyResponse<T>(
+  token: IdempotencyToken,
+  status: number,
+  body: T,
+  headers?: Record<string, string>,
+  ttlMs = DEFAULT_RESERVED_RESULT_TTL_MS
+) {
+  await writeResult(token, status, body, headers, ttlMs, true);
+}
+
+async function writeResult<T>(
+  token: IdempotencyToken,
+  status: number,
+  body: T,
+  headers: Record<string, string> | undefined,
+  ttlMs: number,
+  provisional: boolean
+) {
+  const written = await writeOwnedIdempotencyResult({
+    cacheKey: token.cacheKey,
+    lockKey: token.lockKey,
+    lockValue: token.lockValue,
+    value: JSON.stringify({
       status,
       body,
       headers,
-    } satisfies CachedResponse<T>,
-    token.resultTtlMs
-  );
-
-  await releaseLock(token.lockKey, token.lockValue);
+      requestHash: token.requestHash ?? "",
+      provisional,
+    }),
+    ttlMs,
+    release: !provisional,
+  });
+  if (!written) throw new IdempotencyLeaseLostError();
 }
 
-export async function rollbackIdempotency(token: IdempotencyToken) {
-  await releaseLock(token.lockKey, token.lockValue);
+export async function rollbackIdempotency(token: IdempotencyToken, discardReserved = false) {
+  await releaseOwnedIdempotencyLease(token.cacheKey, token.lockKey, token.lockValue, discardReserved);
 }

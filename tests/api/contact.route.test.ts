@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/contact/route";
 import { conversionSources } from "@/lib/conversions";
 import { __resetMemoryStoreForTests } from "@/lib/server/kv";
+import * as idempotency from "@/lib/server/idempotency";
 
 function createContactRequest(
   fields: Record<string, string>,
@@ -19,6 +20,7 @@ function createContactRequest(
       origin: "https://lizishaw.com",
       "user-agent": "vitest",
       "x-forwarded-for": "203.0.113.11",
+      "idempotency-key": crypto.randomUUID(),
       ...headers,
     },
     body: form,
@@ -40,6 +42,10 @@ function contactPayload(overrides?: Partial<Record<string, string>>) {
 }
 
 describe("POST /api/contact", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeEach(() => {
     vi.restoreAllMocks();
     __resetMemoryStoreForTests();
@@ -182,9 +188,9 @@ describe("POST /api/contact", () => {
     expect(lastResponse?.status).toBe(429);
   });
 
-  it("returns upstream error when Formspree fails", async () => {
+  it("returns a retryable error when Formspree confirms rejection", async () => {
     vi.spyOn(global, "fetch").mockResolvedValueOnce(
-      new Response(JSON.stringify({ error: "bad gateway" }), { status: 500 })
+      new Response(JSON.stringify({ error: "submission rejected" }), { status: 422 })
     );
 
     const response = await POST(createContactRequest(contactPayload()));
@@ -224,10 +230,10 @@ describe("POST /api/contact", () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("does not cache transient upstream failures for idempotent retries", async () => {
+  it("allows same-key retry after a confirmed upstream rejection", async () => {
     const fetchSpy = vi
       .spyOn(global, "fetch")
-      .mockResolvedValueOnce(new Response(JSON.stringify({ error: "bad gateway" }), { status: 500 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ error: "submission rejected" }), { status: 422 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({ ok: true }), { status: 200 }));
 
     const headers = {
@@ -241,5 +247,158 @@ describe("POST /api/contact", () => {
     expect(second.status).toBe(200);
     expect(second.headers.get("x-idempotent-replay")).toBeNull();
     expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("requires an idempotency key before sending a contact message", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch");
+    const request = createContactRequest(contactPayload());
+    request.headers.delete("idempotency-key");
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: "An idempotency key is required." });
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it.each([500, 408])("preserves uncertain delivery after upstream HTTP %s without sending again", async (status) => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: "delivery acknowledgement unavailable" }), { status })
+    );
+    const headers = { "idempotency-key": `contact-unknown-${status}` };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+    const firstBody = await first.json();
+    const second = await POST(createContactRequest(contactPayload(), headers));
+
+    expect(first.status).toBe(409);
+    expect(firstBody.code).toBe("delivery_unknown");
+    expect(firstBody.error).toContain("may have been sent");
+    expect(second.status).toBe(409);
+    expect(await second.json()).toEqual(firstBody);
+    expect(second.headers.get("x-idempotent-replay")).toBe("true");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("preserves uncertain delivery when the upstream connection fails", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockRejectedValueOnce(
+      new TypeError("Connection lost before the acknowledgement")
+    );
+    const headers = { "idempotency-key": "contact-network-unknown" };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+    const firstBody = await first.json();
+    const second = await POST(createContactRequest(contactPayload(), headers));
+
+    expect(first.status).toBe(409);
+    expect(firstBody.code).toBe("delivery_unknown");
+    expect(second.status).toBe(409);
+    expect(await second.json()).toEqual(firstBody);
+    expect(second.headers.get("x-idempotent-replay")).toBe("true");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects changed contents under an already used request key", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
+    const headers = { "idempotency-key": "contact-payload-bound" };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+    const second = await POST(createContactRequest(
+      contactPayload({ message: "A different message" }), headers
+    ));
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(409);
+    expect((await second.json()).error).toContain("different form contents");
+    expect(second.headers.get("x-idempotent-replay")).toBeNull();
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not send without first persisting the conservative delivery result", async () => {
+    vi.spyOn(idempotency, "reserveIdempotencyResponse").mockRejectedValueOnce(
+      new Error("Result store unavailable")
+    );
+    const fetchSpy = vi.spyOn(global, "fetch");
+
+    const response = await POST(createContactRequest(contactPayload()));
+
+    expect(response.status).toBe(503);
+    expect((await response.json()).error).toContain("Unable to send your message");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it("cleans up an unacknowledged reservation before allowing a safe retry", async () => {
+    const reserve = idempotency.reserveIdempotencyResponse;
+    const reserveSpy = vi.spyOn(idempotency, "reserveIdempotencyResponse")
+      .mockImplementationOnce(async (...args) => {
+        await reserve(...args);
+        throw new Error("Lost Redis acknowledgement after reservation write");
+      });
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
+    const headers = { "idempotency-key": "contact-reservation-acknowledgement-lost" };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+
+    expect(first.status).toBe(503);
+    expect(fetchSpy).not.toHaveBeenCalled();
+    reserveSpy.mockRestore();
+
+    const retry = await POST(createContactRequest(contactPayload(), headers));
+
+    expect(retry.status).toBe(200);
+    expect((await retry.json()).success).toBe(true);
+    expect(retry.headers.get("x-idempotent-replay")).toBeNull();
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("prevents resend when cleanup after a confirmed rejection fails", async () => {
+    vi.spyOn(idempotency, "rollbackIdempotency").mockRejectedValueOnce(
+      new Error("Failed to discard the provisional delivery result")
+    );
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: "submission rejected" }), { status: 422 })
+    );
+    const headers = { "idempotency-key": "contact-rejection-cleanup-failed" };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+    const retry = await POST(createContactRequest(contactPayload(), headers));
+
+    expect(first.status).toBe(409);
+    expect((await first.json()).code).toBe("delivery_unknown");
+    expect(retry.status).toBe(409);
+    expect((await retry.json()).code).toBe("delivery_unknown");
+    expect(retry.headers.get("x-idempotent-replay")).toBe("true");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps acknowledged delivery successful and prevents resend if saving success fails", async () => {
+    const now = Date.now();
+    const nowSpy = vi.spyOn(Date, "now").mockReturnValue(now);
+    vi.spyOn(idempotency, "commitIdempotency").mockRejectedValueOnce(
+      new Error("Result store unavailable after delivery")
+    );
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ ok: true }), { status: 200 })
+    );
+    const headers = { "idempotency-key": "contact-acknowledged-store-failure" };
+
+    const first = await POST(createContactRequest(contactPayload(), headers));
+    expect(first.status).toBe(200);
+    expect((await first.json()).success).toBe(true);
+
+    const immediateRetry = await POST(createContactRequest(contactPayload(), headers));
+    expect(immediateRetry.status).toBe(409);
+
+    // After its execution lease expires, the reserved delivery outcome remains.
+    nowSpy.mockReturnValue(now + 60_001);
+    const laterRetry = await POST(createContactRequest(contactPayload(), headers));
+    expect(laterRetry.status).toBe(409);
+    expect((await laterRetry.json()).code).toBe("delivery_unknown");
+    expect(laterRetry.headers.get("x-idempotent-replay")).toBe("true");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });

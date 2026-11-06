@@ -43,6 +43,37 @@ test("mobile Writing sections open the separate Blog archive", async ({ page }, 
   await expect(dialog).toBeHidden();
 });
 
+test("history navigation closes the mobile menu without restoring its trigger", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.includes("mobile"), "Mobile-only smoke coverage.");
+
+  await page.goto("/");
+  const openMenu = page.getByRole("button", { name: "Open menu" });
+  await openMenu.click();
+  await page.getByRole("dialog").getByRole("link", { name: "Contact" }).click();
+  await expect(page).toHaveURL(/\/contact$/);
+
+  await openMenu.click();
+  await expect(page.locator("dialog:modal")).toHaveCount(1);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("dialog")).toHaveCount(0);
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(openMenu).not.toBeFocused();
+
+  await openMenu.click();
+  await expect(page.locator("dialog:modal")).toHaveCount(1);
+  await page.goForward();
+  await expect(page).toHaveURL(/\/contact$/);
+  await expect(page.locator("dialog")).toHaveCount(0);
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(openMenu).not.toBeFocused();
+
+  await openMenu.click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("dialog")).toHaveCount(0);
+  await expect(openMenu).toBeFocused();
+});
+
 test("resizing an open mobile menu releases the desktop page", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile-only smoke coverage.");
 
